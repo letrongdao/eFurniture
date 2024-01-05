@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./navbar.module.css";
+import styles from "../css/navbar.module.css";
 
 const Navbar = () => {
   const [toggleNavbar, setToggleNavbar] = useState(false);
