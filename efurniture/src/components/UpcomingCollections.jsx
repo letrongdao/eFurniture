@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./upcomingCollections.module.css";
+import styles from "../css/upcomingCollections.module.css";
 
 const UpcomingCollections = () => {
   return (

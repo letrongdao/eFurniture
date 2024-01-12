@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import styles from "./navbar.module.css";
 import { NavLink, Link, Route, Routes } from "react-router-dom";
-import { Button } from "@nextui-org/react";
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import Home from "../pages/Home";
-import App from "../App";
+import styles from "../css/navbar.module.css";
 
 const Navbar = () => {
   const [toggleNavbar, setToggleNavbar] = useState(false);
@@ -38,14 +34,6 @@ const Navbar = () => {
             type="text"
             className={styles.search}
           />
-        </div>
-        <div className={styles.button}>
-          <Button radius="full" color="primary" isIconOnly>
-            {isDarkMode ?
-              <SunIcon /> :
-              <MoonIcon />
-            }
-          </Button>
         </div>
         <div
           onClick={() => setToggleNavbar(!toggleNavbar)}

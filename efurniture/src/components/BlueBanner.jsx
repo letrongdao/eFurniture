@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./blueBanner.module.css";
+import styles from "../css/blueBanner.module.css";
 
 const BlueBanner = () => {
   return (

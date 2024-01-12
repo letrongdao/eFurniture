@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./productsOfTheWeek.module.css";
+import styles from "../css/productsOfTheWeek.module.css";
 
 const ProductsOfTheWeek = () => {
   return (
