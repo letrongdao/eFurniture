@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./home.module.css";
+import Navbar from "../components/Navbar";
 
 import Herosection from "../components/Herosection";
 import ShopYourChoice from "../components/ShopYourChoice";
@@ -13,6 +14,7 @@ import Footer from "../components/Footer";
 const Home = () => {
   return (
     <div className={styles.container}>
+      <Navbar />
       <Herosection />
       <ShopYourChoice />
       <ProductsOfTheWeek />

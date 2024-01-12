@@ -46,7 +46,7 @@
   color: white;
 }
 
-.upcomingProductsBtn:haver {
+.upcomingProductsBtn:hover {
   background-color: white;
   transition: ease-in 500px;
 }
