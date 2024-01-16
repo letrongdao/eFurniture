@@ -25,6 +25,7 @@ const Navbar = () => {
         <div className={styles.button}>Blog</div>
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
+        <Link to="/login" className={styles.button}>Login</Link>
         <div className={styles.searchContainer}>
           <span>
             <img src="./images/search.png" alt="" />
