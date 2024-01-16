@@ -1,16 +1,19 @@
 import express from 'express';
 import mysql2 from 'mysql2';
+import dotenv from 'dotenv';
 
 var app = express();
 app.listen(3344,function(){
     console.log('Node server running @ http://localhost:3344')
 });
 
+var env = dotenv.config();
+
 var con = mysql2.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "sa@12345",
-    database: "webmovie"
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE_NAME
   });
   con.connect(function(err) {
     if (err) throw err;
