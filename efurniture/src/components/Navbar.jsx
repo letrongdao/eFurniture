@@ -21,10 +21,11 @@ const Navbar = () => {
       <div className={styles.right}>
         <Link to="/" className={styles.button}>Home</Link>
         <Link to="/product" className={styles.button}>Product</Link>
-        <div className={styles.button}>Shop</div>
+        <Link to="/login" className={styles.button}>Login</Link>
         <div className={styles.button}>Blog</div>
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
+        <Link to="/login" className={styles.button}>Login</Link>
         <div className={styles.searchContainer}>
           <span>
             <img src="./images/search.png" alt="" />
