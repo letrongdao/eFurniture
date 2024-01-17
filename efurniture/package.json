@@ -10,13 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "bootstrap": "^5.3.2",
-=======
     "antd": "^5.12.8",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
->>>>>>> 8e500e44dfd5ab0d65e9e639513d0f623d842fd2
     "json-server": "^0.17.4",
     "mysql2": "^3.7.0",
     "react": "^18.2.0",
