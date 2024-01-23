@@ -21,11 +21,12 @@ const Navbar = () => {
       <div className={styles.right}>
         <Link to="/" className={styles.button}>Home</Link>
         <Link to="/product" className={styles.button}>Product</Link>
-        <Link to="/login" className={styles.button}>Login</Link>
         <div className={styles.button}>Blog</div>
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
-        <Link to="/login" className={styles.button}>Login</Link>
+        <div className={styles.button}>
+          <Link to="/login">Login</Link>
+        </div>
         <div className={styles.searchContainer}>
           <span>
             <img src="./images/search.png" alt="" />
@@ -56,6 +57,9 @@ const Navbar = () => {
         <div className={styles.button}>Blog</div>
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
+        <div className={styles.button}>
+          <Link to="/login">Login</Link>
+        </div>
         <input placeholder="Search..." type="text" className={styles.search} />
       </div>
     </div>

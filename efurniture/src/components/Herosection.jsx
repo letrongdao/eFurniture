@@ -10,7 +10,7 @@ const Herosection = () => {
         <h5 className={styles.tag}>
           Find best quality furniture for all of your requirements{" "}
         </h5>
-        <button className={styles.tag}>See More</button>
+        <button className={styles.tag}>View Products</button>
       </div>
       <img
         className={styles.chairImage}
