@@ -25,7 +25,7 @@ function LoginPage() {
       <div className="login-container">
         <div className="row">
           <div className="login_form">
-            <h2>Login</h2>
+            <h2>LOGIN</h2>
             <Tabs centered defaultActiveKey="1" items={items} />
           </div>
           <div className="col-lg-4"></div>

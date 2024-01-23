@@ -9,17 +9,18 @@ import * as Yup from 'yup';
 
 export default function LoginWithUsername() {
     const [loginData, setLoginData] = useState([])
+    const [loginUser, setLoginUser] = useState(null)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        fetch('http://localhost:8081/accounts')
+    const fetchData = async () => {
+        await fetch('http://localhost:8081/accounts')
             .then(res => res.json())
             .then(data => {
                 console.log("Account list: ", data)
                 setLoginData(data)
             })
             .catch(err => console.log(err))
-    }, [])
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -29,23 +30,26 @@ export default function LoginWithUsername() {
         validationSchema: Yup.object({
             username: Yup.string()
                 .max(15, 'Must be 15 characters or less')
-                .required('Required'),
+                .required('Please enter your username !'),
             password: Yup.string()
-                .max(20, 'Must be 20 characters or less')
-                .required('Required'),
+                .max(20, 'Password must be less than 20 characters')
+                .required('Password is required !'),
         }),
-        onSubmit: (values) => {
-            loginData.map((d) => {
-                if ((d.username === values.username) && (d.password === values.password)) {
-                    console.log(d.firstName)
-                    toast.success("Login successfully. Welcome " + d.firstName)
-                    setTimeout(() => {
-                        navigate('/')
-                    }, 2500);
-                } else {
-                    toast.error("Incorrect credentials. Please try again")
-                }
-            })
+        onSubmit: values => {
+            fetchData()
+            if (loginData) {
+                setLoginUser(loginData.find(({ username, password }) =>
+                    ((username == values.username) && (password == values.password)))
+                )
+            }
+            if (loginUser) {
+                console.log("Welcome " + loginUser.firstName)
+                toast.success("Login successfully. Welcome " + loginUser.firstName)
+                navigate('/')
+            }
+            else {
+                toast.error("Incorrect credentials. Please try again !")
+            }
         }
     })
 

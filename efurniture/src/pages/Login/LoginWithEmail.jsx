@@ -15,7 +15,7 @@ export default function LoginWithEmail() {
     const navigate = useNavigate()
 
     const actionCodeSettings = {
-        url: 'https://localhost:5173',
+        url: 'http://localhost:5173/',
         handleCodeInApp: true,
         iOS: {
             bundleId: 'com.example.ios'
@@ -28,16 +28,6 @@ export default function LoginWithEmail() {
         dynamicLinkDomain: 'efurniture.page.link'
     };
 
-    useEffect(() => {
-        fetch('http://localhost:8081/accounts')
-            .then(res => res.json())
-            .then(data => {
-                console.log("Account list: ", data)
-                setLoginData(data)
-            })
-            .catch(err => console.log(err))
-    }, [])
-
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -46,6 +36,13 @@ export default function LoginWithEmail() {
             email: Yup.string().email("Invalid email address").required('Required')
         }),
         onSubmit: (values) => {
+            fetch('http://localhost:8081/accounts')
+            .then(res => res.json())
+            .then(data => {
+                console.log("Account list: ", data)
+                setLoginData(data)
+            })
+            .catch(err => console.log(err))
             loginData.map((data) => {
                 if (data.email === values.email) {
                     setLoginEmail(data.email)
