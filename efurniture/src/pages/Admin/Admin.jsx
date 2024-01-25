@@ -7,18 +7,12 @@ import {
   SolutionOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
-import Customers from "../../components/Admin/Customers";
-import Dashboard from "../../components/Admin/Dashboard";
-import Inventory from "../../components/Admin/Inventory";
-import Orders from "../../components/Admin/Orders";
-// import avt from "../../assets/image/e1eb03f8282b4f89a438983023e90697 (1).png";
-const { Header, Sider, Content } = Layout;
+import Customers from "../../components/Admin/Customers/Customers";
+import Dashboard from "../../components/Admin/Dashboard/Dashboard";
+import Inventory from "../../components/Admin/Inventory/Inventory";
+import Orders from "../../components/Admin/Orders/Orders";
 
-// interface UserData {
-//   avatar: string;
-//   name: string;
-//   email: string;
-// }
+const { Header, Sider, Content } = Layout;
 
 const Admin = () => {
   const [activeComponent, setActiveComponent] = useState("Dashboard");
