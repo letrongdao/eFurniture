@@ -21,6 +21,7 @@ const Navbar = () => {
       <div className={styles.right}>
         <Link to="/" className={styles.button}>Home</Link>
         <Link to="/product" className={styles.button}>Product</Link>
+        <Link to="/detail" className={styles.button}>Detail</Link>
         <div className={styles.button}>Blog</div>
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
