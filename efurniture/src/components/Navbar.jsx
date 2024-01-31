@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
         <div className={styles.button}>
-          <Link to="/login">Login</Link>
+          <Link to="/signin">Sign in</Link>
         </div>
         <div className={styles.searchContainer}>
           <span>
@@ -59,7 +59,7 @@ const Navbar = () => {
         <div className={styles.button}>New at AntiQ</div>
         <div className={styles.button}>Contact</div>
         <div className={styles.button}>
-          <Link to="/login">Login</Link>
+          <Link to="/signin">Sign in</Link>
         </div>
         <input placeholder="Search..." type="text" className={styles.search} />
       </div>
