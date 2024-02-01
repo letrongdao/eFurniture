@@ -1,0 +1,20 @@
+###
+GET http://localhost:3344/users
+
+###
+GET http://localhost:3344/users/us9949701574607
+
+###
+POST http://localhost:3344/register
+Content-Type: application/json
+
+{
+    "userId": "us1231123123319329131",
+    "email": "email@gmail.com",
+    "password": "11111",
+    "fullName": "Nounce",
+    "roleId": "US",
+    "phone": "0381948293",
+    "createAt": "2024-01-31 14:21:23",
+    "status": 1
+}

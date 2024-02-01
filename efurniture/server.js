@@ -6,6 +6,8 @@ import cors from 'cors';
 const app = express()
 const env = dotenv.config()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 const db = mysql2.createConnection({
@@ -27,17 +29,33 @@ app.get('/users', (req, res) => {
   })
 })
 
-app.post('/users', (req, res) => {
-  const sql = "INSERT INTO `efurniture`.`users` (`user_id`, `username`, `password`, `role_id`, `fullName`, `phone_numbers`, `email`, `create_at`, `status`) VALUES (?,?,?,?,?,?,?,?,?)"
-  const values = [req.body.id, req.body.username, req.body.password, "US", req.body.fullName, "", req.body.email, req.body.createDate, true]
-  db.execute(sql, values, (err, result, fields) => {
-    if (err instanceof Error) {
-      console.log(err);
-      return;
-    }
+app.get('/users/:id', (req, res) => {
+  const id = req.params.id
+  const sql = `SELECT * FROM users WHERE user_id = ?`
+  db.query(sql, id, (err, result) => {
+    if (err) res.json(err)
+    return res.json(result)
+  })
+})
 
-    console.log(result);
-    console.log(fields);
+app.get('/products', (req, res) => {
+  const sql = "SELECT * FROM products"
+  db.query(sql, (err, result) => {
+    if (err) res.json(err)
+    return res.json(result)
+  })
+})
+
+app.post('/register', async (req, res) => {
+  const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status) VALUES (?,?,?,?,?,?,?,?)"
+  const values = [req.body.userId, req.body.email, req.body.password, req.body.fullName, req.body.roleId, req.body.phone, req.body.createAt, req.body.status]
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log(err)
+      return;
+    } else {
+      console.log("Successfully registered")
+    }
   })
 })
 

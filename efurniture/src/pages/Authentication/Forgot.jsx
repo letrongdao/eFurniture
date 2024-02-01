@@ -1,0 +1,187 @@
+import React, { useState, useRef } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'react-toastify/dist/ReactToastify.css';
+import "./Authentication.css"
+import { Button, Image, Divider, Modal } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons'
+import { useNavigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { useFormik } from 'formik'
+import * as Yup from 'yup';
+import generateId from "../../assistants/GenerateId";
+import Reset from "./Reset";
+
+export default function Forgot() {
+    const navigate = useNavigate()
+    const formRef = useRef()
+    const [isLoading, setIsLoading] = useState(false)
+    const randomImage = "https://t4.ftcdn.net/jpg/05/51/69/95/360_F_551699573_1wjaMGnizF5QeorJJIgw5eRtmq5nQnzz.jpg"
+
+    const [open, setOpen] = useState(false);
+    const showModal = () => {
+        setOpen(true);
+    };
+
+    const handleCancel = () => {
+        setOpen(false);
+    };
+
+    const [userInfo, setUserInfo] = useState({
+        userId: '',
+        email: '',
+        password: '',
+        fullName: '',
+        roleId: '',
+        phone: '',
+        createAt: '',
+        status: false,
+    })
+    const [verifyCode, setVerifyCode] = useState("")
+
+    const sendEmail = () => {
+        emailjs.sendForm('service_qm91avr', 'template_0ftxhqc', formRef.current, 'WcYGL3eDIXuI0SMzS')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+    };
+
+    const emailForm = useFormik({
+        initialValues: {
+            email: '',
+            code: generateId(6, "")
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email("Invalid email").required("")
+        }),
+        onSubmit: async (values) => {
+            setIsLoading(true)
+            await fetch('http://localhost:3344/users')
+                .then(res => res.json())
+                .then(data => {
+                    const foundAccountByEmail = data.find((account) => (account.email === values.email))
+                    if (foundAccountByEmail) {
+                        // sendEmail()
+                        setUserInfo(foundAccountByEmail)
+                        setVerifyCode(emailForm.initialValues.code)
+                        setIsLoading(false)
+                        showModal()
+                    }
+                    else {
+                        setIsLoading(false)
+                        emailForm.setErrors({
+                            email: "This email is not registered."
+                        })
+                    }
+                })
+                .catch(err => console.log(err))
+        }
+    })
+
+    const codeVerifyForm = useFormik({
+        initialValues: {
+            code: "",
+            email: userInfo.email,
+        },
+        validationSchema: Yup.object({
+            code: Yup.string().min(6, "Verify code should be a 6-digit one.").max(6, "Verify code should be a 6-digit one.").required("")
+        }),
+        onSubmit: (values) => {
+            if (values.code === verifyCode) {
+                const userId = userInfo.userId
+                setIsLoading(true)
+                setTimeout(() => {
+                    setOpen(false);
+                    setIsLoading(false);
+                    navigate('/reset', { replace: true, state: { id: userInfo.userId }})
+                }, 2000);
+            }
+            else {
+                codeVerifyForm.setErrors({
+                    code: "Incorrect verification code. Please check your email and try again."
+                })
+            }
+        }
+    })
+
+    return (
+        <div className="container">
+            <div className="left-container">
+                <Image src={randomImage} width={400} preview={false} />
+            </div>
+            <Divider type="vertical" />
+            <div className="right-container row" style={{ padding: "20px 0" }}>
+                <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+                <form ref={formRef} onSubmit={emailForm.handleSubmit}>
+                    <h5>Enter your email address to reset password.</h5>
+                    <br />
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="Enter your email address"
+                        onChange={emailForm.handleChange}
+                        onBlur={emailForm.handleBlur}
+                        value={emailForm.values.email}
+                    />
+                    <input
+                        type="hidden"
+                        name="code"
+                        onChange={emailForm.handleChange}
+                        onBlur={emailForm.handleBlur}
+                        value={emailForm.values.code}
+                    />
+                    <div className="error">
+                        {emailForm.errors.email ? (
+                            <i>{emailForm.errors.email}</i>
+                        ) : null}
+                    </div>
+                    <span className="modal-button-group" style={{ flexDirection: "column", marginTop: "20px" }}>
+                        <Button type="primary" htmlType="submit" shape="round" block disabled={isLoading ? true : false}>
+                            {isLoading ? <LoadingOutlined /> : <p>Continue</p>}
+                        </Button>
+                        <Button type="default" shape="round" block onClick={() => { navigate(-1) }}>Back</Button>
+                    </span>
+                </form>
+                <Modal
+                    title="Email sent"
+                    open={open}
+                    onCancel={handleCancel}
+                    confirmLoading={isLoading}
+                    footer={null}
+                >
+                    <form onSubmit={codeVerifyForm.handleSubmit}>
+                        <h5>Please check your email for the verification code.</h5>
+                        <br />
+                        <input type="text"
+                            name="code"
+                            placeholder="Enter the code here"
+                            onChange={codeVerifyForm.handleChange}
+                            onBlur={codeVerifyForm.handleBlur}
+                            value={codeVerifyForm.values.code}
+                        />
+                        <div className="error">
+                            {codeVerifyForm.errors.code ? (
+                                <i>{codeVerifyForm.errors.code}</i>
+                            ) : null}
+                        </div>
+                        <input
+                            type="hidden"
+                            name="email"
+                            onChange={emailForm.handleChange}
+                            onBlur={emailForm.handleBlur}
+                            value={emailForm.values.email}
+                        />
+                        <span className="modal-button-group">
+                            <Button type="default" shape="round" onClick={handleCancel}>Cancel</Button>
+                            <Button type="primary" htmlType="submit" shape="round" disabled={isLoading ? true : false}>
+                                {isLoading ? <LoadingOutlined /> : <p>Verify {verifyCode}</p>}
+                            </Button>
+                        </span>
+                    </form>
+                </Modal>
+            </div>
+        </div>
+
+    )
+}
