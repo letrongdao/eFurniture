@@ -1,6 +1,7 @@
 import React from 'react'
 import "react-toastify/dist/ReactToastify.css"
 import { Avatar, List } from 'antd';
+import 'Product'
 export default function Product() {
   const data = [
     {
