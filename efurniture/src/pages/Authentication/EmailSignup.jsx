@@ -124,7 +124,7 @@ export default function EmailSignup() {
                         {isLoading ? <LoadingOutlined /> : <p>Continue</p>}
                     </Button>
                 </form>
-                <Divider><Text italic style={{ fontSize: "70%" }}>or you can sign up with</Text></Divider>
+                <Divider><Text italic style={{ fontSize: "70%" }}>or you can sign in with</Text></Divider>
                 <div className="otherLogin">
                     <GoogleLogin
                         onSuccess={onGoogleSuccess}
