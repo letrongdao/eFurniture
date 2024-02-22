@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 import { jwtDecode } from "jwt-decode";
 import FacebookLogin from 'react-facebook-login';
 import FacebookIcon from '../../assets/icons/facebook.png'
-import generateId from "../../assistants/GenerateId";
+import { generateId, generatePassword } from "../../assistants/Generators";
 import dateFormat from "../../assistants/date.format";
 import axios from "axios";
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
@@ -41,7 +41,7 @@ export default function EmailSignup() {
                             setIsLoading(false)
                         }, 2000)
                         setTimeout(() => {
-                            navigate('/signin', { state: { email: values.email } })
+                            navigate('/signin', { state: { noti: "signup", email: values.email } })
                         }, 2000)
                     }
                     else {
@@ -64,15 +64,15 @@ export default function EmailSignup() {
                     navigate('/signin')
                 }
                 else {
-                    const newUserId = generateId(15, "us")
+                    const newUserId = generateId(15, "user")
                     const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
                     setRegisterUser({
-                        userId: newUserId,
+                        user_id: newUserId,
                         email: decoded.email,
-                        password: "",
+                        password: "unset",
                         fullName: decoded.name,
-                        roleId: "US",
-                        phone: "",
+                        role_id: "US",
+                        phone: "unset",
                         createAt: createAt,
                         status: true,
                     })
@@ -90,8 +90,44 @@ export default function EmailSignup() {
         console.log("Failed to login with Google: ", err.message)
     }
 
-    const responseFacebook = (response) => {
-        console.log("ResponseFacebook: ", response)
+    const responseFacebook = async (response) => {
+        if (response) {
+            console.log("Facebook login credentials: ", response)
+            await fetch("http://localhost:3344/users")
+                .then(res => res.json())
+                .then(data => {
+                    var foundUserByEmail = data.find((account) => (account.email === response.email))
+                    if (foundUserByEmail) {
+                        console.log("Email is already registered.")
+                    }
+                    else {
+                        const newUserId = generateId(15, 'user')
+                        const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
+                        var registerUser = {
+                            user_id: newUserId,
+                            email: response.email,
+                            password: generatePassword(20),
+                            fullName: response.name,
+                            role_id: "US",
+                            phone: 'unset',
+                            create_at: createAt,
+                            status: true,
+                        }
+                        axios.post("http://localhost:3344/users", registerUser)
+                            .catch((err) => {
+                                console.log("Error: ", err.response.data)
+                            })
+                        console.log("A new account has been created by Facebook email: ", response.email)
+                    }
+                })
+                .catch(err => console.log(err))
+            setTimeout(() => {
+                setIsLoading(false)
+                navigate('/')
+            }, 2000)
+        } else {
+            console.log("Not found data")
+        }
     }
 
     return (
@@ -101,7 +137,7 @@ export default function EmailSignup() {
             </div>
             <Divider type="vertical" />
             <div className="right-container row">
-            <Image className="image" src={eFurniLogo} width={250} preview={false} />
+                <Image className="image" src={eFurniLogo} width={250} preview={false} />
                 <form onSubmit={emailForm.handleSubmit}>
                     <div className="mb-2 mt-2">
                         <br />

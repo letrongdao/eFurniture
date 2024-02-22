@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
-import generateId from "../../assistants/GenerateId";
+import { generateId } from "../../assistants/Generators";
 import Reset from "./Reset";
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 

@@ -5,24 +5,24 @@ GET http://localhost:3344/users
 GET http://localhost:3344/users/user12938712398213
 
 ###
-POST http://localhost:3344/register
+POST http://localhost:3344/users
 Content-Type: application/json
 
 {
-    "userId": "us1231123129131",
+    "user_id": "us1231123129131",
     "email": "email@gmail.com",
     "password": "11111",
     "fullName": "Nounce",
-    "roleId": "US",
+    "role_id": "US",
     "phone": "0381948293",
     "createAt": "2024-01-31 14:21:23",
     "status": 1
 }
 
 ###
-PATCH http://localhost:3344/reset/user12938712398213
+PATCH http://localhost:3344/users/user23599252585
 Content-Type: application/json
 
 {
-    "password": "22222",
+    "password": "22222"
 }

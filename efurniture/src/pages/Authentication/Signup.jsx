@@ -13,7 +13,7 @@ import { jwtDecode } from "jwt-decode";
 import FacebookLogin from 'react-facebook-login';
 import FacebookIcon from '../../assets/icons/facebook.png'
 import emailjs from '@emailjs/browser';
-import generateId from "../../assistants/GenerateId";
+import { generateId, generatePassword } from "../../assistants/Generators";
 import dateFormat from "../../assistants/date.format";
 import axios from "axios";
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
@@ -61,15 +61,15 @@ export default function Signup() {
                     navigate('/')
                 }
                 else {
-                    const newUserId = generateId(15, "us")
+                    const newUserId = generateId(15, "user")
                     const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
                     setRegisterUser({
                         userId: newUserId,
                         email: decoded.email,
-                        password: "",
+                        password: generatePassword(20),
                         fullName: decoded.name,
                         roleId: "US",
-                        phone: "",
+                        phone: "unset",
                         createAt: createAt,
                         status: true,
                     })
@@ -87,8 +87,44 @@ export default function Signup() {
         console.log("Failed to login with Google: ", err.message)
     }
 
-    const responseFacebook = (response) => {
-        console.log("ResponseFacebook: ", response)
+    const responseFacebook = async (response) => {
+        if (response) {
+            console.log("Facebook login credentials: ", response)
+            await fetch("http://localhost:3344/users")
+                .then(res => res.json())
+                .then(data => {
+                    var foundUserByEmail = data.find((account) => (account.email === response.email))
+                    if (foundUserByEmail) {
+                        console.log("Email is already registered.")
+                    }
+                    else {
+                        const newUserId = generateId(15, 'user')
+                        const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
+                        var registerUser = {
+                            user_id: newUserId,
+                            email: response.email,
+                            password: generatePassword(20),
+                            fullName: response.name,
+                            role_id: "US",
+                            phone: 'unset',
+                            create_at: createAt,
+                            status: true,
+                        }
+                        axios.post("http://localhost:3344/users", registerUser)
+                            .catch((err) => {
+                                console.log("Error: ", err.response.data)
+                            })
+                        console.log("A new account has been created by Facebook email: ", response.email)
+                    }
+                })
+                .catch(err => console.log(err))
+            setTimeout(() => {
+                setIsLoading(false)
+                navigate('/')
+            }, 2000)
+        } else {
+            console.log("Not found data")
+        }
     }
 
     const sendEmail = () => {
@@ -143,7 +179,7 @@ export default function Signup() {
         }),
         onSubmit: (values) => {
             if (values.code === verifyCode) {
-                axios.post('http://localhost:3344/register', registerUser)
+                axios.post('http://localhost:3344/users', registerUser)
                     .then((response) => {
                         console.log(response);
                     })

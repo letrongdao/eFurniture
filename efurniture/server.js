@@ -40,7 +40,7 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', async (req, res) => {
   const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status) VALUES (?,?,?,?,?,?,?,?)"
-  const values = [req.body.userId, req.body.email, req.body.password, req.body.fullName, req.body.roleId, req.body.phone, req.body.createAt, req.body.status]
+  const values = [req.body.user_id, req.body.email, req.body.password, req.body.fullName, req.body.role_id, req.body.phone, req.body.create_at, req.body.status]
   db.query(sql, values, (err, result) => {
     if (err) {
       console.log(err)
@@ -54,8 +54,8 @@ app.post('/users', async (req, res) => {
 app.patch('/users/:id', async (req, res) => {
   const id = req.params.id
   const sql = "UPDATE users SET password = ? WHERE user_id = ?"
-  const value = [req.body]
-  db.query(sql, value, id, (err, result) => {
+  const data = [req.body.password, id]
+  db.query(sql, data, (err, result) => {
     if (err) {
       console.log(err.message)
       return;

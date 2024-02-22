@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
 import "./Authentication.css"
@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import axios from "axios";
-import generateId from "../../assistants/GenerateId";
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
 export default function Reset() {
@@ -28,13 +27,18 @@ export default function Reset() {
             password: Yup.string().min(5, "Password must contains within 5-18 letters").max(18, "Password must contains within 5-18 symbols").required(""),
             confirm: Yup.string().test('passwords-match', 'Passwords does not match', function (value) { return this.parent.password === value }),
         }),
-        onSubmit: async (values) => {
+        onSubmit: (values) => {
             setIsLoading(true)
-            await axios.patch(`http://localhost:3344/reset/${params.id}`, values.password)
-                .then(console.log("Reset successfully."))
+            axios.patch(`http://localhost:3344/users/${params.id}`, {
+                password: values.password
+            })
+                .then(() => {
+                    console.log("Password is successfully reset.")
+                })
                 .catch(err => console.log(err))
             setTimeout(() => {
                 setIsLoading(false)
+                navigate('/signin', { state: { noti: "reset" } })
             }, 2000)
         }
     })
