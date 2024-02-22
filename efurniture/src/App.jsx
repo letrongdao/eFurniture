@@ -14,7 +14,6 @@ import AdminPage from "./pages/Admin/Admin";
 import DetailPage from "./pages/Detail/DetailPage";
 
 function App() {
-
   return (
     <Routes>
       <Route path="/" element={<Home />}></Route>
@@ -23,7 +22,7 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/email" element={<EmailSignup />} />
       <Route path="/forgot" element={<Forgot />} />
-      <Route path="/reset" element={<Reset/>} />
+      <Route path="/reset/:id" element={<Reset/>} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/" element={<DetailPage />} />
     </Routes>

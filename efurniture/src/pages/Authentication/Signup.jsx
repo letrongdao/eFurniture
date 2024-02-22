@@ -16,6 +16,7 @@ import emailjs from '@emailjs/browser';
 import generateId from "../../assistants/GenerateId";
 import dateFormat from "../../assistants/date.format";
 import axios from "axios";
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
 export default function Signup() {
     const navigate = useNavigate()
@@ -154,6 +155,7 @@ export default function Signup() {
                     setOpen(false);
                     setIsLoading(false);
                     console.log("Successfully registered");
+                    navigate('/signin')
                 }, 2000);
             }
             else {
@@ -169,7 +171,7 @@ export default function Signup() {
             </div>
             <Divider type="vertical" />
             <div className="right-container row">
-                <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+                <Image className="image" src={eFurniLogo} width={250} preview={false} />
                 <form ref={formRef} onSubmit={signupForm.handleSubmit}>
                     <div className="mb-2 mt-2">
                         <input
@@ -254,7 +256,7 @@ export default function Signup() {
                     />
                     <FacebookLogin
                         appId="689804996380398"
-                        autoLoad={true}
+                        autoLoad={false}
                         fields="name,email"
                         callback={responseFacebook}
                         size="small"

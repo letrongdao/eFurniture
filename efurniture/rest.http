@@ -2,14 +2,14 @@
 GET http://localhost:3344/users
 
 ###
-GET http://localhost:3344/users/us9949701574607
+GET http://localhost:3344/users/user12938712398213
 
 ###
 POST http://localhost:3344/register
 Content-Type: application/json
 
 {
-    "userId": "us1231123123319329131",
+    "userId": "us1231123129131",
     "email": "email@gmail.com",
     "password": "11111",
     "fullName": "Nounce",
@@ -17,4 +17,12 @@ Content-Type: application/json
     "phone": "0381948293",
     "createAt": "2024-01-31 14:21:23",
     "status": 1
+}
+
+###
+PATCH http://localhost:3344/reset/user12938712398213
+Content-Type: application/json
+
+{
+    "password": "22222",
 }

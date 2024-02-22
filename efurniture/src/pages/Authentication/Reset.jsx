@@ -2,34 +2,22 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
 import "./Authentication.css"
-import { Button, Image, Divider, Typography } from 'antd';
+import { Button, Image, Divider } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import axios from "axios";
 import generateId from "../../assistants/GenerateId";
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
 export default function Reset() {
     const navigate = useNavigate()
-    const location = useLocation()
     const [isLoading, setIsLoading] = useState(false)
+    const params = useParams()
 
     const randomImage = "https://t4.ftcdn.net/jpg/05/51/69/95/360_F_551699573_1wjaMGnizF5QeorJJIgw5eRtmq5nQnzz.jpg"
-    useEffect(() => {
-        console.log(location)
-    }, [])
-    const [userInfo, setUserInfo] = useState({
-        userId: '',
-        email: '',
-        password: '',
-        fullName: '',
-        roleId: '',
-        phone: '',
-        createAt: '',
-        status: false,
-    })
 
     const resetPasswordForm = useFormik({
         initialValues: {
@@ -42,15 +30,12 @@ export default function Reset() {
         }),
         onSubmit: async (values) => {
             setIsLoading(true)
-            const userId = "us9949701574607"
-            await axios.get(`http://localhost:3344/users/${userId}`)
-                .then(res => res.json())
-                .then(data => {
-                    data?.map((account) => {
-                        console.log(account.email)
-                    })
-                })
+            await axios.patch(`http://localhost:3344/reset/${params.id}`, values.password)
+                .then(console.log("Reset successfully."))
                 .catch(err => console.log(err))
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 2000)
         }
     })
 
@@ -61,7 +46,7 @@ export default function Reset() {
             </div>
             <Divider type="vertical" />
             <div className="right-container row" style={{ padding: "20px 0" }}>
-                <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+                <Image className="image" src={eFurniLogo} width={250} preview={false} />
                 <form onSubmit={resetPasswordForm.handleSubmit}>
                     <h5>Enter your email address to reset password.</h5>
                     <br />

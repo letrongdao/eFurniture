@@ -10,6 +10,8 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import generateId from "../../assistants/GenerateId";
 import Reset from "./Reset";
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
+
 
 export default function Forgot() {
     const navigate = useNavigate()
@@ -26,16 +28,7 @@ export default function Forgot() {
         setOpen(false);
     };
 
-    const [userInfo, setUserInfo] = useState({
-        userId: '',
-        email: '',
-        password: '',
-        fullName: '',
-        roleId: '',
-        phone: '',
-        createAt: '',
-        status: false,
-    })
+    const [userId, setUserId] = useState("")
     const [verifyCode, setVerifyCode] = useState("")
 
     const sendEmail = () => {
@@ -63,7 +56,7 @@ export default function Forgot() {
                     const foundAccountByEmail = data.find((account) => (account.email === values.email))
                     if (foundAccountByEmail) {
                         // sendEmail()
-                        setUserInfo(foundAccountByEmail)
+                        setUserId(foundAccountByEmail.user_id)
                         setVerifyCode(emailForm.initialValues.code)
                         setIsLoading(false)
                         showModal()
@@ -82,19 +75,17 @@ export default function Forgot() {
     const codeVerifyForm = useFormik({
         initialValues: {
             code: "",
-            email: userInfo.email,
         },
         validationSchema: Yup.object({
             code: Yup.string().min(6, "Verify code should be a 6-digit one.").max(6, "Verify code should be a 6-digit one.").required("")
         }),
         onSubmit: (values) => {
             if (values.code === verifyCode) {
-                const userId = userInfo.userId
                 setIsLoading(true)
                 setTimeout(() => {
                     setOpen(false);
                     setIsLoading(false);
-                    navigate('/reset', { replace: true, state: { id: userInfo.userId }})
+                    navigate(`/reset/${userId}`)
                 }, 2000);
             }
             else {
@@ -112,7 +103,7 @@ export default function Forgot() {
             </div>
             <Divider type="vertical" />
             <div className="right-container row" style={{ padding: "20px 0" }}>
-                <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+                <Image className="image" src={eFurniLogo} width={250} preview={false} />
                 <form ref={formRef} onSubmit={emailForm.handleSubmit}>
                     <h5>Enter your email address to reset password.</h5>
                     <br />
@@ -123,13 +114,6 @@ export default function Forgot() {
                         onChange={emailForm.handleChange}
                         onBlur={emailForm.handleBlur}
                         value={emailForm.values.email}
-                    />
-                    <input
-                        type="hidden"
-                        name="code"
-                        onChange={emailForm.handleChange}
-                        onBlur={emailForm.handleBlur}
-                        value={emailForm.values.code}
                     />
                     <div className="error">
                         {emailForm.errors.email ? (

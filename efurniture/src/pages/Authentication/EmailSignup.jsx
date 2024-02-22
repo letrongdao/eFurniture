@@ -15,6 +15,7 @@ import FacebookIcon from '../../assets/icons/facebook.png'
 import generateId from "../../assistants/GenerateId";
 import dateFormat from "../../assistants/date.format";
 import axios from "axios";
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
 export default function EmailSignup() {
     const navigate = useNavigate()
@@ -100,7 +101,7 @@ export default function EmailSignup() {
             </div>
             <Divider type="vertical" />
             <div className="right-container row">
-                <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+            <Image className="image" src={eFurniLogo} width={250} preview={false} />
                 <form onSubmit={emailForm.handleSubmit}>
                     <div className="mb-2 mt-2">
                         <br />
@@ -135,7 +136,7 @@ export default function EmailSignup() {
                     />
                     <FacebookLogin
                         appId="689804996380398"
-                        autoLoad={true}
+                        autoLoad={false}
                         fields="name,email"
                         callback={responseFacebook}
                         size="small"

@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import { jwtDecode } from "jwt-decode";
 import FacebookLogin from 'react-facebook-login';
 import FacebookIcon from '../../assets/icons/facebook.png'
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
 export default function Signin() {
   const navigate = useNavigate()
@@ -85,7 +86,7 @@ export default function Signin() {
       </div>
       <Divider type="vertical" />
       <div className="right-container row">
-        <Image className="image" src="https://efurniturerepurposing.com.au/wp-content/uploads/2023/12/efurniture-logo.png" width={200} preview={false} />
+        <Image className="image" src={eFurniLogo} width={250} preview={false} />
         <form onSubmit={loginForm.handleSubmit}>
           <div className="mb-2 mt-2">
             <input
@@ -125,7 +126,7 @@ export default function Signin() {
           />
           <FacebookLogin
             appId="689804996380398"
-            autoLoad={true}
+            autoLoad={false}
             fields="name,email"
             callback={responseFacebook}
             size="small"
