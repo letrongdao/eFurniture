@@ -1,17 +1,21 @@
-import { Avatar, Rate, Space, Table, Typography } from "antd";
+import { Avatar, Rate, Space, Table, Typography, Image } from "antd";
 import { useEffect, useState } from "react";
-import { getInventory } from "../../../api/index";
+import axios from "axios";
 
 function Inventory() {
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
-    getInventory().then((res) => {
-      setDataSource(res.products);
-      setLoading(false);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      await axios.get("http://localhost:3344/products")
+      .then((res) => {
+        setDataSource(res.data);
+        setLoading(false);
+      });
+    }
+    fetchData()
   }, []);
 
   return (
@@ -21,39 +25,32 @@ function Inventory() {
         loading={loading}
         columns={[
           {
-            title: "Thumbnail",
-            dataIndex: "thumbnail",
+            title: "Id",
+            key: "product_id",
+            dataIndex: "product_id",           
+          },
+          {
+            title: "Picture",
+            key: "image_url",
+            dataIndex: "image_url",
             render: (link) => {
-              return <Avatar src={link} />;
+              return <Image src ={link} width={100} />;
             },
           },
           {
-            title: "Title",
-            dataIndex: "title",
+            title: "Name",
+            key: "name",
+            dataIndex: "name",
           },
           {
             title: "Price",
+            key: "price",
             dataIndex: "price",
             render: (value) => <span>${value}</span>,
           },
           {
-            title: "Rating",
-            dataIndex: "rating",
-            render: (rating) => {
-              return <Rate value={rating} allowHalf disabled />;
-            },
-          },
-          {
-            title: "Stock",
-            dataIndex: "stock",
-          },
-
-          {
-            title: "Brand",
-            dataIndex: "brand",
-          },
-          {
             title: "Category",
+            key: "category",
             dataIndex: "category",
           },
         ]}

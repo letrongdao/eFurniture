@@ -68,7 +68,7 @@ app.patch('/users/:id', async (req, res) => {
 app.get('/products', (req, res) => {
   const sql = "SELECT * FROM products";
   db.query(sql, (err, result) => {
-    if (err) res.json(err)
+    if (err) console.log(err.message)
     return res.json(result)
   })
 })

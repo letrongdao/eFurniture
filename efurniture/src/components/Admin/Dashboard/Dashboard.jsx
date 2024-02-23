@@ -135,7 +135,7 @@ function RecentOrders() {
   return (
     <>
       <Typography.Text>Recent Orders</Typography.Text>
-      <Table
+      <Table 
         style={{ width: "630px" }}
         columns={[
           {

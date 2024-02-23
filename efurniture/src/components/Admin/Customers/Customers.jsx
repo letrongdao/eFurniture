@@ -1,6 +1,7 @@
 import { Avatar, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers } from "../../../api/index";
+import { getCustomers } from "../../../dataControllers/index";
+import axios from "axios";
 
 function Customers() {
   const [loading, setLoading] = useState(false);
@@ -9,10 +10,11 @@ function Customers() {
   useEffect(() => {
     setLoading(true);
     getCustomers().then((res) => {
-      setDataSource(res.users);
+      setDataSource(res);
       setLoading(false);
-    });
+    })
   }, []);
+
 
   return (
     <Space size={20} direction="vertical">
@@ -22,40 +24,18 @@ function Customers() {
         loading={loading}
         columns={[
           {
-            title: "Photo",
-            dataIndex: "image",
-            render: (link) => {
-              return <Avatar src={link} />;
-            },
-          },
-          {
-            title: "First Name",
-            dataIndex: "firstName",
-          },
-          {
-            title: "LastName",
-            dataIndex: "lastName",
+            title: "User_id",
+            dataIndex: "user_id",
           },
           {
             title: "Email",
             dataIndex: "email",
           },
           {
-            title: "Phone",
-            dataIndex: "phone",
+            title: "Password",
+            dataIndex: "password",
           },
-
-          {
-            title: "address",
-            dataIndex: "address",
-            render: (address) => {
-              return (
-                <span>
-                  {address.address}, {address.city}
-                </span>
-              );
-            },
-          },
+       
         ]}
         dataSource={dataSource}
         pagination={{

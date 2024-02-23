@@ -1,6 +1,6 @@
 import { Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getOrders } from "../../../api/index";
+import { getOrders } from "../../../controllers/index";
 
 function Orders() {
   const [loading, setLoading] = useState(false);
