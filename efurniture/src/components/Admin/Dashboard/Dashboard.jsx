@@ -11,7 +11,7 @@ import {
   getInventory,
   getOrders,
   getRevenue
-} from "../../../api/index"
+} from "../../../dataControllers/index"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -135,7 +135,7 @@ function RecentOrders() {
   return (
     <>
       <Typography.Text>Recent Orders</Typography.Text>
-      <Table 
+      <Table
         style={{ width: "630px" }}
         columns={[
           {
