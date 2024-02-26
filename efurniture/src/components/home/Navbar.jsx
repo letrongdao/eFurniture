@@ -1,33 +1,67 @@
-import React, { useState } from "react";
-import { NavLink, Link, Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { DownOutlined } from '@ant-design/icons';
+import { Button, Dropdown, message, Space } from 'antd';
+import axios from 'axios'
 import styles from "../../css/navbar.module.css";
+import eFurniLogo from '../../assets/logos/eFurniLogo_transparent_white.png'
 
 const Navbar = () => {
   const [toggleNavbar, setToggleNavbar] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const toggleDarkMode = (theme) => {
-    if (theme) {
-      setIsDarkMode(false);
-    } else {
-      setIsDarkMode(true);
-    }
+  const navigate = useNavigate()
+  const [categories, setCategories] = useState([])
+  const handleMenuClick = (category) => {
+    categories.map((item) => {
+      if (item.key === category.keyPath[0]) {
+        navigate(`/products/${item.label}`)
+        console.log(item.label)
+      }
+    })
+  }
+
+  const fetchCategoryData = async () => {
+    await axios.get("http://localhost:3344/categories")
+      .then((res) => {
+        let a = res.data
+        a.map((item, i) => {
+          item["label"] = item.category_name
+          item["key"] = i.toString()
+        })
+        setCategories(a)
+      })
+      .catch((err) => console.log(err.message))
+  }
+
+  useEffect(() => {
+    fetchCategoryData()
+  }, [])
+
+  const menuProps = {
+    items: categories,
+    onClick: handleMenuClick,
+    theme: "dark",
+    inlineIndent: 24,
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <img className={styles.logo} src="./images/logo.png" alt="" />
+        <img className={styles.logo} src={eFurniLogo} alt="" />
       </div>
       <div className={styles.right}>
-        <Link to="/" className={styles.button}>Home</Link>
-        <Link to="/product" className={styles.button}>Product</Link>
-        <Link to="/detail" className={styles.button}>Detail</Link>
-        <div className={styles.button}>Blog</div>
-        <div className={styles.button}>New at AntiQ</div>
-        <div className={styles.button}>Contact</div>
-        <div className={styles.button}>
-          <Link to="/signin">Sign in</Link>
-        </div>
+        <Link to="/" className={styles.button}>HOME</Link>
+        <Link to="/products" className={styles.button}>
+          <Dropdown menu={menuProps} className={styles.button}>
+            <a onClick={() => navigate('/products')} className={styles.button}>
+              <Space>
+                PRODUCTS
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </Link>
+        <Link to="/contact" className={styles.button}>CONTACT</Link>
+        <Link to="/signin" className={styles.button}>SIGN IN</Link>
         <div className={styles.searchContainer}>
           <span>
             <img src="./images/search.png" alt="" />
@@ -52,15 +86,17 @@ const Navbar = () => {
             : `${styles.collapsedDisplay} ${styles.close}`
         }
       >
-        <div className={styles.button}>Home</div>
-        <div className={styles.button}>Products</div>
-        <div className={styles.button}>Shop</div>
-        <div className={styles.button}>Blog</div>
-        <div className={styles.button}>New at AntiQ</div>
-        <div className={styles.button}>Contact</div>
-        <div className={styles.button}>
-          <Link to="/signin">Sign in</Link>
-        </div>
+        <Link to="/" className={styles.button}>HOME</Link>
+        <Dropdown menu={menuProps} className={styles.button}>
+          <a onClick={() => navigate('/products')} className={styles.button}>
+            <Space>
+              PRODUCTS
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+        <Link to="/contact" className={styles.button}>CONTACT</Link>
+        <Link to="/signin" className={styles.button}>SIGN IN</Link>
         <input placeholder="Search..." type="text" className={styles.search} />
       </div>
     </div>

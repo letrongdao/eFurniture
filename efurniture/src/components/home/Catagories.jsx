@@ -24,8 +24,8 @@ const Catagories = () => {
       </div>
       <div id={styles.light} className={styles.catagoryContainer}>
         <div className={styles.textContainer}>
-          <h3>Lamp</h3>
-          <span>Ceiling Lamp</span>
+          <h3>Lighting</h3>
+          <span>Lamp and Bulb</span>
         </div>
         <img className={styles.light} src="./images/light.png" alt="" />
       </div>

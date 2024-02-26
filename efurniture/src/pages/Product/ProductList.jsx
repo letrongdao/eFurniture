@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Card, List, Typography } from 'antd';
 import axios from 'axios';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/Home/Navbar';
 import "./Product.css"
 
 export default function ProductList() {
-    const [dataSource, setDataSource] = useState([])
+    const [productDataSource, setProductDataSource] = useState([])
+    const [categoryDataSource, setCategoryDataSource] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
-    const { Meta } = Card;
     const { Text } = Typography;
+
     const fetchProductData = async () => {
         setIsLoading(true)
         await axios.get('http://localhost:3344/products')
             .then((res) => {
                 if (res) {
-                    setDataSource(res.data)
+                    setProductDataSource(res.data)
                     setTimeout(() => {
                         setIsLoading(false)
                     }, 1000)
@@ -24,8 +25,23 @@ export default function ProductList() {
             .catch((err) => console.log("Fail to fetch product data: ", err.message))
     }
 
+    const fetchCategoryData = async () => {
+        setIsLoading(true)
+        await axios.get('http://localhost:3344/categories')
+            .then((res) => {
+                if (res) {
+                    setCategoryDataSource(res.data)
+                    setTimeout(() => {
+                        setIsLoading(false)
+                    }, 1000)
+                }
+            })
+            .catch((err) => console.log("Fail to fetch category data: ", err.message))
+    }
+
     useEffect(() => {
         fetchProductData()
+        fetchCategoryData()
     }, [])
 
     return (
@@ -38,7 +54,7 @@ export default function ProductList() {
                     column: 4,
                 }}
                 loading={isLoading}
-                dataSource={dataSource}
+                dataSource={productDataSource}
                 renderItem={(item) => (
                     <List.Item>
                         <Card

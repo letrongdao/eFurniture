@@ -26,3 +26,21 @@ Content-Type: application/json
 {
     "password": "22222"
 }
+
+###
+GET http://localhost:3344/products/P001
+
+###
+POST http://localhost:3344/products
+Content-Type: application/json
+
+{
+    "product_id": "us1231123129131",
+    "email": "email@gmail.com",
+    "password": "11111",
+    "fullName": "Nounce",
+    "role_id": "US",
+    "phone": "0381948293",
+    "createAt": "2024-01-31 14:21:23",
+    "status": 1
+}

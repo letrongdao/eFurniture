@@ -73,11 +73,10 @@ app.get('/products', (req, res) => {
   })
 })
 
-app.get('/products', (req, res) => {
-  const productId = [req.query.product_id];
+app.get('/products/:id', (req, res) => {
+  const productId = req.params.id;
   const sql = "SELECT * FROM products WHERE product_id = ?";
-
-  db.query(sql, productId, (err, result) => {
+  db.query(sql, [productId], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -139,6 +138,14 @@ app.delete('/products', (req, res) => {
 
 app.get('/inventoryItems', (req, res) => {
   const sql = "SELECT * FROM inventoryitems";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/categories', (req, res) => {
+  const sql = "SELECT * FROM categories";
   db.query(sql, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)

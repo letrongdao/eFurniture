@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./home.module.css";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Home/Navbar";
 
-import Herosection from "../../components/Herosection";
-import ShopYourChoice from "../../components/ShopYourChoice";
-import ProductsOfTheWeek from "../../components/ProductsOfTheWeek";
-import Catagories from "../../components/Catagories";
-import UpcomingCollections from "../../components/UpcomingCollections";
-import BlueBanner from "../../components/BlueBanner";
-import Features from "../../components/Features";
-import Footer from "../../components/Footer";
+import Herosection from "../../components/Home/Herosection";
+import ShopYourChoice from "../../components/Home/ShopYourChoice";
+import ProductsOfTheWeek from "../../components/Home/ProductsOfTheWeek";
+import Catagories from "../../components/Home/Catagories";
+import UpcomingCollections from "../../components/Home/UpcomingCollections";
+import BlueBanner from "../../components/Home/BlueBanner";
+import Features from "../../components/Home/Features";
+import Footer from "../../components/Home/Footer";
 
 const Home = () => {
   return (
