@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { NavLink, Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "../css/navbar.module.css";
+import eFurniLogo from '../assets/logos/eFurniLogo_transparent.png'
 
 const Navbar = () => {
   const [toggleNavbar, setToggleNavbar] = useState(false);
@@ -16,18 +17,13 @@ const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <img className={styles.logo} src="./images/logo.png" alt="" />
+        <img className={styles.logo} src={eFurniLogo} alt="" />
       </div>
       <div className={styles.right}>
         <Link to="/" className={styles.button}>Home</Link>
-        <Link to="/product" className={styles.button}>Product</Link>
-        <Link to="/detail" className={styles.button}>Detail</Link>
-        <div className={styles.button}>Blog</div>
-        <div className={styles.button}>New at AntiQ</div>
-        <div className={styles.button}>Contact</div>
-        <div className={styles.button}>
-          <Link to="/signin">Sign in</Link>
-        </div>
+        <Link to="/products" className={styles.button}>Products</Link>
+        <Link to="/contact" className={styles.button}>Contact</Link>
+        <Link to="/signin" className={styles.button}>Sign in</Link>
         <div className={styles.searchContainer}>
           <span>
             <img src="./images/search.png" alt="" />
@@ -52,15 +48,10 @@ const Navbar = () => {
             : `${styles.collapsedDisplay} ${styles.close}`
         }
       >
-        <div className={styles.button}>Home</div>
-        <div className={styles.button}>Products</div>
-        <div className={styles.button}>Shop</div>
-        <div className={styles.button}>Blog</div>
-        <div className={styles.button}>New at AntiQ</div>
-        <div className={styles.button}>Contact</div>
-        <div className={styles.button}>
-          <Link to="/signin">Sign in</Link>
-        </div>
+        <Link to="/" className={styles.button}>Home</Link>
+        <Link to="/products" className={styles.button}>Products</Link>
+        <Link to="/contact" className={styles.button}>Contact</Link>
+        <Link to="/signin" className={styles.button}>Sign in</Link>
         <input placeholder="Search..." type="text" className={styles.search} />
       </div>
     </div>

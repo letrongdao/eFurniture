@@ -12,12 +12,14 @@ import Forgot from "./pages/Authentication/Forgot";
 import Reset from "./pages/Authentication/Reset";
 import AdminPage from "./pages/Admin/Admin";
 import DetailPage from "./pages/Detail/DetailPage";
+import ProductList from './pages/Product/ProductList'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />}></Route>
       <Route path="/product" element={<Product />} />
+      <Route path="/products" element={<ProductList />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/email" element={<EmailSignup />} />

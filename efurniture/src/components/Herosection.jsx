@@ -1,6 +1,7 @@
 import React from "react";
 
 import styles from "../css/herosection.module.css";
+import { Link } from "react-router-dom";
 
 const Herosection = () => {
   return (
@@ -10,7 +11,9 @@ const Herosection = () => {
         <h5 className={styles.tag}>
           Find best quality furniture for all of your requirements{" "}
         </h5>
-        <button className={styles.tag}>View Products</button>
+        <button className={styles.tag}>
+          <Link to="/products">View Products</Link>
+        </button>
       </div>
       <img
         className={styles.chairImage}

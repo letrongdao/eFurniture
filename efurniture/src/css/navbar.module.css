@@ -18,11 +18,12 @@
   justify-content: center;
   width: 170px;
   height: 55px;
+  background-color: white;
 }
 
 .logo {
-  width: 130px;
-  height: 45px;
+  width: 200px;
+  height: 150px;
   margin: 20px;
 }
 .right {

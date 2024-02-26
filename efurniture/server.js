@@ -137,6 +137,14 @@ app.delete('/products', (req, res) => {
   });
 })
 
+app.get('/inventoryItems', (req, res) => {
+  const sql = "SELECT * FROM inventoryitems";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.listen(3344, () => {
   console.log("Listening to port 3344")
 })

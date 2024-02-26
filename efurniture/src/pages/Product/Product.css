@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
+
+.info-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.info-section * {
+    font-family: 'Titillium Web', sans-serif;
+}
