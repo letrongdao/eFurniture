@@ -103,8 +103,9 @@ app.post('/products', (req, res) => {
   })
 })
 
-app.put('/products', (req, res) => {
-  const productId = req.query.product_id;
+app.patch('/products/:id', (req, res) => {
+  // const productId = req.query.product_id;
+  const productId = req.params.id;
   const updatedProduct = req.body;
 
   const sql = "UPDATE products SET ? WHERE product_id = ?";
@@ -121,8 +122,9 @@ app.put('/products', (req, res) => {
   });
 })
 
-app.delete('/products', (req, res) => {
-  const productId = [req.query.product_id];
+app.delete('/products/:id', (req, res) => {
+  // const productId = [req.query.product_id];
+  const productId = req.params.id;
   const sql = "DELETE FROM products WHERE product_id = ?";
   db.query(sql, productId, (err, result) => {
     if (err) {

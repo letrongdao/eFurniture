@@ -2,16 +2,16 @@ import {
   DollarCircleOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
-  UserOutlined
-} from "@ant-design/icons"
-import { Card, Space, Statistic, Table, Typography } from "antd"
-import { useEffect, useState } from "react"
+  UserOutlined,
+} from "@ant-design/icons";
+import { Card, Space, Statistic, Table, Typography } from "antd";
+import { useEffect, useState } from "react";
 import {
-  getCustomers,
-  getInventory,
+  getProduct,
+  getUser,
   getOrders,
-  getRevenue
-} from "../../../dataControllers/index"
+  getRevenue,
+} from "../../../dataControllers/index";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,27 +19,34 @@ import {
   BarElement,
   Title,
   Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
   Legend
-} from "chart.js"
-import { Bar } from "react-chartjs-2"
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+);
 function Dashboard() {
-  const [orders, setOrders] = useState(0)
-  const [inventory, setInventory] = useState(0)
-  const [customers, setCustomers] = useState(0)
-  const [revenue, setRevenue] = useState(0)
+  const [orders, setOrders] = useState(0);
+  const [products, setProducts] = useState(0);
+  const [users, setUsers] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   useEffect(() => {
-    getOrders().then(res => {
-      setOrders(res.total)
-      setRevenue(res.discountedTotal)
-    })
-    getInventory().then(res => {
-      setInventory(res.total)
-    })
-    getCustomers().then(res => {
-      setCustomers(res.total)
-    })
-  }, [])
+    getOrders().then((res) => {
+      setOrders(res.total);
+      setRevenue(res.discountedTotal);
+    });
+    getProduct().then((res) => {
+      setProducts(res.total);
+    });
+    getUser().then((res) => {
+      setUsers(res.total);
+    });
+  }, []);
   return (
     <Space size={20} direction="vertical">
       <Typography.Title level={4}>Dashboard</Typography.Title>
@@ -52,7 +59,7 @@ function Dashboard() {
                 backgroundColor: "rgba(0,255,0,0.25)",
                 borderRadius: 20,
                 fontSize: 24,
-                padding: 8
+                padding: 8,
               }}
             />
           }
@@ -67,12 +74,12 @@ function Dashboard() {
                 backgroundColor: "rgba(0,0,255,0.25)",
                 borderRadius: 20,
                 fontSize: 24,
-                padding: 8
+                padding: 8,
               }}
             />
           }
           title={"Inventory"}
-          value={inventory}
+          value={products}
         />
         <DashboardCard
           icon={
@@ -82,12 +89,12 @@ function Dashboard() {
                 backgroundColor: "rgba(0,255,255,0.25)",
                 borderRadius: 20,
                 fontSize: 24,
-                padding: 8
+                padding: 8,
               }}
             />
           }
           title={"Customer"}
-          value={customers}
+          value={users}
         />
         <DashboardCard
           icon={
@@ -97,7 +104,7 @@ function Dashboard() {
                 backgroundColor: "rgba(255,0,0,0.25)",
                 borderRadius: 20,
                 fontSize: 24,
-                padding: 8
+                padding: 8,
               }}
             />
           }
@@ -110,7 +117,7 @@ function Dashboard() {
         <DashboardChart />
       </Space>
     </Space>
-  )
+  );
 }
 function DashboardCard({ title, value, icon }) {
   return (
@@ -120,18 +127,18 @@ function DashboardCard({ title, value, icon }) {
         <Statistic title={title} value={value} />
       </Space>
     </Card>
-  )
+  );
 }
 function RecentOrders() {
-  const [dataSource, setDataSource] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [dataSource, setDataSource] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true)
-    getOrders().then(res => {
-      setDataSource(res.products.splice(0, 3))
-      setLoading(false)
-    })
-  }, [])
+    setLoading(true);
+    getOrders().then((res) => {
+      setDataSource(res.products.splice(0, 3));
+      setLoading(false);
+    });
+  }, []);
   return (
     <>
       <Typography.Text>Recent Orders</Typography.Text>
@@ -140,66 +147,66 @@ function RecentOrders() {
         columns={[
           {
             title: "Title",
-            dataIndex: "title"
+            dataIndex: "title",
           },
           {
             title: "Quantity",
-            dataIndex: "quantity"
+            dataIndex: "quantity",
           },
           {
             title: "Price",
-            dataIndex: "discountedPrice"
-          }
+            dataIndex: "discountedPrice",
+          },
         ]}
         loading={loading}
         dataSource={dataSource}
         pagination={false}
       ></Table>
     </>
-  )
+  );
 }
 function DashboardChart() {
   const [reveneuData, setReveneuData] = useState({
     labels: [],
-    datasets: []
-  })
+    datasets: [],
+  });
   useEffect(() => {
-    getRevenue().then(res => {
-      const labels = res.carts.map(cart => {
-        return `User-${cart.userId}`
-      })
-      const data = res.carts.map(cart => {
-        return cart.discountedTotal
-      })
+    getRevenue().then((res) => {
+      const labels = res.carts.map((cart) => {
+        return `User-${cart.userId}`;
+      });
+      const data = res.carts.map((cart) => {
+        return cart.discountedTotal;
+      });
       const dataSource = {
         labels,
         datasets: [
           {
             label: "Revenue",
             data: data,
-            backgroundColor: "rgba(255, 0, 0, 1)"
-          }
-        ]
-      }
-      setReveneuData(dataSource)
-    })
-  }, [])
+            backgroundColor: "rgba(255, 0, 0, 1)",
+          },
+        ],
+      };
+      setReveneuData(dataSource);
+    });
+  }, []);
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "bottom"
+        position: "bottom",
       },
       title: {
         display: true,
-        text: "Order Revenue"
-      }
-    }
-  }
+        text: "Order Revenue",
+      },
+    },
+  };
   return (
     <Card style={{ width: 500, height: 250 }}>
       <Bar data={reveneuData} />
     </Card>
-  )
+  );
 }
-export default Dashboard
+export default Dashboard;
