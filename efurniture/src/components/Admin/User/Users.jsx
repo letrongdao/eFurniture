@@ -1,24 +1,23 @@
 import { Avatar, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getCustomers } from "../../../dataControllers/index";
+import { getUser } from "../../../dataControllers/index";
 import axios from "axios";
 
-function Customers() {
+function Users() {
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-    getCustomers().then((res) => {
+    getUser().then((res) => {
       setDataSource(res);
       setLoading(false);
-    })
+    });
   }, []);
-
 
   return (
     <Space size={20} direction="vertical">
-      <Typography.Title level={4}>Customers</Typography.Title>
+      <Typography.Title level={4}>Users</Typography.Title>
       <Table
         style={{ width: "1250px" }}
         loading={loading}
@@ -35,7 +34,6 @@ function Customers() {
             title: "Password",
             dataIndex: "password",
           },
-       
         ]}
         dataSource={dataSource}
         pagination={{
@@ -45,4 +43,4 @@ function Customers() {
     </Space>
   );
 }
-export default Customers;
+export default Users;

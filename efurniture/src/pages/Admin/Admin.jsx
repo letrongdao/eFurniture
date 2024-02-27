@@ -7,7 +7,7 @@ import {
   SolutionOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
-import Customers from "../../components/Admin/Customers/Customers";
+import Users from "../../components/Admin/User/Users";
 import Dashboard from "../../components/Admin/Dashboard/Dashboard";
 import Inventory from "../../components/Admin/Inventory/Inventory";
 import Orders from "../../components/Admin/Orders/Orders";
@@ -31,8 +31,8 @@ const Admin = () => {
     {
       key: "2",
       icon: <UserOutlined />,
-      label: "Customers",
-      onClick: () => setActiveComponent("Customers"),
+      label: "Users",
+      onClick: () => setActiveComponent("Users"),
     },
     {
       key: "3",
@@ -94,7 +94,7 @@ const Admin = () => {
           }}
         >
           {activeComponent === "Dashboard" && <Dashboard />}
-          {activeComponent === "Customers" && <Customers />}
+          {activeComponent === "Users" && <Users />}
           {activeComponent === "Orders" && <Orders />}
           {activeComponent === "Inventory" && <Inventory />}
         </Content>

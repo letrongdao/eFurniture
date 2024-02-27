@@ -121,8 +121,8 @@ app.patch('/products/:id', (req, res) => {
   });
 })
 
-app.delete('/products/:id', (req, res) => {
-  const productId = req.params.id;
+app.delete('/products', (req, res) => {
+  const productId = [req.query.product_id];
   const sql = "DELETE FROM products WHERE product_id = ?";
   db.query(sql, [productId], (err, result) => {
     if (err) {
