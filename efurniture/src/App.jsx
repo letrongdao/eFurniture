@@ -23,8 +23,8 @@ function App() {
       <Route path="/signup/email" element={<EmailSignup />} />
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/reset/:id" element={<Reset />} />
-      <Route path="/product" element={<Product />} />
       <Route path="/products" element={<ProductList />} />
+      <Route path="/products/:id" element={<Product />} />
       <Route path="/products/:category" element={<CategorizedProductList />} />
       <Route path="/admin" element={<AdminPage />} />
     </Routes>

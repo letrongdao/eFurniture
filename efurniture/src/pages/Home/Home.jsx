@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./home.module.css";
-import Navbar from "../../components/Home/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 
 import Herosection from "../../components/Home/Herosection";
 import ShopYourChoice from "../../components/Home/ShopYourChoice";

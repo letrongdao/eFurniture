@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
-import "./Authentication.css"
+import styles from './styles.module.css'
 import { Button, Image, Divider } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,17 +44,17 @@ export default function Reset() {
     })
 
     return (
-        <div className="container">
-            <div className="left-container">
+        <div className={styles.container}>
+            <div className={styles.leftContainer}>
                 <Image src={randomImage} width={400} preview={false} />
             </div>
             <Divider type="vertical" />
-            <div className="right-container row" style={{ padding: "20px 0" }}>
-                <Image className="image" src={eFurniLogo} width={250} preview={false} />
-                <form onSubmit={resetPasswordForm.handleSubmit}>
+            <div className={styles.rightContainer} style={{ padding: "20px 0" }}>
+                <Image className={styles.image} src={eFurniLogo} width={250} preview={false} />
+                <form onSubmit={resetPasswordForm.handleSubmit } className={styles.formContainer}>
                     <h5>Enter your email address to reset password.</h5>
                     <br />
-                    <div className="mb-2 mt-2">
+                    <div className={styles.inputContainer}>
                         <input
                             type="password"
                             name="password"
@@ -63,14 +63,14 @@ export default function Reset() {
                             onBlur={resetPasswordForm.handleBlur}
                             value={resetPasswordForm.values.password}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {resetPasswordForm.errors.password ? (
                                 <i>{resetPasswordForm.errors.password}</i>
                             ) : null}
                         </div>
                     </div>
 
-                    <div className="mb-2 mt-2">
+                    <div className={styles.inputContainer}>
                         <input
                             type="password"
                             name="confirm"
@@ -79,13 +79,13 @@ export default function Reset() {
                             onBlur={resetPasswordForm.handleBlur}
                             value={resetPasswordForm.values.confirm}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {resetPasswordForm.errors.confirm ? (
                                 <i>{resetPasswordForm.errors.confirm}</i>
                             ) : null}
                         </div>
                     </div>
-                    <span className="modal-button-group" style={{ flexDirection: "column", marginTop: "20px" }}>
+                    <span className={styles.modalButtonGroup} style={{ flexDirection: "column", marginTop: "20px" }}>
                         <Button type="primary" htmlType="submit" shape="round" block disabled={isLoading ? true : false}>
                             {isLoading ? <LoadingOutlined /> : <p>Finish</p>}
                         </Button>

@@ -44,3 +44,9 @@ Content-Type: application/json
     "createAt": "2024-01-31 14:21:23",
     "status": 1
 }
+
+###
+GET http://localhost:3344/carts/us5833430108618
+
+###
+GET http://localhost:3344/cartItems/cart738249201

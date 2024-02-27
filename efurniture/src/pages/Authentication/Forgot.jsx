@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
-import "./Authentication.css"
+import styles from './styles.module.css'
 import { Button, Image, Divider, Modal } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
 import { useNavigate } from "react-router-dom";
@@ -97,30 +97,32 @@ export default function Forgot() {
     })
 
     return (
-        <div className="container">
-            <div className="left-container">
+        <div className={styles.container}>
+            <div className={styles.leftContainer}>
                 <Image src={randomImage} width={400} preview={false} />
             </div>
             <Divider type="vertical" />
-            <div className="right-container row" style={{ padding: "20px 0" }}>
-                <Image className="image" src={eFurniLogo} width={250} preview={false} />
-                <form ref={formRef} onSubmit={emailForm.handleSubmit}>
+            <div className={styles.rightContainer} style={{ padding: "20px 0" }}>
+                <Image className={styles.image} src={eFurniLogo} width={250} preview={false} />
+                <form ref={formRef} onSubmit={emailForm.handleSubmit} className={styles.formContainer}>
                     <h5>Enter your email address to reset password.</h5>
                     <br />
-                    <input
-                        type="text"
-                        name="email"
-                        placeholder="Enter your email address"
-                        onChange={emailForm.handleChange}
-                        onBlur={emailForm.handleBlur}
-                        value={emailForm.values.email}
-                    />
-                    <div className="error">
-                        {emailForm.errors.email ? (
-                            <i>{emailForm.errors.email}</i>
-                        ) : null}
+                    <div className={styles.inputContainer}>
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="Enter your email address"
+                            onChange={emailForm.handleChange}
+                            onBlur={emailForm.handleBlur}
+                            value={emailForm.values.email}
+                        />
+                        <div className="error">
+                            {emailForm.errors.email ? (
+                                <i>{emailForm.errors.email}</i>
+                            ) : null}
+                        </div>
                     </div>
-                    <span className="modal-button-group" style={{ flexDirection: "column", marginTop: "20px" }}>
+                    <span className={styles.modalButtonGroup} style={{ flexDirection: "column", marginTop: "20px" }}>
                         <Button type="primary" htmlType="submit" shape="round" block disabled={isLoading ? true : false}>
                             {isLoading ? <LoadingOutlined /> : <p>Continue</p>}
                         </Button>
@@ -144,7 +146,7 @@ export default function Forgot() {
                             onBlur={codeVerifyForm.handleBlur}
                             value={codeVerifyForm.values.code}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {codeVerifyForm.errors.code ? (
                                 <i>{codeVerifyForm.errors.code}</i>
                             ) : null}
@@ -156,7 +158,7 @@ export default function Forgot() {
                             onBlur={emailForm.handleBlur}
                             value={emailForm.values.email}
                         />
-                        <span className="modal-button-group">
+                        <span className={styles.modalButtonGroup}>
                             <Button type="default" shape="round" onClick={handleCancel}>Cancel</Button>
                             <Button type="primary" htmlType="submit" shape="round" disabled={isLoading ? true : false}>
                                 {isLoading ? <LoadingOutlined /> : <p>Verify {verifyCode}</p>}
