@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "../node_modules/font-awesome/css/font-awesome.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Signin from "./pages/Authentication/Signin";
@@ -10,8 +9,9 @@ import EmailSignup from "./pages/Authentication/EmailSignup";
 import Forgot from "./pages/Authentication/Forgot";
 import Reset from "./pages/Authentication/Reset";
 import AdminPage from "./pages/Admin/Admin";
-import ProductList from './pages/Product/ProductList'
+import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
+import Cart from "./pages/Cart/Cart";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
       <Route path="/product" element={<Product />} />
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:category" element={<CategorizedProductList />} />
+      <Route path="/carts" element={<Cart />} />
       <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );

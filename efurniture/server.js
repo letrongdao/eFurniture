@@ -154,6 +154,43 @@ app.get('/categories', (req, res) => {
   })
 })
 
+app.post('/cartItems', (req, res) => {
+  const sql = "INSERT INTO cartitems SET ? ";
+  const data = [req.body];
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err)
+      return;
+    } else {
+      // data.id = result.insertId;
+      // res.status(201).json(data);
+      res.json(result);
+    }
+  })
+})
+
+app.get('/:cartID/:productID', (req, res) => {
+  const productId = req.params.productID;
+  const cartId = req.params.cartID;
+  const sql = "SELECT * FROM cartitems WHERE cart_id = ? AND product_id = ? ";
+  db.query(sql, [cartId, productId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else if (result.affectedRows === 0) {
+      res.status(404).json({ err: 'Product not found!' });
+    } else {
+      res.json(result)
+    }
+  });
+})
+
+app.delete('/:cartID/:productID', (req, res) => {
+  const productId = req.params.productID;
+  const cartId = req.params.cartID;
+  const sql = "";
+})
+
 app.listen(3344, () => {
   console.log("Listening to port 3344")
 })

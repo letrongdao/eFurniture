@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Encode+Sans+Expanded:wght@800&family=Maven+Pro:wght@500&family=Oswald:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Encode+Sans+Expanded:wght@800&family=Maven+Pro:wght@500&family=Oswald:wght@500&display=swap");
 
 .container {
   width: 100%;
   height: 100%;
-  background-color: #FFF;
-  display: flex;
+  background-color: #fff;
+  /* display: flex; */
   justify-content: space-between;
   align-items: center;
-  font-family: 'Comfortaa', sans-serif;
-  box-shadow: 5px 10px 5px 10px #b4b4b4;
+  /* font-family: 'Comfortaa', sans-serif; */
+  /* box-shadow: 5px 10px 5px 10px #b4b4b4; */ /*module css*/
   position: relative;
   margin: 10px auto 0 auto;
-  border-radius: 3%;
+  /* border-radius: 3%; */
 }
 
 .left-container {
@@ -70,7 +70,7 @@ input {
   font-size: 90%;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'Maven Pro', sans-serif;
+  font-family: "Maven Pro", sans-serif;
 }
 
 .container .password-input-container {
@@ -83,7 +83,7 @@ input {
   width: fit-content;
   font-size: 12px;
   text-align: start !important;
-  border: none
+  border: none;
 }
 
 .container .forgot:hover {
@@ -94,7 +94,7 @@ input {
   height: fit-content;
   font-size: 60%;
   color: red;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   text-align: start !important;
 }
 
@@ -106,7 +106,7 @@ input {
 .form-footer a {
   cursor: pointer;
   color: #007bff;
-  font-family: 'Encode Sans Expanded', sans-serif;
+  font-family: "Encode Sans Expanded", sans-serif;
   display: inline-block;
 }
 
@@ -144,6 +144,6 @@ input {
 }
 
 h5 {
-  font-family: 'Maven Pro', sans-serif;
+  font-family: "Maven Pro", sans-serif;
   font-size: medium;
 }

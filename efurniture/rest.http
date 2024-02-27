@@ -44,3 +44,14 @@ Content-Type: application/json
     "createAt": "2024-01-31 14:21:23",
     "status": 1
 }
+
+###
+POST http://localhost:3344/cartItems
+Content-Type: application/json
+
+{
+    "product_id": "P001",
+    "quantiy": 1000,
+    "cart_id": "131",
+    "cartItem_id": "1",
+}
