@@ -56,6 +56,7 @@
 .sofaBtnAndImg > button:hover {
   background: black;
   transition: ease-in 300ms;
+  border-color: #333333;
   color: white;
 }
 
@@ -136,6 +137,7 @@
 .chair > button:hover {
   background: black;
   transition: ease-in 300ms;
+  border-color: #333333;
   color: white;
 }
 

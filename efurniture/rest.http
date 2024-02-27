@@ -50,3 +50,12 @@ GET http://localhost:3344/carts/us5833430108618
 
 ###
 GET http://localhost:3344/cartItems/cart738249201
+
+###
+GET http://localhost:3344/products/category/Table
+
+###
+GET http://localhost:3344/topProducts
+
+###
+GET http://localhost:3344/productsOfTheWeek

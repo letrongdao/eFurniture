@@ -17,11 +17,10 @@ const Navbar = () => {
   const [categories, setCategories] = useState([])
   const [userCart, setUserCart] = useState([])
 
-  const handleMenuClick = ({ key }) => {
+  const handleMenuClick = (i) => {
     categories.map((item) => {
-      if (item.key === key) {
-        navigate(`/products/${item.label}`)
-        console.log(item.label)
+      if (item.key === i.key) {
+        window.location.href = `/category/${item.label.toLowerCase()}`
       }
     })
   }
@@ -86,7 +85,9 @@ const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <img className={styles.logo} src={eFurniLogo} alt="" />
+        <Link to='/'>
+          <img className={styles.logo} src={eFurniLogo} alt="" />
+        </Link>
         <span className={styles.navigators}>
           <Link to="/products">
             <Dropdown menu={menuProps}>

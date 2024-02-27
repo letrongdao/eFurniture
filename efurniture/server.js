@@ -136,6 +136,31 @@ app.delete('/products', (req, res) => {
   });
 })
 
+app.get('/products/category/:name', (req, res) => {
+  const name = req.params.name
+  const sql = "SELECT * FROM products WHERE category_name = ?";
+  db.query(sql, [name], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/topProducts', (req, res) => {
+  const sql = "SELECT * FROM products WHERE status = 1 ORDER BY RAND() LIMIT 12";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/productsOfTheWeek', (req, res) => {
+  const sql = "SELECT * FROM products WHERE status = 1 ORDER BY RAND() LIMIT 3";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.get('/inventoryItems', (req, res) => {
   const sql = "SELECT * FROM inventoryitems";
   db.query(sql, (err, result) => {
@@ -143,6 +168,7 @@ app.get('/inventoryItems', (req, res) => {
     return res.json(result)
   })
 })
+
 
 app.get('/categories', (req, res) => {
   const sql = "SELECT * FROM categories";

@@ -10,7 +10,7 @@ const UpcomingCollections = () => {
       <div className={styles.upcomingProductsContent}>
         <h1 className={styles.upcomingProductsTitle}>Upcoming Collections</h1>
         <p className={styles.upcomingProductsTagline}>
-          The wood that enchances the beauty of your home
+          The wood that enhances the beauty of your home
         </p>
         <button className={styles.upcomingProductsBtn}>View More</button>
       </div>

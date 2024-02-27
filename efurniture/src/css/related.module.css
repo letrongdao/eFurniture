@@ -12,9 +12,22 @@
     font-family: 'Titillium Web', sans-serif;
 }
 
-.categoryTag {
+.title {
     font-family: "Yatra One", system-ui;
     font-weight: 400;
     font-style: normal;
     font-size: 150%;
+}
+
+.itemName {
+    width: 140px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
