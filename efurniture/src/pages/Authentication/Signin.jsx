@@ -27,12 +27,16 @@ export default function Signin() {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.state)
+    if (location.state) {
       if (location.state?.noti === "signup") {
         toast.warning("Your email has been registered before. Please enter your password to sign in.")
       }
-    if (location.state?.noti === "reset") {
-      toast.success("Your password has been successfully reset.")
+      if (location.state?.noti === "reset") {
+        toast.success("Your password has been successfully reset.")
+      }
+      if (location.state?.noti === "create") {
+        toast.success("Your account has been successfully signed up. Please login to continue.")
+      }
     }
   }, [])
 
