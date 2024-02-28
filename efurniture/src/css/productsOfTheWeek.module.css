@@ -22,7 +22,7 @@
 }
 
 .productImages {
-  flex: 35%;
+  width: 20rem;
 }
 
 .powTitle {
@@ -41,6 +41,10 @@
 
 .productContainer {
   margin: 1.5rem 0;
+}
+
+.productContainer:hover {
+  cursor: pointer;
 }
 
 .productImagesDesc > h2 {

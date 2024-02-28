@@ -17,6 +17,10 @@
   position: relative;
 }
 
+.catagoryContainer:hover {
+  cursor: pointer;
+}
+
 .textContainer {
   position: absolute;
   left: 0px;

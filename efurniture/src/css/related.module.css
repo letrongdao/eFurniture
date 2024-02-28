@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yatra+One&display=swap');
+
+.infoSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.infoSection * {
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.title {
+    font-family: "Yatra One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 150%;
+}
+
+.itemName {
+    width: 140px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 0 5px;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

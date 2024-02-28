@@ -104,7 +104,6 @@ app.post('/products', (req, res) => {
 })
 
 app.patch('/products/:id', (req, res) => {
-  // const productId = req.query.product_id;
   const productId = req.params.id;
   const updatedProduct = req.body;
 
@@ -122,11 +121,10 @@ app.patch('/products/:id', (req, res) => {
   });
 })
 
-app.delete('/products/:id', (req, res) => {
-  // const productId = [req.query.product_id];
-  const productId = req.params.id;
+app.delete('/products', (req, res) => {
+  const productId = [req.query.product_id];
   const sql = "DELETE FROM products WHERE product_id = ?";
-  db.query(sql, productId, (err, result) => {
+  db.query(sql, [productId], (err, result) => {
     if (err) {
       console.log(err);
       return;
@@ -138,6 +136,31 @@ app.delete('/products/:id', (req, res) => {
   });
 })
 
+app.get('/products/category/:name', (req, res) => {
+  const name = req.params.name
+  const sql = "SELECT * FROM products WHERE category_name = ?";
+  db.query(sql, [name], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/topProducts', (req, res) => {
+  const sql = "SELECT * FROM products WHERE status = 1 ORDER BY RAND() LIMIT 12";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/productsOfTheWeek', (req, res) => {
+  const sql = "SELECT * FROM products WHERE status = 1 ORDER BY RAND() LIMIT 3";
+  db.query(sql, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.get('/inventoryItems', (req, res) => {
   const sql = "SELECT * FROM inventoryitems";
   db.query(sql, (err, result) => {
@@ -145,6 +168,7 @@ app.get('/inventoryItems', (req, res) => {
     return res.json(result)
   })
 })
+
 
 app.get('/categories', (req, res) => {
   const sql = "SELECT * FROM categories";
@@ -154,41 +178,22 @@ app.get('/categories', (req, res) => {
   })
 })
 
-app.post('/cartItems', (req, res) => {
-  const sql = "INSERT INTO cartitems SET ? ";
-  const data = [req.body];
-  db.query(sql, data, (err, result) => {
-    if (err) {
-      console.log(err)
-      return;
-    } else {
-      // data.id = result.insertId;
-      // res.status(201).json(data);
-      res.json(result);
-    }
+app.get('/carts/:userId', (req, res) => {
+  const userId = req.params.userId
+  const sql = "SELECT * FROM carts WHERE user_id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
   })
 })
 
-app.get('/:cartID/:productID', (req, res) => {
-  const productId = req.params.productID;
-  const cartId = req.params.cartID;
-  const sql = "SELECT * FROM cartitems WHERE cart_id = ? AND product_id = ? ";
-  db.query(sql, [cartId, productId], (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else if (result.affectedRows === 0) {
-      res.status(404).json({ err: 'Product not found!' });
-    } else {
-      res.json(result)
-    }
-  });
-})
-
-app.delete('/:cartID/:productID', (req, res) => {
-  const productId = req.params.productID;
-  const cartId = req.params.cartID;
-  const sql = "";
+app.get('/cartItems/:cartId', (req, res) => {
+  const cartId = req.params.cartId
+  const sql = "SELECT * FROM cartItems WHERE cart_id = ?";
+  db.query(sql, [cartId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
 })
 
 app.listen(3344, () => {

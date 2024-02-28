@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
-import "./Authentication.css"
+import styles from './styles.module.css'
 import { Button, Image, Divider, Typography, Modal } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
 import { GoogleLogin } from '@react-oauth/google';
@@ -50,37 +50,49 @@ export default function Signup() {
     };
 
     const onGoogleSuccess = async (credentialResponse) => {
-        setIsLoading(true)
-        var decoded = jwtDecode(credentialResponse.credential)
-        console.log("Google Login user's data:", decoded)
-        await fetch("http://localhost:3344/users")
-            .then(res => res.json())
-            .then(data => {
-                var foundUserByEmail = data.find((account) => (account.email === decoded.email))
-                if (foundUserByEmail) {
-                    navigate('/')
-                }
-                else {
-                    const newUserId = generateId(15, "user")
-                    const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
-                    setRegisterUser({
-                        userId: newUserId,
-                        email: decoded.email,
-                        password: generatePassword(20),
-                        fullName: decoded.name,
-                        roleId: "US",
-                        phone: "unset",
-                        createAt: createAt,
-                        status: true,
-                    })
-                    axios.post("http://localhost:3344/register", registerUser)
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 2000)
-                }
-            })
-            .catch(err => console.log(err))
+        var decoded
+        if (credentialResponse.credential) {
+            decoded = jwtDecode(credentialResponse.credential)
+            console.log("SIGNIN SUCCESSFULLY. Google login user's email:", decoded.email)
 
+            await fetch("http://localhost:3344/users")
+                .then(res => res.json())
+                .then(data => {
+                    var foundUserByEmail = data.find((account) => (account.email === decoded.email))
+                    if (foundUserByEmail) {
+                        sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
+                    }
+                    else {
+                        const newUserId = generateId(30, 'u')
+                        const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
+                        var registerUser = {
+                            user_id: newUserId,
+                            email: decoded.email,
+                            password: generatePassword(20),
+                            fullName: decoded.name,
+                            role_id: "US",
+                            phone: '',
+                            create_at: createAt,
+                            status: true,
+                        }
+                        axios.post("http://localhost:3344/users", registerUser)
+                            .then(() => {
+                                console.log("A new account has been created by email ", decoded.email)
+                            })
+                            .catch((err) => {
+                                console.log("Error: ", err.response)
+                            })
+                        sessionStorage.setItem("loginUserId", newUserId)
+                    }
+                })
+                .catch(err => console.log(err))
+            setTimeout(() => {
+                setIsLoading(false)
+                navigate('/')
+            }, 2000)
+        } else {
+            console.log("Not found data")
+        }
     }
 
     const onGoogleError = (err) => {
@@ -95,10 +107,10 @@ export default function Signup() {
                 .then(data => {
                     var foundUserByEmail = data.find((account) => (account.email === response.email))
                     if (foundUserByEmail) {
-                        console.log("Email is already registered.")
+                        sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
                     }
                     else {
-                        const newUserId = generateId(15, 'user')
+                        const newUserId = generateId(30, 'u')
                         const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
                         var registerUser = {
                             user_id: newUserId,
@@ -106,15 +118,18 @@ export default function Signup() {
                             password: generatePassword(20),
                             fullName: response.name,
                             role_id: "US",
-                            phone: 'unset',
+                            phone: '',
                             create_at: createAt,
                             status: true,
                         }
                         axios.post("http://localhost:3344/users", registerUser)
-                            .catch((err) => {
-                                console.log("Error: ", err.response.data)
+                            .then(() => {
+                                console.log("A new account has been created by Facebook email: ", response.email)
                             })
-                        console.log("A new account has been created by Facebook email: ", response.email)
+                            .catch((err) => {
+                                console.log("Error: ", err.response)
+                            })
+                        sessionStorage.setItem("loginUserId", newUserId)
                     }
                 })
                 .catch(err => console.log(err))
@@ -151,17 +166,17 @@ export default function Signup() {
             fullName: Yup.string().required("Please enter your full name"),
         }),
         onSubmit: async (values) => {
-            const newUserId = generateId(15, "us")
+            const newUserId = generateId(30, "u")
             const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
             setVerifyCode(values.code)
             setRegisterUser({
-                userId: newUserId,
+                user_id: newUserId,
                 email: values.email,
                 password: values.password,
                 fullName: values.fullName,
-                roleId: "US",
+                role_id: "US",
                 phone: "",
-                createAt: createAt,
+                create_at: createAt,
                 status: true,
             })
             // sendEmail()
@@ -201,15 +216,15 @@ export default function Signup() {
     })
 
     return (
-        <div className="container">
-            <div className="left-container">
+        <div className={styles.container}>
+            <div className={styles.leftContainer}>
                 <Image src={randomImage} width={400} preview={false} />
             </div>
             <Divider type="vertical" />
-            <div className="right-container row">
-                <Image className="image" src={eFurniLogo} width={250} preview={false} />
-                <form ref={formRef} onSubmit={signupForm.handleSubmit}>
-                    <div className="mb-2 mt-2">
+            <div className={styles.rightContainer}>
+                <Image className={styles.image} src={eFurniLogo} width={250} preview={false} />
+                <form ref={formRef} onSubmit={signupForm.handleSubmit} className={styles.formContainer}>
+                    <div className={styles.inputContainer}>
                         <input
                             type="text"
                             name="email"
@@ -218,13 +233,13 @@ export default function Signup() {
                             onBlur={signupForm.handleBlur}
                             value={signupForm.values.email}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {signupForm.touched.email && signupForm.errors.email ? (
                                 <i>{signupForm.errors.email}</i>
                             ) : null}
                         </div>
                     </div>
-                    <div className="mb-2 mt-2">
+                    <div className={styles.inputContainer}>
                         <input
                             type="password"
                             name="password"
@@ -233,13 +248,13 @@ export default function Signup() {
                             onBlur={signupForm.handleBlur}
                             value={signupForm.values.password}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {signupForm.touched.password && signupForm.errors.password ? (
                                 <i>{signupForm.errors.password}</i>
                             ) : null}
                         </div>
                     </div>
-                    <div className="mb-2 mt-2">
+                    <div className={styles.inputContainer}>
                         <input
                             type="password"
                             name="confirm"
@@ -248,13 +263,13 @@ export default function Signup() {
                             onBlur={signupForm.handleBlur}
                             value={signupForm.values.confirm}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {signupForm.touched.confirm && signupForm.errors.confirm ? (
                                 <i>{signupForm.errors.confirm}</i>
                             ) : null}
                         </div>
                     </div>
-                    <div className="mb-2 mt-2">
+                    <div className={styles.inputContainer}>
                         <input
                             type="text"
                             name="fullName"
@@ -263,7 +278,7 @@ export default function Signup() {
                             onBlur={signupForm.handleBlur}
                             value={signupForm.values.fullName}
                         />
-                        <div className="error">
+                        <div className={styles.error}>
                             {signupForm.touched.fullName && signupForm.errors.fullName ? (
                                 <i>{signupForm.errors.fullName}</i>
                             ) : null}
@@ -277,12 +292,12 @@ export default function Signup() {
                         value={signupForm.values.code}
                     />
                     <br />
-                    <Button type="primary" htmlType="submit" shape="round" size="large" disabled={isLoading ? true : false}>
+                    <Button type="primary" htmlType="submit" shape="round" block disabled={isLoading ? true : false}>
                         {isLoading ? <LoadingOutlined /> : <p>Sign up</p>}
                     </Button>
                 </form>
                 <Divider><Text italic style={{ fontSize: "70%" }}>or you can sign up with</Text></Divider>
-                <div className="otherLogin">
+                <div className={styles.otherLogin}>
                     <GoogleLogin
                         onSuccess={onGoogleSuccess}
                         onError={onGoogleError}
@@ -296,7 +311,7 @@ export default function Signup() {
                         fields="name,email"
                         callback={responseFacebook}
                         size="small"
-                        cssClass="my-facebook-button-class"
+                        cssClass={styles.myFacebookButtonClass}
                         textButton=""
                         icon={<Image src={FacebookIcon} width={20} preview={false} height={22} />}
                     />
@@ -317,7 +332,7 @@ export default function Signup() {
                                 onBlur={codeVerifyForm.handleBlur}
                                 value={codeVerifyForm.values.code}
                             />
-                            <div className="error">
+                            <div className={styles.error}>
                                 {codeStatus != "" ? (
                                     <i>{codeStatus}</i>
                                 ) : null}
@@ -329,7 +344,7 @@ export default function Signup() {
                                 onBlur={signupForm.handleBlur}
                                 value={signupForm.values.email}
                             />
-                            <span className="modal-button-group">
+                            <span className={styles.modalButtonGroup}>
                                 <Button type="default" shape="round" onClick={handleCancel}>Cancel</Button>
                                 <Button type="primary" htmlType="submit" shape="round" disabled={isLoading ? true : false}>
                                     {isLoading ? <LoadingOutlined /> : <p>Verify {verifyCode}</p>}
@@ -338,8 +353,8 @@ export default function Signup() {
                         </form>
                     </Modal>
                 </div>
-                <div className="form-footer">
-                    <p>Already have account?&nbsp;</p>
+                <div className={styles.formFooter}>
+                    <p>Already have account?</p>
                     <a onClick={() => { navigate('/signin') }}>Sign in</a>
                 </div>
             </div>

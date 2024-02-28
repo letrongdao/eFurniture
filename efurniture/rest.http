@@ -46,12 +46,16 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3344/cartItems
-Content-Type: application/json
+GET http://localhost:3344/carts/us5833430108618
 
-{
-    "product_id": "P001",
-    "quantiy": 1000,
-    "cart_id": "131",
-    "cartItem_id": "1",
-}
+###
+GET http://localhost:3344/cartItems/cart738249201
+
+###
+GET http://localhost:3344/products/category/Table
+
+###
+GET http://localhost:3344/topProducts
+
+###
+GET http://localhost:3344/productsOfTheWeek

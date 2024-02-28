@@ -11,7 +11,7 @@ import Reset from "./pages/Authentication/Reset";
 import AdminPage from "./pages/Admin/Admin";
 import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
-import Cart from "./pages/Cart/Cart";
+// import Cart from "./pages/Cart/Cart";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 
 function App() {
@@ -23,10 +23,9 @@ function App() {
       <Route path="/signup/email" element={<EmailSignup />} />
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/reset/:id" element={<Reset />} />
-      <Route path="/product" element={<Product />} />
       <Route path="/products" element={<ProductList />} />
-      <Route path="/products/:category" element={<CategorizedProductList />} />
-      <Route path="/carts" element={<Cart />} />
+      <Route path="/products/:id" element={<Product />} />
+      <Route path="/category/:name" element={<CategorizedProductList />} />
       <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );

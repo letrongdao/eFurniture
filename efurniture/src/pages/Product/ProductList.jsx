@@ -1,40 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Card, List, Typography } from 'antd';
 import axios from 'axios';
-import Navbar from '../../components/Home/Navbar';
-import "./Product.css"
+import Navbar from '../../components/Navbar/Navbar';
+import styles from './Product.module.css'
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductList() {
     const [productDataSource, setProductDataSource] = useState([])
     const [categoryDataSource, setCategoryDataSource] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
 
     const { Text } = Typography;
 
     const fetchProductData = async () => {
-        setIsLoading(true)
         await axios.get('http://localhost:3344/products')
             .then((res) => {
-                if (res) {
-                    setProductDataSource(res.data)
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 1000)
-                }
+                setProductDataSource(res.data)
             })
             .catch((err) => console.log("Fail to fetch product data: ", err.message))
     }
 
     const fetchCategoryData = async () => {
-        setIsLoading(true)
         await axios.get('http://localhost:3344/categories')
             .then((res) => {
-                if (res) {
-                    setCategoryDataSource(res.data)
-                    setTimeout(() => {
-                        setIsLoading(false)
-                    }, 1000)
-                }
+                setCategoryDataSource(res.data)
             })
             .catch((err) => console.log("Fail to fetch category data: ", err.message))
     }
@@ -58,15 +48,16 @@ export default function ProductList() {
                 renderItem={(item) => (
                     <List.Item>
                         <Card
+                            hoverable
                             style={{
                                 width: 300,
                                 height: 400,
                             }}
                             cover={<img alt="example" src={item.image_url} />}
-                            className='product-item'
+                            onClick={() => { navigate(`/products/${item.product_id}`) }}
                         >
-                            <div className='info-section'>
-                                <Text strong style={{ fontWeight: "700", fontSize: "110%" }}>{item.name}</Text>
+                            <div className={styles.infoSection}>
+                                <Text strong style={{ fontWeight: "700", fontSize: "130%" }}>{item.name}</Text>
                                 <Text type='secondary' italic style={{ fontWeight: "400" }}>
                                     <Text delete={item.status === 0}>{item.price} $</Text>&ensp;
                                     {item.status === 0 ? 'SOLD OUT' : ''}

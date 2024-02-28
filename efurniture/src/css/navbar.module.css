@@ -15,10 +15,10 @@
 .left {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 170px;
-  height: 55px;
-  background-color: white;
+  justify-content: start;
+  gap: 5%;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
 }
 
 .logo {
@@ -28,28 +28,93 @@
 
 .right {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  margin-right: 2%;
+  gap: 1%;
 }
 
-.right>.button {
+.right span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1%;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 5%;
+}
+
+#userProfile {
   padding: 0 5px;
   margin: 0 10px;
   font-weight: 600;
   text-decoration: none;
   color: #FFF;
+  font-size: 100%;
+  width: 100%;
 }
 
-.right>.button:hover {
+#userProfile:hover {
   cursor: pointer;
-  color: rgb(159, 162, 162);
+  color: #303030;
 }
 
-.right>.searchContainer {
+.button {
+  padding: 0 5px;
+  margin: 0 10px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #FFF;
+  background-color: #000;
+  display: inline-block;
+  min-width: max-content;
+  transition: 0.4s;
+}
+
+.button:hover {
+  cursor: pointer;
+  color: #6e6e6e;
+  border: none;
+  text-decoration: none;
+}
+
+.iconButton {
+  background-color: #000;
+  color: #FFF;
+  width: 100%;
+  border: solid 1px #FFF;
+  margin: 0 3%;
+  transition: 0.4s;
+}
+
+.iconButton:hover {
+  border-color: #898989;
+  background-color: #2e2e2e;
+}
+
+.logButton {
+  background-color: #FFF;
+  color: #000;
+  width: 100%;
+  margin: 0 3% 0 0;
+  transition: 0.4s;
+  min-width: max-content;
+}
+
+.logButton:hover {
+  border-color: #8b8b8b;
+  background-color: #8b8b8b;
+}
+
+.searchContainer {
   position: relative;
 }
 
-.right>.searchContainer>span {
+.searchContainer>span {
   position: absolute;
   top: 50%;
   transform: translate(0, -45%);
@@ -57,7 +122,7 @@
   color: black;
 }
 
-.right>.searchContainer>.search {
+.searchContainer>.search {
   padding: 8px 10px 8px 45px;
   margin: 10px;
   /* color: #ffff; */
@@ -67,13 +132,13 @@
   outline: none;
 }
 
-.right>.searchContainer>.search::placeholder {
+.searchContainer>.search::placeholder {
   color: white !important;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
 }
 
-.right>.hamburger {
+.hamburger {
   display: none;
   cursor: pointer;
   padding: 5px;
@@ -81,7 +146,7 @@
   color: #FFF;
 }
 
-.right>.hamburger:hover {
+.hamburger:hover {
   background-color: rgba(250, 250, 250, 0.4);
   transition: ease-in-out 300ms;
 }
@@ -124,15 +189,15 @@
 }
 
 @media only screen and (max-width: 900px) {
-  .right>.button {
+  .button {
     display: none;
   }
 
-  .right>.searchContainer {
+  .searchContainer {
     display: none;
   }
 
-  .right>.hamburger {
+  .hamburger {
     display: block;
   }
 }

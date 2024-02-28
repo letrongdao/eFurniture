@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
-import "./Authentication.css"
+import styles from './styles.module.css'
 import { Button, Image, Divider, Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
 import { GoogleLogin } from '@react-oauth/google';
@@ -47,10 +47,10 @@ export default function Signin() {
         .then(data => {
           var foundUserByEmail = data.find((account) => (account.email === decoded.email))
           if (foundUserByEmail) {
-            console.log("Email is already registered.")
+            sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
           }
           else {
-            const newUserId = generateId(15, 'user')
+            const newUserId = generateId(30, 'u')
             const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
             var registerUser = {
               user_id: newUserId,
@@ -58,7 +58,7 @@ export default function Signin() {
               password: generatePassword(20),
               fullName: decoded.name,
               role_id: "US",
-              phone: 'unset',
+              phone: '',
               create_at: createAt,
               status: true,
             }
@@ -69,6 +69,7 @@ export default function Signin() {
               .catch((err) => {
                 console.log("Error: ", err.response)
               })
+            sessionStorage.setItem("loginUserId", newUserId)
           }
         })
         .catch(err => console.log(err))
@@ -93,10 +94,10 @@ export default function Signin() {
         .then(data => {
           var foundUserByEmail = data.find((account) => (account.email === response.email))
           if (foundUserByEmail) {
-            console.log("Email is already registered.")
+            sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
           }
           else {
-            const newUserId = generateId(15, 'user')
+            const newUserId = generateId(30, 'u')
             const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
             var registerUser = {
               user_id: newUserId,
@@ -104,7 +105,7 @@ export default function Signin() {
               password: generatePassword(20),
               fullName: response.name,
               role_id: "US",
-              phone: 'unset',
+              phone: '',
               create_at: createAt,
               status: true,
             }
@@ -115,6 +116,7 @@ export default function Signin() {
               .catch((err) => {
                 console.log("Error: ", err.response)
               })
+            sessionStorage.setItem("loginUserId", newUserId)
           }
         })
         .catch(err => console.log(err))
@@ -143,9 +145,10 @@ export default function Signin() {
         .then(data => {
           var loginUser = data.find((account) => (account.email === values.email) && (account.password === values.password))
           if (loginUser) {
+            sessionStorage.setItem("loginUserId", loginUser.user_id)
             setTimeout(() => {
               setIsLoading(false)
-              // navigate('/')
+              navigate('/')
             }, 2000)
           } else {
             setTimeout(() => {
@@ -159,15 +162,15 @@ export default function Signin() {
   })
 
   return (
-    <div className="container">
-      <div className="left-container">
+    <div className={styles.container}>
+      <div className={styles.leftContainer}>
         <Image src={randomImage} width={400} preview={false} />
       </div>
       <Divider type="vertical" />
-      <div className="right-container row">
-        <Image className="image" src={eFurniLogo} width={250} preview={false} />
-        <form onSubmit={loginForm.handleSubmit}>
-          <div className="mb-2 mt-2">
+      <div className={styles.rightContainer}>
+        <Image className={styles.image} src={eFurniLogo} width={250} preview={false} />
+        <form onSubmit={loginForm.handleSubmit} className={styles.formContainer}>
+          <div className={styles.inputContainer}>
             <input
               type="text"
               name="email"
@@ -177,7 +180,7 @@ export default function Signin() {
               value={loginForm.values.email}
             />
           </div>
-          <div className="mb-2 password-input-container">
+          <div className={styles.inputContainer}>
             <input
               type="password"
               name="password"
@@ -187,15 +190,15 @@ export default function Signin() {
               value={loginForm.values.password}
             />
           </div>
-          <Button type="link" className="forgot" onClick={() => { navigate('/forgot') }}>
+          <Button type="link" className={styles.forgot} onClick={() => { navigate('/forgot') }}>
             Forgot password?
           </Button>
-          <Button type="primary" htmlType="submit" shape="round" size="large" disabled={isLoading ? true : false}>
+          <Button type="primary" htmlType="submit" shape="round" block disabled={isLoading ? true : false}>
             {isLoading ? <LoadingOutlined /> : <p>Sign in</p>}
           </Button>
         </form>
         <Divider><Text italic style={{ fontSize: "70%" }}>or you can sign in with</Text></Divider>
-        <div className="otherLogin">
+        <div className={styles.otherLogin}>
           <GoogleLogin
             onSuccess={onGoogleSuccess}
             onError={onGoogleError}
@@ -209,7 +212,7 @@ export default function Signin() {
             fields="name,email"
             callback={responseFacebook}
             size="small"
-            cssClass="my-facebook-button-class"
+            cssClass={styles.myFacebookButtonClass}
             textButton=""
             icon={<Image src={FacebookIcon} width={20} preview={false} height={22} />}
           />
@@ -226,7 +229,7 @@ export default function Signin() {
           pauseOnHover
           theme="light"
         />
-        <div className="form-footer">
+        <div className={styles.formFooter}>
           <p>Don't have an account yet?&nbsp;</p>
           <a onClick={() => { navigate('/signup/email') }}>Sign up</a>
         </div>
