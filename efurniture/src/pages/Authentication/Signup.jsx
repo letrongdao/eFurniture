@@ -166,7 +166,7 @@ export default function Signup() {
             fullName: Yup.string().required("Please enter your full name"),
         }),
         onSubmit: async (values) => {
-            const newUserId = generateId(30, "u")
+            const newUserId = generateId(10, "u")
             const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
             setVerifyCode(values.code)
             setRegisterUser({

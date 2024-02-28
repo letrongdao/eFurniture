@@ -15,7 +15,7 @@ Content-Type: application/json
     "fullName": "Nounce",
     "role_id": "US",
     "phone": "0381948293",
-    "createAt": "2024-01-31 14:21:23",
+    "create_At": "2024-01-31 14:21:23",
     "status": 1
 }
 

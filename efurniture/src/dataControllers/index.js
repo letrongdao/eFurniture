@@ -31,3 +31,25 @@ export const getUser = () => {
 export const getComments = () => {
   return fetch("https://dummyjson.com/comments").then((res) => res.json());
 };
+
+export const getBookings = () => {
+  return fetch("http://localhost:3344/bookings").then((res) => res.json());
+}
+
+export const deleteBooking = (id) => {
+  return fetch(`http://localhost:3344/bookings/${id}`, {
+    method: 'DELETE',
+  })
+    .then(res => res.json())
+}
+
+export const editBooking = (id, values) => {
+  return fetch(`http://localhost:3344/bookings/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(values),
+  })
+    .then(res => res.json());
+}

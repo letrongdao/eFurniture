@@ -13,6 +13,8 @@ import AdminPage from "./pages/Admin/Admin";
 import ProductList from './pages/Product/ProductList'
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
+import Booking from "./pages/Booking/Booking";
+import Cart from "./pages/Cart/Cart.jsx";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
       <Route path="/products/:id" element={<Product />} />
       <Route path="/products/:category" element={<CategorizedProductList />} />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/booking" element={<Booking />} />
+      <Route path="cart" element={<Cart />} />
     </Routes>
   );
 }
