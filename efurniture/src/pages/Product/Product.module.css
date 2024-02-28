@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Yatra+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
 .infoSection {
     display: flex;
@@ -17,4 +18,66 @@
     font-weight: 400;
     font-style: normal;
     font-size: 150%;
+}
+
+.productInfoContainer {
+    margin-top: 2%;
+}
+
+.productInfoContainer * {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.favoriteSection {
+    color: #000;
+    text-decoration: none;
+}
+
+.buttonSection {
+    min-width: 50%;
+    justify-self: flex-end;
+}
+
+.button {
+    min-width: 100%;
+    background-color: #000;
+    color: #FFF;
+    border: solid 1px #000;
+}
+
+.button:hover {
+    color: #000 !important;
+    background-color: #FFF !important;
+    border-color: #000 !important;
+}
+
+#buyButton {
+    background-color: red;
+    color: #FFF;
+}
+
+#buyButton:hover {
+    background-color: #FFF !important;
+    color: red !important;
+    border-color: #000 !important;
+}
+
+
+.cartIcon {
+    font-size: 120%;
+    position: relative;
+    bottom: 15%;
+}
+
+.link {
+    font-size: 120%;
+    color: #000 !important;
+    text-decoration: underline !important;
+}
+
+.link:hover {
+    color: #636363 !important;
 }
