@@ -205,8 +205,7 @@ export default function Signup() {
                 setTimeout(() => {
                     setOpen(false);
                     setIsLoading(false);
-                    console.log("Successfully registered");
-                    navigate('/signin')
+                    navigate('/signin', { state: { noti: "create" } })
                 }, 2000);
             }
             else {
