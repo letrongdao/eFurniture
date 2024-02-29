@@ -19,7 +19,13 @@ const ShopYourChoice = () => {
         <div className={styles.sofaBtnAndImg}>
           <img className={styles.sofaimg} src="./images/Sofa2.png" alt="" />
           <h3>Sofas</h3>
-          <button onClick={() => { window.location.href = '/category/sofa'}}>View More</button>
+          <button
+            onClick={() => {
+              window.location.href = "/category/sofa";
+            }}
+          >
+            View More
+          </button>
         </div>
       </div>
       <div className={styles.chairsAndTables}>
@@ -31,7 +37,13 @@ const ShopYourChoice = () => {
           </div>
           <img className={styles.chairImg} src="/images/Chair.png" alt="" />
           <h3>Chairs</h3>
-          <button onClick={() => { window.location.href = '/category/chair'}}>View More</button>
+          <button
+            onClick={() => {
+              window.location.href = "/category/chair";
+            }}
+          >
+            View More
+          </button>
           <div className={styles.chairTitle_Btn}></div>
         </div>
         <div className={styles.chair}>
@@ -46,7 +58,13 @@ const ShopYourChoice = () => {
             alt=""
           />
           <h3>Tables</h3>
-          <button onClick={() => { window.location.href = '/category/table'}}>View More</button>
+          <button
+            onClick={() => {
+              window.location.href = "/category/table";
+            }}
+          >
+            View More
+          </button>
         </div>
       </div>
     </div>

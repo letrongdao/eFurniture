@@ -1,4 +1,5 @@
 import { Avatar, Space, Table, Typography } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { getUser } from "../../../dataControllers/index";
 import axios from "axios";
@@ -33,6 +34,25 @@ function Users() {
           {
             title: "Password",
             dataIndex: "password",
+          },
+          {
+            title: "Action",
+            dataIndex: "user_id",
+            render: (record) => {
+              <>
+                <EditOutlined
+                  onClick={() => {
+                    // onUpdateUser(record);
+                  }}
+                />
+                <DeleteOutlined
+                  onClick={() => {
+                    // onDeleteUser(record);
+                  }}
+                  style={{ color: "red" }}
+                />
+              </>;
+            },
           },
         ]}
         dataSource={dataSource}

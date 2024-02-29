@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "../node_modules/font-awesome/css/font-awesome.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Signin from "./pages/Authentication/Signin";
@@ -10,16 +9,20 @@ import EmailSignup from "./pages/Authentication/EmailSignup";
 import Forgot from "./pages/Authentication/Forgot";
 import Reset from "./pages/Authentication/Reset";
 import AdminPage from "./pages/Admin/Admin";
-import ProductList from './pages/Product/ProductList'
+import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
+import ContactPage from "./pages/Contact/ContactPage";
+import AboutPage from "./pages/About/AboutPage";
 import Checkout from "./pages/Purchase/Checkout";
 import Cart from "./pages/Cart/Cart";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/email" element={<EmailSignup />} />

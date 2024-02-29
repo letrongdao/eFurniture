@@ -30,7 +30,7 @@ const AddModal = () => {
     description: "",
     image_url: "",
     status: 1,
-    category_id: "",
+    category_name: "",
   });
 
   const showModal = () => {
@@ -47,7 +47,7 @@ const AddModal = () => {
       description: "",
       image_url: "",
       status: 1,
-      category_id: "",
+      category_name: "",
     });
   };
 
@@ -72,7 +72,7 @@ const AddModal = () => {
       description: "",
       image_url: "",
       status: 1,
-      category_id: "",
+      category_name: "",
     });
   };
 
@@ -113,8 +113,8 @@ const AddModal = () => {
           <Form.Item label="Category">
             <Input
               type="text"
-              name="category_id"
-              value={formData?.category_id}
+              name="category_name"
+              value={formData?.category_name}
               onChange={handleChange}
             />
           </Form.Item>
