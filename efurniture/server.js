@@ -196,6 +196,127 @@ app.get('/cartItems/:cartId', (req, res) => {
   })
 })
 
+//POST add to cart_items with user_id, product_id, quantity
+app.post('/cart', (req, res) => {
+  const sql = "INSERT INTO cartItems SET ?";
+  const newCartItem = req.body;
+  db.query(sql, newCartItem, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ status: 'failed' });
+    } else {
+      newCartItem.id = result.insertId;
+      res.status(201).json(newCartItem);
+    }
+  });
+});
+
+//DELETE delete from cart_items with user_id, product_id
+app.delete('/cart', (req, res) => {
+  const sql = "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
+  const data = [req.query.user_id, req.query.product_id];
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart deleted!' });
+    }
+  });
+});
+
+//GET all cart_items with user_id and join with products to get name, price, image_url
+app.get('/cart', (req, res) => {
+  const sql = "SELECT c.*, p.name, p.price, p.image_url FROM cart_items c JOIN products p ON c.product_id = p.product_id WHERE c.user_id = ?";
+  db.query(sql, req.query.user_id, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+//UPDATE cart_items with user_id, product_id, quantity
+app.patch('/cart', (req, res) => {
+  const sql = "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?";
+  const data = [req.body.quantity, req.body.user_id, req.body.product_id];
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart updated successfully' });
+    }
+  });
+});
+
+//POST create a new booking with user_id, product_id, date, time, content, status, booking_id
+app.post('/bookings', (req, res) => {
+  const sql = "INSERT INTO bookings SET ?";
+  const newBooking = req.body;
+  if (newBooking.status === undefined) {
+    newBooking.status = 0;
+  }
+  // if (newBooking.user_id === undefined) {
+  //   newBooking.user_id = 'us1231123129131';
+  // }
+  db.query(sql, newBooking, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ status: 'failed' });
+    } else {
+      newBooking.booking_id = result.insertId;
+      res.status(201).json(newBooking);
+    }
+  });
+});
+
+
+//PATCH update a booking with booking_id
+app.patch('/bookings/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
+  const data = [req.body, id];
+  console.log(data);
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart updated successfully' });
+    }
+  });
+});
+
+//DELETE delete a booking with booking_id
+app.delete('/bookings/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE FROM bookings WHERE booking_id = ?";
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart deleted!' });
+    }
+  });
+});
+
+//GET get all bookings
+app.get('/bookings', (req, res) => {
+  const sql = "SELECT * FROM bookings";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 app.listen(3344, () => {
   console.log("Listening to port 3344")
 })

@@ -79,9 +79,9 @@ export default function Product() {
           </Flex>
           <Flex justify='space-between' align='center' gap="large">
             <Flex justify='center' align='center' className={styles.quantitySection}>
-              <Button onClick={decreaseQuantity}>-</Button>
+              <Button onClick={decreaseQuantity} style={{ marginRight: "1%" }}>-</Button>
               <InputNumber min={1} max={20} onChange={onQuantityChange} controls={false} value={quantity} size='large' />
-              <Button onClick={increaseQuantity}>+</Button>
+              <Button onClick={increaseQuantity} style={{ marginLeft: "1%" }}>+</Button>
             </Flex>
             <Link className={styles.favoriteSection}><HeartOutlined /> Favorite</Link>
           </Flex>
@@ -90,7 +90,8 @@ export default function Product() {
               <ShoppingCartOutlined className={styles.cartIcon} />
               ADD TO CART
             </Button>
-            <Button block className={styles.button} id={styles.buyButton}>
+            <Button block className={styles.button} id={styles.buyButton}
+              onClick={() => navigate(`/checkout/${id}`)}>
               <ShoppingOutlined className={styles.cartIcon} />
               BUY NOW
             </Button>

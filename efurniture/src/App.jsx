@@ -13,6 +13,8 @@ import AdminPage from "./pages/Admin/Admin";
 import ProductList from './pages/Product/ProductList'
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
+import Checkout from "./pages/Purchase/Checkout";
+import Cart from "./pages/Cart/Cart";
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:id" element={<Product />} />
       <Route path="/category/:name" element={<CategorizedProductList />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/checkout/:id" element={<Checkout />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );
