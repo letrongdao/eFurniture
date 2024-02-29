@@ -1,5 +1,4 @@
 import "./App.css";
-import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";

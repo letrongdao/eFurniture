@@ -81,3 +81,12 @@
 .link:hover {
     color: #636363 !important;
 }
+
+.productImageSection {
+    max-width: fit-content;
+}
+
+.productImageSection img {
+    width: 100%;
+    min-height: 250px;
+}

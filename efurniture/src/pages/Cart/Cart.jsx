@@ -21,6 +21,7 @@ const Cart = () => {
 
     axios.get(`http://localhost:3344/cartItems/${cartId}`)
       .then((res) => {
+        console.log("Cart item fetched: ", res.data)
         setCartItemData(res.data)
       })
       .catch((err) => console.log(err.message))
