@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Card, List, Typography, Spin, Flex } from 'antd';
+import { List, Typography, Spin, Flex, FloatButton } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons'
 import axios from 'axios';
 import Navbar from '../../components/Navbar/Navbar';
-import styles from './Product.module.css'
 import { useNavigate } from 'react-router-dom';
+import CategorizedList from '../../components/Categorized List/CategorizedList';
+import Footer from '../../components/Home/Footer'
 
 export default function ProductList() {
     const [productDataSource, setProductDataSource] = useState([])
@@ -61,39 +62,18 @@ export default function ProductList() {
                     <List
                         grid={{
                             gutter: 20,
-                            column: 4,
+                            column: 1,
                         }}
                         loading={isLoading}
-                        dataSource={productDataSource}
-                        style={{
-                            marginLeft: '2%'
+                        dataSource={categoryDataSource}
+                        renderItem={(item) => {
+                            return <CategorizedList name={item.category_name} />
                         }}
-                        renderItem={(item) => (
-                            <List.Item>
-                                <Card
-                                    hoverable
-                                    style={{
-                                        width: 300,
-                                        height: 350,
-                                    }}
-                                    onClick={() => { navigate(`/products/${item.product_id}`) }}
-                                >
-                                    <div className={styles.productImageSection}>
-                                        <img alt="example" src={item.image_url} />
-                                    </div>
-                                    <div className={styles.infoSection}>
-                                        <Text strong style={{ fontWeight: "700", fontSize: "130%" }}>{item.name}</Text>
-                                        <Text type='secondary' italic style={{ fontWeight: "400" }}>
-                                            <Text delete={item.status === 0}>{item.price} $</Text>&ensp;
-                                            {item.status === 0 ? 'SOLD OUT' : ''}
-                                        </Text>
-                                    </div>
-                                </Card>
-                            </List.Item>
-                        )}
                     />
+                    <FloatButton.BackTop duration={300}/>
                 </>
             }
+            <Footer />
         </>
     );
 }

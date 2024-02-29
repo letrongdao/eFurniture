@@ -12,6 +12,16 @@
     font-family: 'Titillium Web', sans-serif;
 }
 
+.productImageSection {
+    max-width: fit-content;
+}
+
+.productImageSection img {
+    width: 100%;
+    min-height: 150px;
+    border-radius: 3%;
+}
+
 .title {
     font-family: "Yatra One", system-ui;
     font-weight: 400;

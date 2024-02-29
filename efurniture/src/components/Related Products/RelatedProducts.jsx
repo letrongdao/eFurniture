@@ -29,7 +29,7 @@ export default function RelatedProducts() {
       </Divider>
       <List
         grid={{
-          gutter: 800,
+          gutter: 1600,
           column: dataSource.length,
         }}
         loading={isLoading}
@@ -37,21 +37,25 @@ export default function RelatedProducts() {
           position: "bottom",
           align: "center",
           pageSize: 5,
+          hideOnSinglePage: true,
+          responsive: true,
         }}
         dataSource={dataSource}
         itemLayout='horizontal'
-        style={{ marginLeft: "8%" }}
+        style={{ margin: "0 4%" }}
         renderItem={(item) => (
           <List.Item>
             <Card
               hoverable
               style={{
                 width: 200,
-                height: 300,
+                height: 250,
               }}
-              cover={<img alt="example" src={item.image_url} />}
               onClick={() => { navigate(`/products/${item.product_id}`) }}
             >
+              <div className={styles.productImageSection}>
+                <img alt="example" src={item.image_url} />
+              </div>
               <div className={styles.infoSection}>
                 <Text strong style={{ fontWeight: "700", fontSize: "130%" }} className={styles.itemName}>{item.name}</Text>
                 <Text type='secondary' italic style={{ fontWeight: "400" }}>
