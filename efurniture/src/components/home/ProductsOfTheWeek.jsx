@@ -4,19 +4,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ProductsOfTheWeek = () => {
-  const [dataSource, setDataSource] = useState([])
-  const navigate = useNavigate()
+  const [dataSource, setDataSource] = useState([]);
+  const navigate = useNavigate();
   const fetchProductsOfTheWeek = async () => {
-    await axios.get('http://localhost:3344/productsOfTheWeek')
+    await axios
+      .get("http://localhost:3344/productsOfTheWeek")
       .then((res) => {
-        setDataSource(res.data)
+        setDataSource(res.data);
       })
-      .catch((err) => console.log(err.message))
-  }
+      .catch((err) => console.log(err.message));
+  };
 
   useEffect(() => {
-    fetchProductsOfTheWeek()
-  }, [])
+    fetchProductsOfTheWeek();
+  }, []);
 
   return (
     <div className={styles.powContainer}>
@@ -28,12 +29,14 @@ const ProductsOfTheWeek = () => {
       </div>
       <div className={styles.imageSection}>
         {dataSource.map((item, i) => (
-          <div className={styles.productContainer} key={i} onClick={() => { navigate(`/products/${item.product_id}`) }}>
-            <img
-              className={styles.productImages}
-              src={item.image_url}
-              alt=""
-            />
+          <div
+            className={styles.productContainer}
+            key={i}
+            onClick={() => {
+              navigate(`/products/${item.product_id}`);
+            }}
+          >
+            <img className={styles.productImages} src={item.image_url} alt="" />
             <div className={styles.productImagesDesc}>
               <h2>{item.name}</h2>
               <p>{item.price} $</p>

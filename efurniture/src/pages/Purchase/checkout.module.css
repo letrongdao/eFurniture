@@ -1,0 +1,54 @@
+.checkoutContainer {
+    height: 80vh;
+    max-height: 80vh;
+}
+
+.cardContainer {
+    display: inline-block;
+    width: 40rem;
+    height: 150px;
+    background-color: rgb(242, 242, 242);
+}
+
+.orderItemSection {
+    min-height: 400px;
+    max-height: 400px;
+    max-width: min-content;
+    padding: 0 1%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    border-radius: 3%;
+}
+
+.billingSection {
+    width: 25rem;
+    height: 400px;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    border-radius: 5%;
+}
+
+.imageContainer {
+    max-width: min-content;
+    height: 100%;
+}
+
+.image {
+    min-width: 7rem;
+}
+
+.productInfo {
+    min-width: max-content;
+    align-self: flex-start;
+}
+
+.productListSection {
+    min-height: 300px;
+    max-height: 300px;
+    min-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 90%;
+}

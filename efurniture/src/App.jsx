@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Signin from "./pages/Authentication/Signin";
@@ -10,7 +8,7 @@ import EmailSignup from "./pages/Authentication/EmailSignup";
 import Forgot from "./pages/Authentication/Forgot";
 import Reset from "./pages/Authentication/Reset";
 import AdminPage from "./pages/Admin/Admin";
-import ProductList from './pages/Product/ProductList'
+import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 import PaymentForm from "./vn-pay-payment/PaymentForm";
@@ -18,7 +16,9 @@ import PaymentForm from "./vn-pay-payment/PaymentForm";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/email" element={<EmailSignup />} />
@@ -27,6 +27,9 @@ function App() {
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:id" element={<Product />} />
       <Route path="/category/:name" element={<CategorizedProductList />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/checkout/:id" element={<Checkout />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/paymentForm" element={<PaymentForm />} />
 

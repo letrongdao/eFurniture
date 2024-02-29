@@ -198,64 +198,126 @@ app.get('/cartItems/:cartId', (req, res) => {
   })
 })
 
-app.use(express.json());
-
-app.post('/payments', (req, res) => {
-  const date = new Date();
-  const createDate = date.toISOString();
-  const ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-  const tmnCode = 'P10RAQ3B'; // Thay thế với mã TMN của bạn từ VNPay
-  const secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI'; // Thay thế với mã Secret Key của bạn từ VNPay
-  const vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'; // Thay thế với URL của VNPay
-  const returnUrl = 'http://localhost:5173/'; // Thay thế với URL trả về của bạn
-  const orderId = date.toISOString();
-  const amount = req.body.amount;
-  const bankCode = req.body.bankCode;
-
-  let locale = req.body.language;
-  if (!locale || locale === '') {
-    locale = 'vn';
-  }
-  const currCode = 'VND';
-  const vnp_Params = {
-    vnp_Version: '2.1.0',
-    vnp_Command: 'pay',
-    vnp_TmnCode: tmnCode,
-    vnp_Locale: locale,
-    vnp_CurrCode: currCode,
-    vnp_TxnRef: orderId,
-    vnp_OrderInfo: 'Thanh toan cho ma GD:' + orderId,
-    vnp_OrderType: 'other',
-    vnp_Amount: amount * 100,
-    vnp_ReturnUrl: returnUrl,
-    vnp_IpAddr: ipAddr,
-    vnp_CreateDate: createDate,
-  };
-  if (bankCode && bankCode !== '') {
-    vnp_Params['vnp_BankCode'] = bankCode;
-  }
-
-  const sortedParams = sortObject(vnp_Params);
-  const signData = querystring.stringify(sortedParams, { encode: false });
-  const hmac = crypto.createHmac('sha512', secretKey);
-  const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
-  vnp_Params['vnp_SecureHash'] = signed;
-
-  const vnpUrlWithParams = vnpUrl + '?' + querystring.stringify(vnp_Params, { encode: false });
-
-  res.json({ paymentUrl: vnpUrlWithParams });
+//POST add to cart_items with user_id, product_id, quantity
+app.post('/cart', (req, res) => {
+  const sql = "INSERT INTO cartItems SET ?";
+  const newCartItem = req.body;
+  db.query(sql, newCartItem, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ status: 'failed' });
+    } else {
+      newCartItem.id = result.insertId;
+      res.status(201).json(newCartItem);
+    }
+  });
 });
 
-function sortObject(obj) {
-  const sorted = {};
-  const keys = Object.keys(obj).sort();
-  for (const key of keys) {
-    sorted[key] = obj[key];
-  }
-  return sorted;
-}
+//DELETE delete from cart_items with user_id, product_id
+app.delete('/cart', (req, res) => {
+  const sql = "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
+  const data = [req.query.user_id, req.query.product_id];
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart deleted!' });
+    }
+  });
+});
 
+//GET all cart_items with user_id and join with products to get name, price, image_url
+app.get('/cart', (req, res) => {
+  const sql = "SELECT c.*, p.name, p.price, p.image_url FROM cart_items c JOIN products p ON c.product_id = p.product_id WHERE c.user_id = ?";
+  db.query(sql, req.query.user_id, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+//UPDATE cart_items with user_id, product_id, quantity
+app.patch('/cart', (req, res) => {
+  const sql = "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?";
+  const data = [req.body.quantity, req.body.user_id, req.body.product_id];
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart updated successfully' });
+    }
+  });
+});
+
+//POST create a new booking with user_id, product_id, date, time, content, status, booking_id
+app.post('/bookings', (req, res) => {
+  const sql = "INSERT INTO bookings SET ?";
+  const newBooking = req.body;
+  if (newBooking.status === undefined) {
+    newBooking.status = 0;
+  }
+  // if (newBooking.user_id === undefined) {
+  //   newBooking.user_id = 'us1231123129131';
+  // }
+  db.query(sql, newBooking, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ status: 'failed' });
+    } else {
+      newBooking.booking_id = result.insertId;
+      res.status(201).json(newBooking);
+    }
+  });
+});
+
+
+//PATCH update a booking with booking_id
+app.patch('/bookings/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
+  const data = [req.body, id];
+  console.log(data);
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart updated successfully' });
+    }
+  });
+});
+
+//DELETE delete a booking with booking_id
+app.delete('/bookings/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE FROM bookings WHERE booking_id = ?";
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json({ message: 'Cart deleted!' });
+    }
+  });
+});
+
+//GET get all bookings
+app.get('/bookings', (req, res) => {
+  const sql = "SELECT * FROM bookings";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  });
+});
 
 app.listen(3344, () => {
   console.log("Listening to port 3344")

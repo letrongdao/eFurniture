@@ -29,7 +29,7 @@ export default function RelatedProducts() {
       </Divider>
       <List
         grid={{
-          gutter: 600,
+          gutter: 800,
           column: dataSource.length,
         }}
         loading={isLoading}
