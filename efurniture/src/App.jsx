@@ -13,6 +13,7 @@ import AdminPage from "./pages/Admin/Admin";
 import ProductList from './pages/Product/ProductList'
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
+import PaymentForm from "./vn-pay-payment/PaymentForm";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
       <Route path="/products/:id" element={<Product />} />
       <Route path="/category/:name" element={<CategorizedProductList />} />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/paymentForm" element={<PaymentForm />} />
+
     </Routes>
   );
 }

@@ -2,6 +2,8 @@ import express from 'express';
 import mysql2 from 'mysql2';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import querystring from 'querystring';
+import crypto from 'crypto';
 
 const app = express()
 const env = dotenv.config()
@@ -196,7 +198,65 @@ app.get('/cartItems/:cartId', (req, res) => {
   })
 })
 
+app.use(express.json());
+
+app.post('/payments', (req, res) => {
+  const date = new Date();
+  const createDate = date.toISOString();
+  const ipAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  const tmnCode = 'P10RAQ3B'; // Thay thế với mã TMN của bạn từ VNPay
+  const secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI'; // Thay thế với mã Secret Key của bạn từ VNPay
+  const vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'; // Thay thế với URL của VNPay
+  const returnUrl = 'http://localhost:5173/'; // Thay thế với URL trả về của bạn
+  const orderId = date.toISOString();
+  const amount = req.body.amount;
+  const bankCode = req.body.bankCode;
+
+  let locale = req.body.language;
+  if (!locale || locale === '') {
+    locale = 'vn';
+  }
+  const currCode = 'VND';
+  const vnp_Params = {
+    vnp_Version: '2.1.0',
+    vnp_Command: 'pay',
+    vnp_TmnCode: tmnCode,
+    vnp_Locale: locale,
+    vnp_CurrCode: currCode,
+    vnp_TxnRef: orderId,
+    vnp_OrderInfo: 'Thanh toan cho ma GD:' + orderId,
+    vnp_OrderType: 'other',
+    vnp_Amount: amount * 100,
+    vnp_ReturnUrl: returnUrl,
+    vnp_IpAddr: ipAddr,
+    vnp_CreateDate: createDate,
+  };
+  if (bankCode && bankCode !== '') {
+    vnp_Params['vnp_BankCode'] = bankCode;
+  }
+
+  const sortedParams = sortObject(vnp_Params);
+  const signData = querystring.stringify(sortedParams, { encode: false });
+  const hmac = crypto.createHmac('sha512', secretKey);
+  const signed = hmac.update(new Buffer(signData, 'utf-8')).digest('hex');
+  vnp_Params['vnp_SecureHash'] = signed;
+
+  const vnpUrlWithParams = vnpUrl + '?' + querystring.stringify(vnp_Params, { encode: false });
+
+  res.json({ paymentUrl: vnpUrlWithParams });
+});
+
+function sortObject(obj) {
+  const sorted = {};
+  const keys = Object.keys(obj).sort();
+  for (const key of keys) {
+    sorted[key] = obj[key];
+  }
+  return sorted;
+}
+
+
 app.listen(3344, () => {
   console.log("Listening to port 3344")
 })
-
