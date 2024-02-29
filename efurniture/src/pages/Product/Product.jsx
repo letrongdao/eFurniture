@@ -1,36 +1,103 @@
-import React from 'react'
-import "react-toastify/dist/ReactToastify.css"
-import { Avatar, List } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Flex, Image, Typography, InputNumber, Button, Divider } from 'antd';
+import { HeartOutlined, ShoppingCartOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import styles from './Product.module.css'
+import Navbar from '../../components/Navbar/Navbar';
+import RelatedProducts from '../../components/Related Products/RelatedProducts'
+
 export default function Product() {
-  const data = [
-    {
-      title: 'Ant Design Title 1',
-    },
-    {
-      title: 'Ant Design Title 2',
-    },
-    {
-      title: 'Ant Design Title 3',
-    },
-    {
-      title: 'Ant Design Title 4',
-    },
-  ];
+  const { Text, Title, Link } = Typography
+  const navigate = useNavigate()
+  const [quantity, setQuantity] = useState(1)
+  const [currentProduct, setCurrentProduct] = useState({
+    name: '',
+    image_url: '',
+    description: '',
+    price: '',
+    category_name: '',
+  })
+  const { id } = useParams()
+  const fetchProductInfo = async () => {
+    await axios.get(`http://localhost:3344/products/${id}`)
+      .then((res) => {
+        console.log("Product info: ", res.data)
+        setCurrentProduct(res.data)
+      })
+      .catch((err) => console.log(err.message))
+  }
+
+  useEffect(() => {
+    fetchProductInfo()
+  }, [])
+
+  const onQuantityChange = (value) => {
+    setQuantity(value)
+  }
+
+  const decreaseQuantity = () => {
+    if (quantity > 1)
+      setQuantity((currentQuantity) => currentQuantity - 1)
+  }
+
+  const increaseQuantity = () => {
+    if (quantity < 20)
+      setQuantity((currentQuantity) => currentQuantity + 1)
+  }
+
   return (
-    <div className='backdrop'>
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        renderItem={(item, index) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-              title={<a href="https://ant.design">{item.title}</a>}
-              description="osaijdaosijsdoijs"
-            />
-          </List.Item>
-        )}
-      />
-    </div>
+    <>
+      <Navbar />
+      <Flex justify='space-around' align='center' className={styles.productInfoContainer}>
+        <Image src={currentProduct.image_url} alt='' width={500} />
+        <Flex vertical justify='space-between' align='center' gap={20}>
+          <Flex vertical justify='space-between' align='center'>
+            <Title>{currentProduct.name.toUpperCase()}</Title>
+            <Text style={{ fontSize: '200%', fontWeight: '300' }}>{currentProduct.price} $</Text>
+            <Divider />
+          </Flex>
+          <Flex vertical justify='space-between' align='center'>
+            <ul style={{ listStyleType: 'circle' }}>
+              <li>
+                <Text>
+                  Category: &nbsp;
+                  <Link className={styles.link}
+                    onClick={() => navigate(`/category/${currentProduct.category_name}`)}>
+                    {currentProduct.category_name}
+                  </Link>
+                </Text>
+              </li>
+              <br />
+              <li>
+                <Text>
+                  Description: {currentProduct.description}
+                </Text>
+              </li>
+            </ul>
+            <Divider />
+          </Flex>
+          <Flex justify='space-between' align='center' gap="large">
+            <Flex justify='center' align='center' className={styles.quantitySection}>
+              <Button onClick={decreaseQuantity}>-</Button>
+              <InputNumber min={1} max={20} onChange={onQuantityChange} controls={false} value={quantity} size='large' />
+              <Button onClick={increaseQuantity}>+</Button>
+            </Flex>
+            <Link className={styles.favoriteSection}><HeartOutlined /> Favorite</Link>
+          </Flex>
+          <Flex vertical justify='space-evenly' align='center' gap={5} className={styles.buttonSection}>
+            <Button block className={styles.button}>
+              <ShoppingCartOutlined className={styles.cartIcon} />
+              ADD TO CART
+            </Button>
+            <Button block className={styles.button} id={styles.buyButton}>
+              <ShoppingOutlined className={styles.cartIcon} />
+              BUY NOW
+            </Button>
+          </Flex>
+        </Flex>
+      </Flex>
+      <RelatedProducts />
+    </>
   )
 }

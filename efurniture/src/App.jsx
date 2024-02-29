@@ -13,11 +13,15 @@ import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
 // import Cart from "./pages/Cart/Cart";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
+import ContactPage from "./pages/Contact/ContactPage";
+import AboutPage from "./pages/About/AboutPage";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup/email" element={<EmailSignup />} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/home/Navbar";
-import Footer from "../../components/home/Footer";
+import Footer from "../../components/Home/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import { addCart, deleteCart } from "../../dataControllers/cartController";
