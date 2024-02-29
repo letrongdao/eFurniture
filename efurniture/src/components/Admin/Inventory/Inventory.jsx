@@ -1,4 +1,4 @@
-import { Space, Table, Image, Modal, Input } from "antd";
+import { Space, Table, Image, Modal, Input, Switch, Select } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
@@ -6,17 +6,50 @@ import {
   updateProduct,
   deleteProduct,
 } from "../../../dataControllers/productController";
-
 import AddModal from "./Modal";
+
+const options = [
+  {
+    value: "Table",
+    label: "Table",
+  },
+  {
+    value: "Sofa",
+    label: "Sofa",
+  },
+  {
+    value: "Bed",
+    label: "Bed",
+  },
+  {
+    value: "Chair",
+    label: "Chair",
+  },
+  {
+    value: "Lighting",
+    label: "Lighting",
+  },
+  {
+    value: "Shelf",
+    label: "Shelf",
+  },
+  {
+    value: "Outdoor",
+    label: "Outdoor",
+  },
+];
 
 function Inventory() {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [testRecord, setTestRecord] = useState();
+  const [searchInput, setSearchInput] = useState();
   const [editFormData, setEditFormData] = useState({
     name: "",
     price: "",
+    status: 1,
+    category_name: "",
   });
 
   useEffect(() => {
@@ -39,8 +72,8 @@ function Inventory() {
   const onDeleteProduct = (record) => {
     console.log(record);
     Modal.confirm({
-      title: "Are you sure, you want to delete this user?",
-      okText: "Yes",
+      title: "Are you sure, you want to delete this product?",
+      okText: "Confirm",
       okType: "danger",
       onOk: () => {
         deleteProduct(record);
@@ -53,19 +86,47 @@ function Inventory() {
     setEditFormData(null);
   };
 
+  const handleSearch = (searchText) => {
+    setSearchInput(searchText);
+    getProduct().then((res) => {
+      if (searchText === "") {
+        setDataSource(res);
+      } else {
+        setDataSource(
+          res.filter(
+            (item) =>
+              item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+              item.category_name
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+          )
+        );
+      }
+    });
+  };
+
   return (
     <Space size={20} direction="vertical">
       {/* <Typography.Title level={4}>Inventory</Typography.Title> */}
-      <AddModal>Add Product</AddModal>
+      <div>
+        <Input.Search
+          placeholder="Search by name, category..."
+          value={searchInput}
+          onChange={(e) => handleSearch(e.target.value)}
+          enterButton
+          style={{ width: "500px" }}
+        />
+        <AddModal>Add Product</AddModal>
+      </div>
       <Table
         style={{ width: "1250px" }}
         loading={loading}
         columns={[
-          {
-            title: "Id",
-            key: "product_id",
-            dataIndex: "product_id",
-          },
+          // {
+          //   title: "Id",
+          //   key: "product_id",
+          //   dataIndex: "product_id",
+          // },
           {
             title: "Picture",
             key: "image_url",
@@ -88,7 +149,12 @@ function Inventory() {
           {
             title: "Category",
             key: "category",
-            dataIndex: "category",
+            dataIndex: "category_name",
+          },
+          {
+            title: "Status",
+            key: "status",
+            dataIndex: "status",
           },
           {
             title: "Action",
@@ -96,7 +162,12 @@ function Inventory() {
             dataIndex: "product_id",
             render: (record) => {
               return (
-                <>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <EditOutlined
                     onClick={() => {
                       onUpdateProduct(record);
@@ -108,7 +179,7 @@ function Inventory() {
                     }}
                     style={{ color: "red" }}
                   />
-                </>
+                </div>
               );
             },
           },
@@ -119,7 +190,7 @@ function Inventory() {
         }}
       ></Table>
       <Modal
-        title="Edit User"
+        title="Edit Product"
         open={isEditing}
         okText="Confirm"
         onCancel={() => {
@@ -130,24 +201,46 @@ function Inventory() {
           resetEditing();
         }}
       >
-        Name:{" "}
-        <Input
-          value={editFormData?.name}
-          onChange={(e) => {
-            setEditFormData((pre) => {
-              return { ...pre, name: e.target.value };
-            });
-          }}
-        />
-        Price:{" "}
-        <Input
-          value={editFormData?.Price}
-          onChange={(e) => {
-            setEditFormData((pre) => {
-              return { ...pre, Price: e.target.value };
-            });
-          }}
-        />
+        <div style={{ lineHeight: "2.5" }}>
+          Name:{" "}
+          <Input
+            value={editFormData?.name}
+            onChange={(e) => {
+              setEditFormData((pre) => {
+                return { ...pre, name: e.target.value };
+              });
+            }}
+          />
+          Price:{" "}
+          <Input
+            value={editFormData?.price}
+            onChange={(e) => {
+              setEditFormData((pre) => {
+                return { ...pre, price: e.target.value };
+              });
+            }}
+          />
+          Category:{" "}
+          <Select
+            value={editFormData?.category_name}
+            options={options}
+            style={{ width: 200, margin: "20px 20px 0px 0px" }}
+            onChange={(e) => {
+              setEditFormData((pre) => {
+                return { ...pre, category_name: e };
+              });
+            }}
+          />
+          Status:{" "}
+          <Switch
+            value={editFormData?.status}
+            onChange={(e) => {
+              setEditFormData((pre) => {
+                return { ...pre, status: e ? 1 : 0 };
+              });
+            }}
+          />
+        </div>
       </Modal>
     </Space>
   );
