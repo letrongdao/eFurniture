@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Modal, Input } from "antd";
+import { Button, Form, Modal, Input, Select, Switch } from "antd";
 import { addProduct } from "../../../dataControllers/productController";
+import { generateId } from "../../../assistants/Generators";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 const formItemLayout = {
   labelCol: {
@@ -21,6 +23,37 @@ const formItemLayout = {
   },
 };
 
+const options = [
+  {
+    value: "Table",
+    label: "Table",
+  },
+  {
+    value: "Sofa",
+    label: "Sofa",
+  },
+  {
+    value: "Bed",
+    label: "Bed",
+  },
+  {
+    value: "Chair",
+    label: "Chair",
+  },
+  {
+    value: "Lighting",
+    label: "Lighting",
+  },
+  {
+    value: "Shelf",
+    label: "Shelf",
+  },
+  {
+    value: "Outdoor",
+    label: "Outdoor",
+  },
+];
+
 const AddModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,6 +65,8 @@ const AddModal = () => {
     status: 1,
     category_name: "",
   });
+
+  console.log("ADADA: ", formData);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -46,7 +81,7 @@ const AddModal = () => {
       price: "",
       description: "",
       image_url: "",
-      status: 1,
+      status: 0,
       category_name: "",
     });
   };
@@ -56,13 +91,31 @@ const AddModal = () => {
     const newValue = type === "checkbox" ? checked : value;
     setFormData({
       ...formData,
+      product_id: generateId(30, ""),
       [name]: newValue,
     });
+  };
+
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      console.log("URL: ", imageUrl);
+      setFormData({
+        ...formData,
+        image_url: imageUrl,
+      });
+    }
+  };
+
+  const handleSwitchChange = (checked) => {
+    setFormData({ ...formData, status: checked ? true : false });
   };
 
   const handleSubmit = (event) => {
     setIsModalOpen(false);
     event.preventDefault();
+    // setFormData({ ...formData, product_id: generateId(30, "") });
     addProduct(formData);
     setFormData({
       ...formData,
@@ -78,7 +131,12 @@ const AddModal = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button
+        style={{ float: "right", marginRight: "50px" }}
+        type="primary"
+        onClick={showModal}
+        icon={<PlusCircleOutlined />}
+      >
         Add Product
       </Button>
       <Modal
@@ -86,6 +144,7 @@ const AddModal = () => {
         open={isModalOpen}
         onOk={handleSubmit}
         onCancel={handleCancel}
+        centered
       >
         <Form
           {...formItemLayout}
@@ -94,14 +153,6 @@ const AddModal = () => {
             maxWidth: 600,
           }}
         >
-          <Form.Item label="Product ID">
-            <Input
-              type="text"
-              name="product_id"
-              value={formData?.product_id}
-              onChange={handleChange}
-            />
-          </Form.Item>
           <Form.Item label="Product Name">
             <Input
               type="text"
@@ -111,11 +162,16 @@ const AddModal = () => {
             />
           </Form.Item>
           <Form.Item label="Category">
-            <Input
-              type="text"
-              name="category_name"
+            <Select
               value={formData?.category_name}
-              onChange={handleChange}
+              options={options}
+              style={{ width: 200 }}
+              onChange={(value) => {
+                setFormData((pre) => {
+                  return { ...pre, category_name: value };
+                });
+              }}
+              // onChange={handleChange}
             />
           </Form.Item>
           <Form.Item label="Price">
@@ -125,6 +181,17 @@ const AddModal = () => {
               value={formData?.price}
               onChange={handleChange}
             />
+          </Form.Item>
+          {/* <Form.Item label="Add Image">
+            <Input
+              type="file"
+              name="image_url"
+              value={formData?.image_url}
+              onChange={handleImage}
+            />
+          </Form.Item> */}
+          <Form.Item label="Available">
+            <Switch value={formData?.status} onChange={handleSwitchChange} />
           </Form.Item>
         </Form>
       </Modal>

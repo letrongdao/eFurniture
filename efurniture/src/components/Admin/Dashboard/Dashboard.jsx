@@ -41,10 +41,10 @@ function Dashboard() {
       setRevenue(res.discountedTotal);
     });
     getProduct().then((res) => {
-      setProducts(res.total);
+      setProducts(res.length);
     });
     getUser().then((res) => {
-      setUsers(res.total);
+      setUsers(res.length);
     });
   }, []);
   return (

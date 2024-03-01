@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import styles from './Product.module.css'
 import Navbar from '../../components/Navbar/Navbar'
-import { Divider, Typography, List, Card, Spin, Flex } from 'antd'
+import { Divider, Typography, List, Card, Spin, Flex, Tooltip } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import RelatedProducts from '../../components/Related Products/RelatedProducts'
+import Footer from '../../components/Home/Footer'
 
 export default function CategorizedProductList() {
     const { Text, Title } = Typography
@@ -14,6 +15,7 @@ export default function CategorizedProductList() {
 
     const [productDataSource, setProductDataSource] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [page, setPage] = useState(1)
     const fetchProductData = async () => {
         setIsLoading(true)
         await axios.get(`http://localhost:3344/products/category/${name}`)
@@ -63,6 +65,15 @@ export default function CategorizedProductList() {
                             position: "bottom",
                             align: "center",
                             pageSize: 8,
+                            current: page,
+                            hideOnSinglePage: true,
+                            onChange: (page, pageSize) => {
+                                setIsLoading(true)
+                                setTimeout(() => {
+                                    setIsLoading(false)
+                                    setPage(page)
+                                }, 1000)
+                            }
                         }}
                         dataSource={productDataSource}
                         style={{
@@ -82,7 +93,9 @@ export default function CategorizedProductList() {
                                         <img alt="example" src={item.image_url} />
                                     </div>
                                     <div className={styles.infoSection}>
-                                        <Text strong style={{ fontWeight: "700", fontSize: "130%" }}>{item.name}</Text>
+                                        <Tooltip title={item.name}>
+                                            <Text strong className={styles.productName}>{item.name}</Text>
+                                        </Tooltip>
                                         <Text type='secondary' italic style={{ fontWeight: "400" }}>
                                             <Text delete={item.status === 0}>{item.price} $</Text>&ensp;
                                             {item.status === 0 ? 'SOLD OUT' : ''}
@@ -93,6 +106,7 @@ export default function CategorizedProductList() {
                         )}
                     />
                     <RelatedProducts />
+                    <Footer />
                 </>
             }
 

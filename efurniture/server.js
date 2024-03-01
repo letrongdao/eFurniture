@@ -68,7 +68,7 @@ app.patch('/users/:id', async (req, res) => {
 })
 
 app.get('/products', (req, res) => {
-  const sql = "SELECT * FROM products";
+  const sql = "SELECT * FROM products ORDER BY status DESC";
   db.query(sql, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
@@ -123,8 +123,8 @@ app.patch('/products/:id', (req, res) => {
   });
 })
 
-app.delete('/products', (req, res) => {
-  const productId = [req.query.product_id];
+app.delete('/products/:id', (req, res) => {
+  const productId = req.params.id;
   const sql = "DELETE FROM products WHERE product_id = ?";
   db.query(sql, [productId], (err, result) => {
     if (err) {
