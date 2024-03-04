@@ -1,11 +1,11 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Home/Footer";
+import Footer from "../../components/home/Footer";
 import { Card, Col, Row, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 const AboutPage = () => {
-  const { Paragraph } = Typography
+  const { Paragraph } = Typography;
   return (
     <>
       <Navbar />
@@ -13,13 +13,35 @@ const AboutPage = () => {
         <h1 className="text-center">About Us</h1>
         <hr />
         <Paragraph className="lead text-center">
-          Welcome to eFurniture, where we turn spaces into living dreams. As a premier destination for quality furniture and exceptional customer service, we take pride in offering a curated selection of stylish and functional pieces to elevate your home or office.
-          At eFurniture, we believe that furniture is more than just objects; it's an expression of personal style and a reflection of individuality. Whether you're furnishing a cozy apartment, a spacious house, or a modern office, we are here to help you find the perfect pieces that complement your lifestyle and inspire creativity.
-          What sets us apart is our commitment to excellence in every aspect of our business. From sourcing materials to craftsmanship and delivery, we prioritize quality and attention to detail to ensure that every piece meets our high standards. Our curated collection features a blend of timeless classics and contemporary designs, sourced from trusted manufacturers and artisans around the world.
-          But it's not just about the furniture; it's about the experience. Our team of knowledgeable and friendly professionals is dedicated to providing personalized assistance every step of the way. Whether you need help choosing the right pieces, coordinating colors and fabrics, or navigating the ordering process, we are here to make your furniture shopping experience seamless and enjoyable.
-          As a family-owned business, we understand the importance of creating spaces that feel like home. That's why we go above and beyond to offer exceptional value, competitive pricing, and flexible financing options to accommodate every budget. Our goal is simple: to help you create spaces that inspire, comfort, and delight for years to come.
-          Thank you for choosing eFurniture as your trusted partner in furnishing your world. We look forward to helping you bring your vision to life and making your house a home.
-          Contact us today to discover the endless possibilities for your space.
+          Welcome to eFurniture, where we turn spaces into living dreams. As a
+          premier destination for quality furniture and exceptional customer
+          service, we take pride in offering a curated selection of stylish and
+          functional pieces to elevate your home or office. At eFurniture, we
+          believe that furniture is more than just objects; it's an expression
+          of personal style and a reflection of individuality. Whether you're
+          furnishing a cozy apartment, a spacious house, or a modern office, we
+          are here to help you find the perfect pieces that complement your
+          lifestyle and inspire creativity. What sets us apart is our commitment
+          to excellence in every aspect of our business. From sourcing materials
+          to craftsmanship and delivery, we prioritize quality and attention to
+          detail to ensure that every piece meets our high standards. Our
+          curated collection features a blend of timeless classics and
+          contemporary designs, sourced from trusted manufacturers and artisans
+          around the world. But it's not just about the furniture; it's about
+          the experience. Our team of knowledgeable and friendly professionals
+          is dedicated to providing personalized assistance every step of the
+          way. Whether you need help choosing the right pieces, coordinating
+          colors and fabrics, or navigating the ordering process, we are here to
+          make your furniture shopping experience seamless and enjoyable. As a
+          family-owned business, we understand the importance of creating spaces
+          that feel like home. That's why we go above and beyond to offer
+          exceptional value, competitive pricing, and flexible financing options
+          to accommodate every budget. Our goal is simple: to help you create
+          spaces that inspire, comfort, and delight for years to come. Thank you
+          for choosing eFurniture as your trusted partner in furnishing your
+          world. We look forward to helping you bring your vision to life and
+          making your house a home. Contact us today to discover the endless
+          possibilities for your space.
         </Paragraph>
 
         <h2 className="text-center py-4">Our Featured Products</h2>

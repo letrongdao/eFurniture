@@ -6,9 +6,9 @@ const Footer = () => {
     <>
       <div className={styles.mainContainer}>
         <div className={styles.footerContainer}>
-          <div className={styles.icon}>
+          {/* <div className={styles.icon}>
             <img className={styles.logo} src="./images/logo.png" alt="" />
-          </div>
+          </div> */}
           <div className={styles.Services}>
             <h3>Service</h3>
             <p>Delivery Service</p>
@@ -23,10 +23,10 @@ const Footer = () => {
           </div>
           <div className={styles.Support}>
             <h3>Support</h3>
-            <p>Monday to Friday:9-20</p>
-            <p>Saturday to Sunday: closed</p>
-            <p>antiq@qode.com</p>
-            <p>+1 333 555</p>
+            <p>Monday to Saturday: 9-20</p>
+            <p>Sunday: Closed</p>
+            <p>efurni@email.com</p>
+            <p>+84 463 210</p>
           </div>
         </div>
         <div className={styles.SocialMediaLinks}>
@@ -51,7 +51,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div className={styles.teamLine}>Made by team AntiQ</div>
+        <div className={styles.teamLine}>Made by team eFurni</div>
       </div>
     </>
   );

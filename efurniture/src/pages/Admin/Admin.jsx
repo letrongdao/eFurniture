@@ -5,12 +5,17 @@ import {
   ShoppingCartOutlined,
   UserOutlined,
   SolutionOutlined,
+  HomeOutlined,
+  InboxOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Breadcrumb, Image } from "antd";
+import eFurniLogo from "../../assets/logos/eFurniLogo_transparent.png";
 import Users from "../../components/Admin/User/Users";
 import Dashboard from "../../components/Admin/Dashboard/Dashboard";
-import Inventory from "../../components/Admin/Inventory/Inventory";
+import Products from "../../components/Admin/Product/Products";
 import Orders from "../../components/Admin/Orders/Orders";
+import Inventory from "../../components/Admin/Inventory/Inventory";
+import { Link } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
@@ -37,8 +42,8 @@ const Admin = () => {
     {
       key: "3",
       icon: <ShopOutlined />,
-      label: "Inventory",
-      onClick: () => setActiveComponent("Inventory"),
+      label: "Products",
+      onClick: () => setActiveComponent("Products"),
     },
     {
       key: "4",
@@ -46,21 +51,26 @@ const Admin = () => {
       label: "Orders",
       onClick: () => setActiveComponent("Orders"),
     },
+    {
+      key: "5",
+      icon: <InboxOutlined />,
+      label: "Inventory",
+      onClick: () => setActiveComponent("Inventory"),
+    },
   ];
 
   return (
     <Layout className={styles.admin}>
       <Sider style={{ background: "white" }}>
         <div className={styles.appHeader}>
-          {/* <Avatar size={40} src={avt} className="logo" /> */}
-          {/* {!collapsed ? (
-            <>
-              <span style={{ marginTop: "10px", fontWeight: "bold" }}>
-                {userData.name}
-              </span>
-              <span>{userData.email}</span>
-            </>
-          ) : null} */}
+          <Link to="/">
+            <Image
+              preview={false}
+              size={30}
+              src={eFurniLogo}
+              className="logo"
+            />
+          </Link>
         </div>
         <Menu
           className={styles.sideMenuVertical}
@@ -83,7 +93,7 @@ const Admin = () => {
             alignItems: "center",
           }}
         >
-          <h2 style={{ marginLeft: "650px" }}>Admin</h2>
+          <h2 style={{ marginLeft: "620px" }}>Admin</h2>
         </Header>
         <Content
           style={{
@@ -93,9 +103,32 @@ const Admin = () => {
             background: colorBgContainer,
           }}
         >
+          <Breadcrumb
+            style={{ marginBottom: "10px" }}
+            items={[
+              {
+                href: "/",
+                title: <HomeOutlined />,
+              },
+              {
+                href: "/admin",
+                title: (
+                  <>
+                    <UserOutlined />
+                    <span>Admin</span>
+                  </>
+                ),
+              },
+              {
+                href: "",
+                title: activeComponent,
+              },
+            ]}
+          />
           {activeComponent === "Dashboard" && <Dashboard />}
           {activeComponent === "Users" && <Users />}
           {activeComponent === "Orders" && <Orders />}
+          {activeComponent === "Products" && <Products />}
           {activeComponent === "Inventory" && <Inventory />}
         </Content>
       </Layout>

@@ -78,7 +78,7 @@ function Dashboard() {
               }}
             />
           }
-          title={"Inventory"}
+          title={"Products"}
           value={products}
         />
         <DashboardCard
