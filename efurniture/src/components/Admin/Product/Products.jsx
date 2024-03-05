@@ -155,17 +155,20 @@ function Products() {
             title: "Status",
             key: "status",
             dataIndex: "status",
+            render: (status) => status ? "Available" : "Unavailable"
           },
           {
             title: "Action",
             key: "action",
+            align: "center",
             dataIndex: "product_id",
             render: (record) => {
               return (
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "space-evenly",
+                    fontSize: "20px"
                   }}
                 >
                   <EditOutlined
