@@ -164,17 +164,19 @@ function Users() {
           {
             title: "Status",
             dataIndex: "status",
-            render: (status) => String(status),
+            render: (status) => (status ? "Online" : "Banned"),
           },
           {
             title: "Action",
+            align: "center",
             dataIndex: "user_id",
             render: (record) => {
               return (
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "space-evenly",
+                    fontSize: "20px",
                   }}
                 >
                   <InfoCircleOutlined
@@ -292,6 +294,7 @@ function Users() {
               {
                 title: "Status",
                 dataIndex: "status",
+                render: (status) => status ? "Online" : "Banned"
               },
             ]}
             pagination={false}

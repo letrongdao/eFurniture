@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { List, InputNumber, Button, message, Row, Col } from 'antd';
+import { Flex, Typography } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import './Cart.css';
+import styles from './Cart.module.css'
 import Footer from "../../components/Home/Footer.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx"; // Import the CSS file for custom styling
 import axios from 'axios';
+import CartItem from './CartItem.jsx';
+import CartDetailList from './CartDetailList.jsx'
 
-const Cart = () => {
-  const cartId = sessionStorage.getItem('loginUserCartId')
+export default function Cart() {
+  const { Text, Title } = Typography
+  const currentUserId = sessionStorage.getItem("loginUserId")
   const [cartItems, setCartItems] = useState([])
 
   const fetchCartItems = async () => {
-    await axios.get(`http://localhost:3344/cartItems/${cartId}`)
+    await axios.get(`http://localhost:3344/cartItems/${currentUserId}`)
       .then((res) => {
         setCartItems(res.data)
-        cartItems.map((cartItem) => {
-          axios.get(`http://localhost:3344/products/${cartItem.product_id}`)
-            .then((res) => {
-              cartItem = {
-                ...cartItem,
-                ...{
-                  product: res.data,
-                }
-              }
-            })
-        })
       })
       .catch((err) => console.log(err))
   }
@@ -33,46 +25,37 @@ const Cart = () => {
     fetchCartItems()
   }, [])
 
-  return (
-    <>
-      <Navbar />
-      <h1>{cartItems.length}</h1>
-      <Row justify="center" className="main">
-        <Col span={14}>
-          <div className="cart-list">
-            <List
-              dataSource={cartItems}
-              renderItem={item => (
-                <List.Item className="cart-item" style={{ display: "block" }}>
-                  <Row align="middle">
-                    <Col span={4}>
-                      <img src={item.product} alt='' className="cart-item-image" />
-                    </Col>
-                    <Col span={7} style={{ fontWeight: "bold", fontSize: "1.2rem" }}>{item.product_id}</Col>
-                    <Col span={3}>Price: {item.product.price}</Col>
-                    <Col span={4}>
-                      <InputNumber
-                        min={1}
-                        defaultValue={item.quantity}
-                        onChange={newQuantity => handleQuantityChange(item.product_id, newQuantity)}
-                      />
-                    </Col>
-                    <Col span={3}>Total: {item.product_id}</Col>
-                    <Col span={2} className="last-col">
-                      <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteItem(item.product_id)}>
-                        Delete
-                      </Button>
-                    </Col>
-                  </Row>
-                </List.Item>
-              )}
-            />
+  if (cartItems.length === 0) {
+    return (
+      <>
+        <Navbar />
+        <div>
+          <h1>EMPTY</h1>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+  else {
+    return (
+      <>
+        <Navbar />
+        <Flex justify='space-around' align='center' gap={1} className={styles.cartContainer}>
+          <div className={styles.orderItemSection}>
+            {cartItems.map((item) => (
+              <CartItem cartItemId={item.cartItem_id} productId={item.product_id} quantity={item.quantity} />
+            ))}
           </div>
-        </Col>
-      </Row>
-      <Footer />
-    </>
-  );
+          <Flex vertical justify='center' align='center' className={styles.billingSection}>
+            <div className={styles.productListSection}>
+              {cartItems.map((item) => (
+                <CartDetailList productId={item.product_id} quantity={item.quantity} />
+              ))}
+            </div>
+          </Flex>
+        </Flex>
+        <Footer />
+      </>
+    )
+  }
 };
-
-export default Cart;

@@ -6,7 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../../../dataControllers/productController";
-// import AddModal from "./Modal";
+import AddModal from "./Modal";
 
 const options = [
   {
@@ -39,7 +39,7 @@ const options = [
   },
 ];
 
-function Inventory() {
+function Products() {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -116,7 +116,7 @@ function Inventory() {
           enterButton
           style={{ width: "500px" }}
         />
-        {/* <AddModal>Add Product</AddModal> */}
+        <AddModal>Add Product</AddModal>
       </div>
       <Table
         style={{ width: "1250px" }}
@@ -155,7 +155,7 @@ function Inventory() {
             title: "Status",
             key: "status",
             dataIndex: "status",
-            render: (status) => (status ? "Available" : "Unavailable"),
+            render: (status) => status ? "Available" : "Unavailable"
           },
           {
             title: "Action",
@@ -168,7 +168,7 @@ function Inventory() {
                   style={{
                     display: "flex",
                     justifyContent: "space-evenly",
-                    fontSize: "20px",
+                    fontSize: "20px"
                   }}
                 >
                   <EditOutlined
@@ -248,4 +248,4 @@ function Inventory() {
     </Space>
   );
 }
-export default Inventory;
+export default Products;

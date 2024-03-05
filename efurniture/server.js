@@ -2,13 +2,23 @@ import express from 'express';
 import mysql2 from 'mysql2';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import querystring from 'qs';
+import crypto from 'crypto';
+import dateFormat from './src/assistants/date.format.js';
+import moment from 'moment';
 
 const app = express()
 const env = dotenv.config()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow requests from your website
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Allow GET, POST, PATCH, DELETE methods
+  credentials: true // Allow sending cookies with the request
+}));
+// app.use('/create_payment_url', createProxyMiddleware({ target: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', changeOrigin: true }));
+
 
 const db = mysql2.createConnection({
   host: process.env.HOST,
@@ -178,79 +188,23 @@ app.get('/categories', (req, res) => {
   })
 })
 
-app.get('/carts/:userId', (req, res) => {
+app.get('/cartItems/:userId', (req, res) => {
   const userId = req.params.userId
-  const sql = "SELECT * FROM carts WHERE user_id = ?";
+  const sql = "SELECT * FROM cartItems WHERE user_id = ?";
   db.query(sql, [userId], (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
   })
 })
 
-app.get('/cartItems/:cartId', (req, res) => {
-  const cartId = req.params.cartId
-  const sql = "SELECT * FROM cartItems WHERE cart_id = ?";
-  db.query(sql, [cartId], (err, result) => {
+app.patch('/cartItems/:cartItemId', (req, res) => {
+  const cartItemId = req.params.cartItemId
+  const sql = "UPDATE cartitems SET quantity = ? WHERE cartItem_id = ?";
+  db.query(sql, [req.body.quantity, cartItemId], (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
   })
 })
-
-//POST add to cart_items with user_id, product_id, quantity
-app.post('/cart', (req, res) => {
-  const sql = "INSERT INTO cartItems SET ?";
-  const newCartItem = req.body;
-  db.query(sql, newCartItem, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ status: 'failed' });
-    } else {
-      newCartItem.id = result.insertId;
-      res.status(201).json(newCartItem);
-    }
-  });
-});
-
-//DELETE delete from cart_items with user_id, product_id
-app.delete('/cart', (req, res) => {
-  const sql = "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
-  const data = [req.query.user_id, req.query.product_id];
-  db.query(sql, data, (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.json({ message: 'Cart deleted!' });
-    }
-  });
-});
-
-//GET all cart_items with user_id and join with products to get name, price, image_url
-app.get('/cart', (req, res) => {
-  const sql = "SELECT c.*, p.name, p.price, p.image_url FROM cart_items c JOIN products p ON c.product_id = p.product_id WHERE c.user_id = ?";
-  db.query(sql, req.query.user_id, (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.json(result);
-    }
-  });
-});
-
-//UPDATE cart_items with user_id, product_id, quantity
-app.patch('/cart', (req, res) => {
-  const sql = "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?";
-  const data = [req.body.quantity, req.body.user_id, req.body.product_id];
-  db.query(sql, data, (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.json({ message: 'Cart updated successfully' });
-    }
-  });
-});
 
 //POST create a new booking with user_id, product_id, date, time, content, status, booking_id
 app.post('/bookings', (req, res) => {
@@ -317,7 +271,137 @@ app.get('/bookings', (req, res) => {
   });
 });
 
-app.listen(3344, () => {
-  console.log("Listening to port 3344")
-})
 
+function sortObject(obj) {
+  let sorted = {};
+  let str = [];
+  let key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      str.push(encodeURIComponent(key));
+    }
+  }
+  str.sort();
+  for (key = 0; key < str.length; key++) {
+    sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+  }
+  return sorted;
+}
+
+app.post('/create_payment_url', function (req, res, next) {
+
+  var ipAddr = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+  var tmnCode = 'P10RAQ3B';
+  var secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI';
+  var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+  var returnUrl = 'http://localhost:5173/';
+
+  var date = new Date();
+
+  var createDate = dateFormat(date, 'yyyymmddHHmmss');
+  var orderId = dateFormat(date, 'HHmmss');
+  var amount = req.body.amount;
+  var bankCode = req.body.bankCode;
+
+  var orderInfo = req.body.orderDescription;
+  var orderType = req.body.orderType;
+  var locale = req.body.language;
+
+  console.log("Request", req.body);
+  var expireDate = moment(date).add(10, "minutes").format("YYYYMMDDHHmmss");
+  if (locale === null || locale === '') {
+    locale = 'vn';
+  }
+  var currCode = 'VND';
+
+  var vnp_Params = {};
+  vnp_Params['vnp_Version'] = '2.1.0';
+  vnp_Params['vnp_Command'] = 'pay';
+  vnp_Params['vnp_TmnCode'] = tmnCode;
+  // vnp_Params['vnp_Merchant'] = ''
+  vnp_Params['vnp_Locale'] = locale;
+  vnp_Params['vnp_CurrCode'] = currCode;
+  vnp_Params['vnp_TxnRef'] = orderId;
+  vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+  vnp_Params['vnp_OrderType'] = 'other';
+  vnp_Params['vnp_Amount'] = amount * 100;
+  vnp_Params['vnp_ReturnUrl'] = returnUrl;
+  vnp_Params['vnp_IpAddr'] = ipAddr;
+  vnp_Params['vnp_CreateDate'] = createDate;
+  vnp_Params['vnp_ExpireDate'] = expireDate;
+
+  if (bankCode !== null && bankCode !== '') {
+    vnp_Params['vnp_BankCode'] = bankCode;
+  }
+
+  vnp_Params = sortObject(vnp_Params);
+
+  var signData = querystring.stringify(vnp_Params, { encode: false });
+  var hmac = crypto.createHmac("sha512", secretKey);
+  var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+  vnp_Params['vnp_SecureHash'] = signed;
+  vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+  res.json({ vnpUrl: vnpUrl });
+});
+// Vui lòng tham khảo thêm tại code demo
+
+
+
+app.get('/vnpay_ipn', function (req, res, next) {
+  var vnp_Params = req.query;
+  var secureHash = vnp_Params['vnp_SecureHash'];
+
+  delete vnp_Params['vnp_SecureHash'];
+  delete vnp_Params['vnp_SecureHashType'];
+
+  vnp_Params = sortObject(vnp_Params);
+  var secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI';
+  var signData = querystring.stringify(vnp_Params, { encode: false });
+  var hmac = crypto.createHmac("sha512", secretKey);
+  var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+
+
+  if (secureHash === signed) {
+    var orderId = vnp_Params['vnp_TxnRef'];
+    var rspCode = vnp_Params['vnp_ResponseCode'];
+    //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
+    res.status(200).json({ RspCode: '00', Message: 'success' })
+  }
+  else {
+    res.status(200).json({ RspCode: '97', Message: 'Fail checksum' })
+  }
+});
+
+
+app.get('/vnpay_return', function (req, res, next) {
+  var vnp_Params = req.query;
+
+  var secureHash = vnp_Params['vnp_SecureHash'];
+
+  delete vnp_Params['vnp_SecureHash'];
+  delete vnp_Params['vnp_SecureHashType'];
+
+  vnp_Params = sortObject(vnp_Params);
+
+  var tmnCode = 'P10RAQ3B';
+  var secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI';
+
+  var signData = querystring.stringify(vnp_Params, { encode: false });
+  var hmac = crypto.createHmac("sha512", secretKey);
+  var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+
+  if (secureHash === signed) {
+    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+
+    res.render('success', { code: vnp_Params['vnp_ResponseCode'] })
+  } else {
+    res.render('success', { code: '97' })
+  } s
+});
+
+
+app.listen(3344, () => {
+  console.log("Listening to port 3344");
+})
