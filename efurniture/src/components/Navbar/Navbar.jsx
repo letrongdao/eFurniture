@@ -71,6 +71,7 @@ const Navbar = () => {
         let foundCart = (cartId = res.data[0]);
         if (foundCart) {
           cartId = foundCart.cart_id;
+          sessionStorage.setItem("loginUserCartId", cartId)
         }
       })
       .catch((err) => console.log(err.message));

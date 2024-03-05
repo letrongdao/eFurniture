@@ -36,9 +36,11 @@ const ProductsOfTheWeek = () => {
               navigate(`/products/${item.product_id}`);
             }}
           >
-            <img className={styles.productImages} src={item.image_url} alt="" />
+            <div className={styles.productImageContainer}>
+              <img className={styles.productImages} src={item.image_url} alt="" />
+            </div>
             <div className={styles.productImagesDesc}>
-              <h2>{item.name}</h2>
+              <h6 style={{ fontSize: '150%' }}>{item.name}</h6>
               <p>{item.price} $</p>
             </div>
           </div>
