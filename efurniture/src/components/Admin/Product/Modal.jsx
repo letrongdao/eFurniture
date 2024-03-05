@@ -70,6 +70,10 @@ const AddModal = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
+    setFormData({
+      ...formData,
+      product_id: generateId(30, ""),
+    });
   };
 
   const handleCancel = () => {
@@ -91,7 +95,6 @@ const AddModal = () => {
     const newValue = type === "checkbox" ? checked : value;
     setFormData({
       ...formData,
-      product_id: generateId(30, ""),
       [name]: newValue,
     });
   };
@@ -115,7 +118,6 @@ const AddModal = () => {
   const handleSubmit = (event) => {
     setIsModalOpen(false);
     event.preventDefault();
-    // setFormData({ ...formData, product_id: generateId(30, "") });
     addProduct(formData);
     setFormData({
       ...formData,
@@ -179,6 +181,22 @@ const AddModal = () => {
               type="number"
               name="price"
               value={formData?.price}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item label="Description">
+            <Input
+              type="text"
+              name="description"
+              value={formData?.description}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item label="Image">
+            <Input
+              type="text"
+              name="image"
+              value={formData?.image_url}
               onChange={handleChange}
             />
           </Form.Item>

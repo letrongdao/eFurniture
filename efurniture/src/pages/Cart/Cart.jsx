@@ -1,39 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { List, InputNumber, Button, message, Row, Col } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
-import './Cart.css';
-import Footer from "../../components/Home/Footer.jsx";
+import React, { useState, useEffect } from "react";
+import { List, InputNumber, Button, message, Row, Col } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import "./Cart.css";
+import Footer from "../../components/home/Footer.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx"; // Import the CSS file for custom styling
-import axios from 'axios';
+import axios from "axios";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [cartItemData, setCartItemData] = useState([])
-  const userId = sessionStorage.getItem('loginUserId');
+  const [cartItemData, setCartItemData] = useState([]);
+  const userId = sessionStorage.getItem("loginUserId");
 
   const fetchCartItems = async () => {
-    var cartId = ''
-    await axios.get(`http://localhost:3344/carts/${userId}`)
+    var cartId = "";
+    await axios
+      .get(`http://localhost:3344/carts/${userId}`)
       .then((res) => {
-        cartId = res.data[0].cart_id
+        cartId = res.data[0].cart_id;
       })
-      .catch((err) => console.log(err.message))
+      .catch((err) => console.log(err.message));
 
-    axios.get(`http://localhost:3344/cartItems/${cartId}`)
+    axios
+      .get(`http://localhost:3344/cartItems/${cartId}`)
       .then((res) => {
-        console.log("Cart item fetched: ", res.data)
-        setCartItemData(res.data)
+        console.log("Cart item fetched: ", res.data);
+        setCartItemData(res.data);
       })
-      .catch((err) => console.log(err.message))
+      .catch((err) => console.log(err.message));
 
     cartItemData.map((item) => {
-      axios.get(`http://localhost:3344/products/${item.product_id}`)
+      axios
+        .get(`http://localhost:3344/products/${item.product_id}`)
         .then((res) => {
-          setCartItems(res.data)
+          setCartItems(res.data);
         })
-        .catch((err) => console.log(err))
-      console.log("ProductID: ", item.product_id)
-    })
+        .catch((err) => console.log(err));
+      console.log("ProductID: ", item.product_id);
+    });
   };
 
   useEffect(() => {
@@ -43,9 +46,9 @@ const Cart = () => {
   const handleQuantityChange = async (productId, newQuantity) => {
     try {
       const response = await fetch(`http://localhost:3344/cart`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user_id: userId,
@@ -54,39 +57,45 @@ const Cart = () => {
         }),
       });
       if (!response.ok) {
-        throw new Error('Failed to update quantity');
+        throw new Error("Failed to update quantity");
       }
-      setCartItems(prevItems =>
-        prevItems.map(item => (item.product_id === productId ? { ...item, quantity: newQuantity } : item))
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item.product_id === productId
+            ? { ...item, quantity: newQuantity }
+            : item
+        )
       );
-      message.success('Quantity updated successfully.');
+      message.success("Quantity updated successfully.");
     } catch (error) {
-      console.error('Error updating quantity:', error);
+      console.error("Error updating quantity:", error);
     }
   };
 
-  const handleDeleteItem = async productId => {
+  const handleDeleteItem = async (productId) => {
     try {
-      const response = await fetch(`http://localhost:3344/cart?user_id=${userId}&product_id=${productId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `http://localhost:3344/cart?user_id=${userId}&product_id=${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) {
-        throw new Error('Failed to delete item');
+        throw new Error("Failed to delete item");
       }
-      setCartItems(prevItems => prevItems.filter(item => item.product_id !== productId));
-      message.success('Item deleted from cart.');
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.product_id !== productId)
+      );
+      message.success("Item deleted from cart.");
     } catch (error) {
-      console.error('Error deleting item:', error);
+      console.error("Error deleting item:", error);
     }
   };
 
   return (
     <>
       <Navbar />
-      {cartItems ?
-        <h1>{cartItems.length}</h1>
-        : null
-      }
+      {cartItems ? <h1>{cartItems.length}</h1> : null}
       {/* <Row justify="center" className="main">
         <Col span={14}>
           <div className="cart-list">
