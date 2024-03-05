@@ -45,13 +45,14 @@ export default function RelatedProducts() {
         style={{ margin: "0 4%" }}
         renderItem={(item) => (
           <List.Item>
+            <div onClick={() => { navigate(`/products/${item.product_id}`) }}>
             <Card
               hoverable
               style={{
                 width: 200,
                 height: 250,
               }}
-              onClick={() => { navigate(`/products/${item.product_id}`) }}
+              
             >
               <div className={styles.productImageSection}>
                 <img alt="example" src={item.image_url} />
@@ -64,6 +65,7 @@ export default function RelatedProducts() {
                 </Text>
               </div>
             </Card>
+            </div>
           </List.Item>
         )}
       />
