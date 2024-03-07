@@ -56,6 +56,7 @@ const options = [
 
 const AddModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [formData, setFormData] = useState({
     product_id: "",
     name: "",
@@ -88,6 +89,7 @@ const AddModal = () => {
       status: 0,
       category_name: "",
     });
+    setSelectedImage(null);
   };
 
   const handleChange = (event) => {
@@ -102,14 +104,16 @@ const AddModal = () => {
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      console.log("URL: ", imageUrl);
+      // const imageUrl = URL.createObjectURL(file);
+      // console.log("URL: ", imageUrl);
       setFormData({
         ...formData,
-        image_url: imageUrl,
+        image_url: file,
       });
     }
   };
+
+  console.log("Image URL: ", formData.image_url);
 
   const handleSwitchChange = (checked) => {
     setFormData({ ...formData, status: checked ? true : false });
@@ -129,6 +133,7 @@ const AddModal = () => {
       status: 1,
       category_name: "",
     });
+    setSelectedImage(null);
   };
 
   return (
@@ -200,14 +205,14 @@ const AddModal = () => {
               onChange={handleChange}
             />
           </Form.Item>
-          {/* <Form.Item label="Add Image">
+          <Form.Item label="Add Image">
             <Input
               type="file"
               name="image_url"
               value={formData?.image_url}
               onChange={handleImage}
             />
-          </Form.Item> */}
+          </Form.Item>
           <Form.Item label="Available">
             <Switch value={formData?.status} onChange={handleSwitchChange} />
           </Form.Item>

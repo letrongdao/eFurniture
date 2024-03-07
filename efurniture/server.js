@@ -274,18 +274,18 @@ app.post('/bookings', (req, res) => {
 });
 
 
-//PATCH update a booking with booking_id
+//PATCH approve a booking with booking_id
 app.patch('/bookings/:id', (req, res) => {
   const id = req.params.id;
-  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
-  const data = [req.body, id];
+  const sql = "UPDATE bookings SET status = 1 WHERE booking_id = ?";
+  const data = [id];
   console.log(data);
   db.query(sql, data, (err, result) => {
     if (err) {
       console.log(err);
-      return;
+      return res.status(500).json({ message: 'Error updating booking status' });
     } else {
-      res.json({ message: 'Cart updated successfully' });
+      res.json({ message: 'Booking status updated to true successfully' });
     }
   });
 });
@@ -305,17 +305,31 @@ app.delete('/bookings/:id', (req, res) => {
 });
 
 //GET get all bookings
+// app.get('/bookings', (req, res) => {
+//   const sql = "SELECT * FROM bookings";
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     } else {
+//       res.json(result);
+//     }
+//   });
+// });
+
+//GET NAME AND PRODUCT NAME FROM BOOKINGS
 app.get('/bookings', (req, res) => {
-  const sql = "SELECT * FROM bookings";
-  db.query(sql, (err, result) => {
+  // const sql = "SELECT b.*, u.name AS fullName, p.name AS name FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
+  const sql1 = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
+  db.query(sql1, (err, result) => {
     if (err) {
       console.log(err);
       return;
     } else {
       res.json(result);
     }
-  });
-});
+  })
+})
 
 app.listen(3344, () => {
   console.log("Listening to port 3344")
