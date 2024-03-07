@@ -11,8 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import { jwtDecode } from "jwt-decode";
-import FacebookLogin from 'react-facebook-login';
-import FacebookIcon from '../../assets/icons/facebook.png'
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 import { generateId, generatePassword } from '../../assistants/Generators'
 import dateFormat from "../../assistants/date.format";
@@ -20,11 +18,10 @@ import axios from "axios";
 
 export default function Signin() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [isLoading, setIsLoading] = useState(false)
   const { Text } = Typography;
   const randomImage = "https://t4.ftcdn.net/jpg/05/51/69/95/360_F_551699573_1wjaMGnizF5QeorJJIgw5eRtmq5nQnzz.jpg"
-
-  const location = useLocation()
 
   useEffect(() => {
     if (location.state) {
@@ -41,6 +38,7 @@ export default function Signin() {
   }, [])
 
   const onGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true)
     var decoded
     if (credentialResponse.credential) {
       decoded = jwtDecode(credentialResponse.credential)
@@ -54,7 +52,7 @@ export default function Signin() {
             sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
           }
           else {
-            const newUserId = generateId(30, 'u')
+            const newUserId = generateId(30, '')
             const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
             var registerUser = {
               user_id: newUserId,
@@ -65,6 +63,7 @@ export default function Signin() {
               phone: '',
               create_at: createAt,
               status: true,
+              efpoint: 0,
             }
             axios.post("http://localhost:3344/users", registerUser)
               .then(() => {
@@ -88,49 +87,6 @@ export default function Signin() {
 
   const onGoogleError = (err) => {
     console.log("Failed to login with Google: ", err.message)
-  }
-
-  const responseFacebook = async (response) => {
-    if (response) {
-      console.log("Facebook login credentials: ", response)
-      await fetch("http://localhost:3344/users")
-        .then(res => res.json())
-        .then(data => {
-          var foundUserByEmail = data.find((account) => (account.email === response.email))
-          if (foundUserByEmail) {
-            sessionStorage.setItem("loginUserId", foundUserByEmail.user_id)
-          }
-          else {
-            const newUserId = generateId(30, 'u')
-            const createAt = dateFormat(new Date, "yyyy/mm/dd HH:MM:ss")
-            var registerUser = {
-              user_id: newUserId,
-              email: response.email,
-              password: generatePassword(20),
-              fullName: response.name,
-              role_id: "US",
-              phone: '',
-              create_at: createAt,
-              status: true,
-            }
-            axios.post("http://localhost:3344/users", registerUser)
-              .then(() => {
-                console.log("A new account has been created by Facebook email: ", response.email)
-              })
-              .catch((err) => {
-                console.log("Error: ", err.response)
-              })
-            sessionStorage.setItem("loginUserId", newUserId)
-          }
-        })
-        .catch(err => console.log(err))
-      setTimeout(() => {
-        setIsLoading(false)
-        navigate('/')
-      }, 2000)
-    } else {
-      console.log("Not found data")
-    }
   }
 
   const loginForm = useFormik({
@@ -206,19 +162,8 @@ export default function Signin() {
           <GoogleLogin
             onSuccess={onGoogleSuccess}
             onError={onGoogleError}
-            size="large"
-            type="icon"
-            icon={true}
-          />
-          <FacebookLogin
-            appId="689804996380398"
-            autoLoad={false}
-            fields="name,email"
-            callback={responseFacebook}
-            size="small"
-            cssClass={styles.myFacebookButtonClass}
-            textButton=""
-            icon={<Image src={FacebookIcon} width={20} preview={false} height={22} />}
+            size="medium"
+            type="standard"
           />
         </div>
         <ToastContainer
@@ -232,6 +177,7 @@ export default function Signin() {
           draggable
           pauseOnHover
           theme="light"
+          limit={1}
         />
         <div className={styles.formFooter}>
           <p>Don't have an account yet?&nbsp;</p>

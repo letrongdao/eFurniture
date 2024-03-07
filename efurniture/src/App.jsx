@@ -13,6 +13,7 @@ import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 import PaymentForm from "./vn-pay-payment/PaymentForm";
 import PaymentTransform from "./vn-pay-payment/PaymentTransform";
+import Profile from "./pages/Profile/Profile";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Purchase/Checkout";
 
@@ -25,6 +26,7 @@ function App() {
       <Route path="/signup/email" element={<EmailSignup />} />
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/reset/:id" element={<Reset />} />
+      <Route path="/profile/:id" element={<Profile />} />
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:id" element={<Product />} />
       <Route path="/category/:name" element={<CategorizedProductList />} />

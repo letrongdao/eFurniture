@@ -19,7 +19,6 @@ export default function ProductList() {
     }
 
     useEffect(() => {
-        fetchProductData()
         fetchCategoryData()
     }, [])
 

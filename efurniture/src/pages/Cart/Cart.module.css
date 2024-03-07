@@ -1,9 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,700;1,300&family=Quantico:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 .cartContainer {
     height: 80vh;
     max-height: 80vh;
     background-color: rgb(242, 242, 242);
+}
+
+#emptyCart {
+    max-width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+#emptyCart img {
+    opacity: 0.5;
+    width: 30%;
 }
 
 .cardContainer {
@@ -29,11 +44,13 @@
     flex-direction: column;
 }
 
-.orderItemSection::-webkit-scrollbar {
+.orderItemSection::-webkit-scrollbar,
+.productListSection::-webkit-scrollbar {
     display: none;
 }
 
-.orderItemSection {
+.orderItemSection,
+.productListSection {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -62,12 +79,11 @@
 }
 
 .productListSection {
-    min-height: 300px;
+    height: 300px;
     max-height: 300px;
     min-width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    max-width: 90%;
 }
 
 .productName {
@@ -104,4 +120,80 @@
 .price {
     font-family: "Chakra Petch", sans-serif;
     font-style: normal;
+}
+
+.shopNow {
+    color: #000000 !important;
+}
+
+.shopNow:hover {
+    color: #8d8d8d !important;
+}
+
+.totalAmount,
+.summary {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.singleCartDetail {
+    max-width: 90%;
+    margin: auto;
+}
+
+.singleCartDetail * {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#productNameInDetailList {
+    max-width: 200px;
+    min-width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#productTotalInDetailList {
+    text-align: end;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.buttonSection {
+    min-width: 50%;
+    justify-self: flex-end;
+    margin-top: 2%;
+}
+
+.button {
+    min-width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    border: solid 1px #000000;
+    font-size: 105%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover {
+    color: #575757 !important;
+    background-color: #ffffff !important;
+    border-color: #636363 !important;
+}
+
+#buyButton {
+    background-color: rgb(20, 170, 45);
+    color: #ffffff;
+    border-color: #000;
+}
+
+#buyButton:hover {
+    background-color: rgb(12, 118, 30) !important;
+    color: rgb(0, 0, 0) !important;
+    border-color: #000 !important;
 }

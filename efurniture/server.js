@@ -49,12 +49,12 @@ app.get('/users/:id', (req, res) => {
 })
 
 app.post('/users', async (req, res) => {
-  const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status) VALUES (?,?,?,?,?,?,?,?)"
-  const values = [req.body.user_id, req.body.email, req.body.password, req.body.fullName, req.body.role_id, req.body.phone, req.body.create_at, req.body.status]
+  const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status, efpoint) VALUES (?,?,?,?,?,?,?,?,?)"
+  const values = [req.body.user_id, req.body.email, req.body.password, req.body.fullName, req.body.role_id, req.body.phone, req.body.create_at, req.body.status, req.body.efpoint]
   db.query(sql, values, (err, result) => {
     if (err) {
       console.log(err)
-      return;
+      return res.json(result);
     } else {
       console.log("Successfully registered")
     }
@@ -197,10 +197,56 @@ app.get('/cartItems/:userId', (req, res) => {
   })
 })
 
+app.get('/cartItems/:userId/:productId', (req, res) => {
+  const userId = req.params.userId
+  const productId = req.params.productId
+  const sql = "SELECT * FROM cartItems WHERE user_id = ? and product_id = ?";
+  db.query(sql, [userId, productId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.post('/cartItems', (req, res) => {
+  const values = [req.body.cartItem_id, req.body.quantity, req.body.product_id, req.body.user_id]
+  const sql = "INSERT INTO cartItems VALUES (?,?,?,?)";
+  db.query(sql, values, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.patch('/cartItems/:cartItemId', (req, res) => {
   const cartItemId = req.params.cartItemId
   const sql = "UPDATE cartitems SET quantity = ? WHERE cartItem_id = ?";
   db.query(sql, [req.body.quantity, cartItemId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/orderItems/:orderId', (req, res) => {
+  const orderId = req.params.orderId
+  const sql = "SELECT * FROM orderitems WHERE order_id = ?";
+  db.query(sql, [orderId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.get('/orders/:userId', (req, res) => {
+  const userId = req.params.userId
+  const sql = "SELECT * FROM orders WHERE user_id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
+app.post('/orders', (req, res) => {
+  const values = [req.body.order_id, req.body.date, req.body.total, req.body.status, req.body.user_id]
+  const sql = "INSERT INTO orders VALUES (?,?,?,?,?)";
+  db.query(sql, values, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
   })

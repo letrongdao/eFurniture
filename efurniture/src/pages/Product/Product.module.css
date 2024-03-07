@@ -40,6 +40,8 @@
 .favoriteSection {
     color: #000;
     text-decoration: none;
+    min-width: fit-content;
+    white-space: nowrap;
 }
 
 .buttonSection {
