@@ -21,10 +21,9 @@ export default function ProductList() {
       );
   };
 
-  useEffect(() => {
-    // fetchProductData()
-    fetchCategoryData();
-  }, []);
+    useEffect(() => {
+        fetchCategoryData()
+    }, [])
 
   return (
     <>

@@ -13,7 +13,18 @@ export const addUser = () => {
 }
 
 export const updateUser = (id, data) => {
-  return fetch(`htpp://localhost:3344/users/${id}`, {
+  return fetch(`http://localhost:3344/users/status/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(res => res.json());
+}
+
+export const banUser = (id, data) => {
+  return fetch(`http://localhost:3344/users/status/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'

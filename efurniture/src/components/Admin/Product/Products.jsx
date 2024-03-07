@@ -52,12 +52,24 @@ function Products() {
     category_name: "",
   });
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getProduct().then((res) => {
+  //     setDataSource(res);
+  //     setLoading(false);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    setLoading(true);
-    getProduct().then((res) => {
-      setDataSource(res);
+    const fetchData = async () => {
+      setLoading(true);
+      const newData = await getProduct();
+      setDataSource(newData);
       setLoading(false);
-    });
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const onUpdateProduct = (record) => {
@@ -67,10 +79,7 @@ function Products() {
     setTestRecord(record);
   };
 
-  console.log("DATA: ", editFormData);
-
   const onDeleteProduct = (record) => {
-    console.log(record);
     Modal.confirm({
       title: "Are you sure, you want to delete this product?",
       okText: "Confirm",
@@ -122,11 +131,6 @@ function Products() {
         style={{ width: "1250px" }}
         loading={loading}
         columns={[
-          // {
-          //   title: "Id",
-          //   key: "product_id",
-          //   dataIndex: "product_id",
-          // },
           {
             title: "Picture",
             key: "image_url",
@@ -155,7 +159,18 @@ function Products() {
             title: "Status",
             key: "status",
             dataIndex: "status",
-            render: (status) => status ? "Available" : "Unavailable"
+            render: (status) => (
+              <span
+                style={{
+                  backgroundColor: status ? "green" : "red",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  color: "white",
+                }}
+              >
+                {status ? "Available" : "Unavailable"}
+              </span>
+            ),
           },
           {
             title: "Action",
@@ -168,7 +183,7 @@ function Products() {
                   style={{
                     display: "flex",
                     justifyContent: "space-evenly",
-                    fontSize: "20px"
+                    fontSize: "20px",
                   }}
                 >
                   <EditOutlined

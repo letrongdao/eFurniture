@@ -67,8 +67,6 @@ const AddModal = () => {
     category_name: "",
   });
 
-  console.log("ADADA: ", formData);
-
   const showModal = () => {
     setIsModalOpen(true);
     setFormData({
@@ -112,8 +110,6 @@ const AddModal = () => {
       });
     }
   };
-
-  console.log("Image URL: ", formData.image_url);
 
   const handleSwitchChange = (checked) => {
     setFormData({ ...formData, status: checked ? true : false });

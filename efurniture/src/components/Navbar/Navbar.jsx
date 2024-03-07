@@ -132,7 +132,9 @@ const Navbar = () => {
                 </Badge>
               </a>
               <button className={styles.iconButton}>
-                <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
+                <a href={`/profile/${currentUserId}`}>
+                  <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
+                </a>
               </button>
               <Tooltip title="Log out">
                 <button className={styles.logButton} onClick={logout}>
@@ -153,42 +155,6 @@ const Navbar = () => {
             </Tooltip>
           )}
         </span>
-
-        <div
-          onClick={() => setToggleNavbar(!toggleNavbar)}
-          className={styles.hamburger}
-        >
-          {toggleNavbar ? `X` : "||||"}
-        </div>
-      </div>
-      <div
-        className={
-          toggleNavbar
-            ? `${styles.collapsedDisplay} ${styles.open}`
-            : `${styles.collapsedDisplay} ${styles.close}`
-        }
-      >
-        <Link to="/" className={styles.button}>
-          HOME
-        </Link>
-        <Dropdown menu={menuProps} className={styles.button}>
-          <a onClick={() => navigate("/products")} className={styles.button}>
-            <Space>
-              PRODUCTS
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
-        <Link to="/about" className={styles.button}>
-          ABOUT US
-        </Link>
-        <Link to="/contact" className={styles.button}>
-          CONTACT
-        </Link>
-        <Link to="/signin" className={styles.button}>
-          SIGN IN
-        </Link>
-        <input placeholder="Search..." type="text" className={styles.search} />
       </div>
     </div>
   );

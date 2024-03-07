@@ -14,11 +14,15 @@ function Bookings() {
   const [searchInput, setSearchInput] = useState();
 
   useEffect(() => {
-    setLoading(true);
-    getBooking().then((res) => {
-      setDataSource(res);
+    const fetchData = async () => {
+      setLoading(true);
+      const newData = await getBooking();
+      setDataSource(newData);
       setLoading(false);
-    });
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const onApproveBooking = (record) => {
@@ -144,7 +148,7 @@ function Bookings() {
         ]}
         dataSource={dataSource}
         pagination={{
-          pageSize: 5,
+          pageSize: 6,
         }}
       ></Table>
     </Space>
