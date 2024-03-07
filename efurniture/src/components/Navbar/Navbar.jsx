@@ -122,19 +122,16 @@ const Navbar = () => {
           </button>
           {currentUser ? (
             <>
-              <a href="/cart">
-                <Badge count={userCart.length} showZero={true} title="">
-                  <button className={styles.iconButton}>
-                    <ShoppingCartOutlined
-                      style={{ color: "#FFF", fontSize: "180%" }}
-                    />
-                  </button>
-                </Badge>
-              </a>
-              <button className={styles.iconButton}>
-                <a href={`/profile/${currentUserId}`}>
-                  <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
-                </a>
+              <Badge count={userCart.length} showZero={true} title="">
+                <button className={styles.iconButton} onClick={() => navigate('/cart')}>
+                  <ShoppingCartOutlined
+                    style={{ color: "#FFF", fontSize: "180%" }}
+                  />
+                </button>
+              </Badge>
+              <button className={styles.iconButton}
+                onClick={() => navigate(`/profile/${currentUserId}`)}>
+                <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
               </button>
               <Tooltip title="Log out">
                 <button className={styles.logButton} onClick={logout}>

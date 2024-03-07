@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Flex, Typography, Image, Button } from 'antd'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Home/Footer'
 import styles from './Profile.module.css'
@@ -9,6 +9,7 @@ import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 
 export default function Profile() {
     const { Text, Title } = Typography
+    const navigate = useNavigate()
     const userId = useParams()
     const [user, setUser] = useState({})
 
@@ -40,15 +41,19 @@ export default function Profile() {
                     </Flex>
                 </Flex>
                 <Flex vertical justify='space-evenly' align='center' gap={10} className={styles.eFurniPaySection}>
-                    <Flex justify='center' align='center' gap={10}>
-                        <Title>
-                            {user.efpoint}
-                        </Title>
-                        <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
+                    <Flex vertical>
+                        <Flex justify='center' align='center' gap={10}>
+                            <Title>
+                                {user.efpoint}
+                            </Title>
+                            <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
+                        </Flex>
+                        <Text style={{ fontSize: '70%', opacity: '0.5' }}>1 EF Point &#8771; 1 US Dollar &#8771; 24.690,00 VND </Text>
                     </Flex>
-                    <Text style={{ fontSize: '70%', opacity: '0.5' }}>1 EF Point &#8771; 1 US Dollar &#8771; 24.690,00 VND </Text>
-                    <button className={styles.button} id={styles.buyPointButton}>BUY EF POINTS</button>
-                    <button className={styles.button}>VIEW TRANSACTION HISTORY</button>
+                    <Flex vertical align='center' justify='center' gap={10}>
+                        <button className={styles.button} id={styles.buyPointButton}>BUY EF POINTS</button>
+                        <button className={styles.button} onClick={() => navigate('/order')}>VIEW ORDER HISTORY</button>
+                    </Flex>
                 </Flex>
             </Flex>
             <Footer />

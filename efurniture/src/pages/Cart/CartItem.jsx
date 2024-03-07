@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Typography, Flex, Image, Button, InputNumber } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import styles from './Cart.module.css'
 import efPointLogo from '../../assets/icons/efpoint_transparent.png'
@@ -65,6 +66,15 @@ export default function CartItem({ cartItemId, productId, quantity, totalPrice }
         }
     }
 
+    const handleDelete = () => {
+        axios.delete(`http://localhost:3344/cartItems/${cartItemId}`)
+            .then((res) => {
+                console.log(res)
+                navigate(0)
+            })
+            .catch((err) => console.log(err.message))
+    }
+
     return (
         <Card hoverable className={styles.cardContainer}>
             <Flex align='center' justify='space-between'>
@@ -81,6 +91,9 @@ export default function CartItem({ cartItemId, productId, quantity, totalPrice }
                         <InputNumber min={1} max={20} onChange={onQuantityChange} onBlur={() => navigate(0)} onPressEnter={() => navigate(0)}
                             controls={false} value={quantityValue} size='medium' style={{ width: '15%' }} />
                         <Button onClick={increaseQuantity} style={{ marginLeft: "2%" }}>+</Button>
+                        <Button onClick={handleDelete} style={{ marginLeft: "2%", display: 'flex', alignItems: 'center', fontSize: '120%' }} danger>
+                            <DeleteOutlined />
+                        </Button>
                     </Flex>
                 </Flex>
                 <div className={styles.priceSection}>

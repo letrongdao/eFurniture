@@ -9,13 +9,24 @@ import axios from 'axios';
 import CartItem from './CartItem.jsx';
 import CartDetailList from './CartDetailList.jsx'
 import efPointLogo from '../../assets/icons/efpoint_transparent.png'
+import { generateId } from '../../assistants/Generators.js'
+import dateFormat from '../../assistants/date.format.js';
 
 export default function Cart() {
   const { Text, Title } = Typography
   const navigate = useNavigate()
   const currentUserId = sessionStorage.getItem("loginUserId")
   const [cartItems, setCartItems] = useState([])
+  const [user, setUser] = useState({})
   const [totalAmount, setTotalAmount] = useState(0)
+
+  const fetchUserData = async () => {
+    await axios.get(`http://localhost:3344/users/${currentUserId}`)
+      .then((res) => {
+        setUser(res.data[0])
+      })
+      .catch((err) => console.log(err))
+  }
 
   const fetchCartItems = async () => {
     await axios.get(`http://localhost:3344/cartItems/${currentUserId}`)
@@ -31,18 +42,72 @@ export default function Cart() {
 
   const handleCheckout = async () => {
     try {
-      await axios.post('http://localhost:3344/create_payment_url', {
-        amount: totalAmount * 100,
-        bankCode: 'VNBANK',
-        language: 'vn',
-        orderDescription: 'Mô tả đơn hàng',
-        orderType: 'billpayment',
-      }).then(res => {
-        const responseData = res.data.vnpUrl;
-        window.location.href = responseData;
-      }).catch(error => console.log(error))
+      // await axios.post('http://localhost:3344/create_payment_url', {
+      //   amount: totalAmount * 100,
+      //   bankCode: 'VNBANK',
+      //   language: 'vn',
+      //   orderDescription: 'Mô tả đơn hàng',
+      //   orderType: 'billpayment',
+      // }).then(res => {
+      //   const responseData = res.data.vnpUrl;
+      //   window.location.href = responseData;
+      // }).catch(error => console.log(error))
+      if (user.efpoint < totalAmount) {
+        console.log("Not enough EF Point")
+      } else {
+        try {
+          console.log("ENOUGH EFPOINT. Congrats.")
+          const newOrderId = generateId(30, '')
+          const orderCreateDate = dateFormat(new Date, 'yyyy/mm/dd HH:MM:ss')
+          await axios.post(`http://localhost:3344/orders`, {
+            order_id: newOrderId,
+            date: orderCreateDate,
+            total: totalAmount,
+            status: 1,
+            user_id: currentUserId
+          })
+            .then((res) => {
+              console.log("Post order: ", res.data)
+            })
+            .catch((err) => console.log(err))
 
-      // Redirect đến URL tạo được
+          cartItems.map(async (item) => {
+            const newOrderItemId = generateId(30, '')
+            console.log("cartItems list: ", item)
+            await axios.get(`http://localhost:3344/products/${item.product_id}`)
+              .then((res) => {
+                axios.post(`http://localhost:3344/orderItems`, {
+                  orderItem_id: newOrderItemId,
+                  price: res.data.price,
+                  quantity: item.quantity,
+                  order_id: newOrderId,
+                  product_id: item.product_id
+                })
+                  .then((res) => {
+                    console.log("Order items post process: ", res.data)
+                  })
+                  .catch((err) => console.log(err))
+              })
+              .catch((err) => console.log(err))
+            await axios.delete(`http://localhost:3344/cartItems/${item.cartItem_id}`)
+              .then((res) => {
+                console.log(res.data)
+              })
+              .catch((err) => console.log(err))
+          })
+          await axios.patch(`http://localhost:3344/users/efpoint/${currentUserId}`, {
+            efpoint: user.efpoint - totalAmount
+          })
+            .then(() => {
+
+            })
+            .catch((err) => console.log(err))
+        } catch (err) {
+          console.log('Error: ', err)
+        } finally {
+          navigate('order', { state: { noti: 'cart' } })
+        }
+      }
 
     } catch (error) {
       console.error('Error:', error);
@@ -51,6 +116,7 @@ export default function Cart() {
 
   useEffect(() => {
     fetchCartItems()
+    fetchUserData()
   }, [])
 
   return (
@@ -87,12 +153,12 @@ export default function Cart() {
               <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
             </Flex>
             <Flex vertical justify='space-evenly' align='center' gap={2} className={styles.buttonSection}>
-              <Button block className={styles.button} id={styles.buyButton} onClick={handleCheckout}>
+              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); navigate('/order') }}>
                 BUY
                 <Image src='https://static.vecteezy.com/system/resources/previews/017/350/123/original/green-check-mark-icon-in-round-shape-design-png.png' width={30} alt='' preview={false} />
               </Button>
               <Button block className={styles.button} onClick={() => navigate('/products')}>
-                Back to shop
+                Back to shop <ArrowRightOutlined />
               </Button>
             </Flex>
           </Flex>
