@@ -210,9 +210,9 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
 app.post('/bookings', (req, res) => {
   const sql = "INSERT INTO bookings SET ?";
   const newBooking = req.body;
-  if (newBooking.status === undefined) {
-    newBooking.status = 0;
-  }
+  // if (newBooking.status === undefined) {
+  //   newBooking.status = 0;
+  // }
   // if (newBooking.user_id === undefined) {
   //   newBooking.user_id = 'us1231123129131';
   // }
@@ -226,7 +226,6 @@ app.post('/bookings', (req, res) => {
     }
   });
 });
-
 
 //PATCH approve a booking with booking_id
 app.patch('/bookings/:id', (req, res) => {
@@ -273,9 +272,8 @@ app.delete('/bookings/:id', (req, res) => {
 
 //GET NAME AND PRODUCT NAME FROM BOOKINGS
 app.get('/bookings', (req, res) => {
-  // const sql = "SELECT b.*, u.name AS fullName, p.name AS name FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
-  const sql1 = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
-  db.query(sql1, (err, result) => {
+  const sql = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
+  db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
       return;

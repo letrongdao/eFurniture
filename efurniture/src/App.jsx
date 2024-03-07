@@ -15,6 +15,7 @@ import PaymentForm from "./vn-pay-payment/PaymentForm";
 import PaymentTransform from "./vn-pay-payment/PaymentTransform";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Purchase/Checkout";
+import BookingPage from "./pages/Booking/BookingPage";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/paymentForm" element={<PaymentForm />} />
       <Route path="/admin" element={<AdminPage />} />
-
+      <Route path="/booking" element={<BookingPage />} />
     </Routes>
   );
 }
