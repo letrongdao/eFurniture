@@ -75,6 +75,20 @@ app.patch('/users/:id', async (req, res) => {
   })
 })
 
+app.patch('/users/efpoint/:id', async (req, res) => {
+  const id = req.params.id
+  const sql = "UPDATE users SET efpoint = ? WHERE user_id = ?"
+  const data = [req.body.efpoint, id]
+  db.query(sql, data, (err, result) => {
+    if (err) {
+      console.log(err.message)
+      return;
+    } else {
+      console.log("EF Point balance has been updated.")
+    }
+  })
+})
+
 app.get('/products', (req, res) => {
   const sql = "SELECT * FROM products ORDER BY status DESC";
   db.query(sql, (err, result) => {
@@ -225,6 +239,15 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
+app.delete('/cartItems/:cartItemId', (req, res) => {
+  const cartItemId = req.params.cartItemId
+  const sql = "DELETE FROM cartitems WHERE cartItem_id = ?";
+  db.query(sql, [cartItemId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.get('/orderItems/:orderId', (req, res) => {
   const orderId = req.params.orderId
   const sql = "SELECT * FROM orderitems WHERE order_id = ?";
@@ -234,9 +257,18 @@ app.get('/orderItems/:orderId', (req, res) => {
   })
 })
 
+app.post('/orderItems', (req, res) => {
+  const values = [req.body.orderItem_id, req.body.price, req.body.quantity, req.body.order_id, req.body.product_id]
+  const sql = "INSERT INTO orderitems VALUES (?,?,?,?,?)";
+  db.query(sql, values, (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.get('/orders/:userId', (req, res) => {
   const userId = req.params.userId
-  const sql = "SELECT * FROM orders WHERE user_id = ?";
+  const sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY date DESC";
   db.query(sql, [userId], (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
