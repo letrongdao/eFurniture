@@ -64,25 +64,11 @@ const Navbar = () => {
   };
 
   const fetchUserCartData = async () => {
-    let cartId = "";
-    await axios
-      .get(`http://localhost:3344/carts/${currentUserId}`)
+    await axios.get(`http://localhost:3344/cartItems/${currentUserId}`)
       .then((res) => {
-        let foundCart = (cartId = res.data[0]);
-        if (foundCart) {
-          cartId = foundCart.cart_id;
-        }
+        setUserCart(res.data)
       })
       .catch((err) => console.log(err.message));
-
-    if (cartId !== "") {
-      axios
-        .get(`http://localhost:3344/cartItems/${cartId}`)
-        .then((res) => {
-          setUserCart(res.data);
-        })
-        .catch((err) => console.log(err.message));
-    }
   };
 
   useEffect(() => {

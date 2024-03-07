@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,700;1,300&family=Quantico:wght@700&display=swap');
+
+.cartContainer {
+    height: 80vh;
+    max-height: 80vh;
+    background-color: rgb(242, 242, 242);
+}
+
+.cardContainer {
+    display: inline-block;
+    width: 100%;
+    height: 150px;
+    background-color: rgb(242, 242, 242);
+    margin-top: 20px;
+}
+
+.orderItemSection {
+    min-height: 400px;
+    max-height: 400px;
+    min-width: 700px;
+    max-width: min-content;
+    padding: 0 1%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    border-radius: 3%;
+    display: flex;
+    flex-direction: column;
+}
+
+.orderItemSection::-webkit-scrollbar {
+    display: none;
+}
+
+.orderItemSection {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.billingSection {
+    width: 25rem;
+    height: 400px;
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    border-radius: 5%;
+}
+
+.imageContainer {
+    max-width: min-content;
+    height: 100%;
+}
+
+.image {
+    min-width: 7rem;
+    border-radius: 10px;
+}
+
+.productInfo {
+    min-width: max-content;
+    align-self: flex-start;
+}
+
+.productListSection {
+    min-height: 300px;
+    max-height: 300px;
+    min-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 90%;
+}
+
+.productName {
+    font-weight: 800;
+    font-size: 150%;
+    margin: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 350px;
+    font-family: "Quantico", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.productName:hover {
+    text-decoration: underline;
+}
+
+.priceSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    text-align: center;
+    min-width: 130px;
+}
+
+.priceSection * {
+    margin: 0 auto;
+}
+
+.price {
+    font-family: "Chakra Petch", sans-serif;
+    font-style: normal;
+}
