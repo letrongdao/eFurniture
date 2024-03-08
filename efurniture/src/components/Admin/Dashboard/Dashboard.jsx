@@ -1,5 +1,5 @@
 import {
-  DollarCircleOutlined,
+  BookOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   UserOutlined,
@@ -22,6 +22,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { getBooking } from "../../../dataControllers/bookingController";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,6 +36,7 @@ function Dashboard() {
   const [products, setProducts] = useState(0);
   const [users, setUsers] = useState(0);
   const [revenue, setRevenue] = useState(0);
+  const [bookings, setBookings] = useState(0);
   useEffect(() => {
     getOrders().then((res) => {
       setOrders(res.total);
@@ -45,6 +47,9 @@ function Dashboard() {
     });
     getUser().then((res) => {
       setUsers(res.length);
+    });
+    getBooking().then((res) => {
+      setBookings(res.length);
     });
   }, []);
   return (
@@ -98,7 +103,7 @@ function Dashboard() {
         />
         <DashboardCard
           icon={
-            <DollarCircleOutlined
+            <BookOutlined
               style={{
                 color: "red",
                 backgroundColor: "rgba(255,0,0,0.25)",
@@ -108,8 +113,8 @@ function Dashboard() {
               }}
             />
           }
-          title={"Revenue"}
-          value={revenue}
+          title={"Booking"}
+          value={bookings}
         />
       </Space>
       <Space>

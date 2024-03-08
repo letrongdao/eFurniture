@@ -1,40 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yatra+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Yatra+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
 
 .infoSection {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
 }
 
 .infoSection * {
-    font-family: 'Titillium Web', sans-serif;
+  font-family: "Titillium Web", sans-serif;
 }
 
 .categoryTag {
-    font-family: "Yatra One", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 150%;
+  font-family: "Yatra One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 150%;
 }
 
 .productInfoContainer {
-    margin-top: 2%;
-    height: 90vh;
+  margin-top: 2%;
+  height: 90vh;
 }
 
 .productInfoContainer * {
-    font-family: "Josefin Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-style: normal;
-    margin-left: 3%;
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  margin-left: 3%;
 }
 
 .detailSection {
-    max-height: min-content;
+  max-height: min-content;
 }
 
 .favoriteSection {
@@ -45,67 +45,77 @@
 }
 
 .buttonSection {
-    min-width: 50%;
-    justify-self: flex-end;
-    margin-top: 2%;
+  min-width: 50%;
+  justify-self: flex-end;
+  margin-top: 2%;
 }
 
 .button {
-    min-width: 100%;
-    background-color: #000;
-    color: #FFF;
-    border: solid 1px #000;
+  min-width: 100%;
+  background-color: #000;
+  color: #fff;
+  border: solid 1px #000;
 }
 
 .button:hover {
-    color: #000 !important;
-    background-color: #FFF !important;
-    border-color: #000 !important;
+  color: #000 !important;
+  background-color: #fff !important;
+  border-color: #000 !important;
 }
 
 #buyButton {
-    background-color: red;
-    color: #FFF;
+  background-color: red;
+  color: #fff;
 }
 
 #buyButton:hover {
-    background-color: #FFF !important;
-    color: red !important;
-    border-color: #000 !important;
+  background-color: #fff !important;
+  color: red !important;
+  border-color: #000 !important;
 }
 
+#bookButton {
+  background-color: blue;
+  color: #fff;
+}
+
+#bookButton:hover {
+  background-color: #fff !important;
+  color: blue !important;
+  border-color: #000 !important;
+}
 
 .cartIcon {
-    font-size: 120%;
-    position: relative;
-    bottom: 15%;
+  font-size: 120%;
+  position: relative;
+  bottom: 15%;
 }
 
 .link {
-    font-size: 120%;
-    color: #1e4caa !important;
-    text-decoration: underline !important;
+  font-size: 120%;
+  color: #1e4caa !important;
+  text-decoration: underline !important;
 }
 
 .link:hover {
-    color: #437cee !important;
+  color: #437cee !important;
 }
 
 .productName {
-    font-weight: 700;
-    font-size: 150%;
-    max-width: 100%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  font-weight: 700;
+  font-size: 150%;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .productImageSection {
-    max-width: fit-content;
+  max-width: fit-content;
 }
 
 .productImageSection img {
-    width: 100%;
-    min-height: 250px;
-    border-radius: 3%;
+  width: 100%;
+  min-height: 250px;
+  border-radius: 3%;
 }
