@@ -8,6 +8,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Home/Footer'
 import OrderItemList from './OrderItemList'
 import dateFormat from '../../assistants/date.format'
+import moment from 'moment'
 
 export default function OrderList() {
     const { Text, Title } = Typography
@@ -49,11 +50,11 @@ export default function OrderList() {
                 :
                 <>
                     {orderList.map((order) => (
-                        <Flex style={{ border: 'solid 1px red' }} align='center' justify='start'>
-                            <span className={styles.dateTimeSection}>
-                                <Text>{dateFormat(order.date, 'HH:MM:ss dd/mm/yyyy')}</Text>
-                            </span>
+                        <Flex align='center' justify='start' gap={10} style={{ marginLeft: '5%' }}>
                             <OrderItemList orderId={order.order_id} />
+                            <span className={styles.dateTimeSection}>
+                                <Text>{moment(order.date).fromNow()}</Text>
+                            </span>
                         </Flex>
                     ))}
                 </>
