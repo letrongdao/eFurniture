@@ -20,6 +20,11 @@
     font-size: 150%;
 }
 
+.categoryTag:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .productInfoContainer {
     margin-top: 2%;
     height: 90vh;

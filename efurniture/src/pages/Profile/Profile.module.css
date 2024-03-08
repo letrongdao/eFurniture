@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Righteous&display=swap');
+
+.profileContainer {
+    height: 80vh;
+    width: 60vw;
+    box-shadow: 2px 2px 2px 2px;
+    margin: 2% auto;
+}
+
+.profileContainer * {
+    font-family: "Righteous", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.userInfoSection {
+    width: 50%;
+    height: 100%;
+    background-color: rgb(27, 168, 255);
+    border-right: solid;
+}
+
+.eFurniPaySection {
+    width: 50%;
+    height: 100%;
+    background-color: rgb(22, 126, 41);
+    border-left: solid;
+}
+
+.button {
+    background-color: rgb(224, 227, 230);
+    color: #000;
+    border: none;
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 120%;
+}
+
+.button:hover {
+    background-color: #434343;
+    color: #FFF;
+    border: none;
+}
+
+#deleteButton {
+    background-color: rgb(191, 27, 27);
+    color: #000000;
+    border: solid 1px rgb(185, 28, 28);
+}
+
+#deleteButton:hover {
+    color: #ffffff;
+    background-color: rgb(105, 3, 3);
+}
+
+#buyPointButton {
+    background-color: rgb(0, 140, 255);
+    color: #FFF;
+    padding: 6% 20%;
+}
+
+#buyPointButton:hover {
+    background-color: rgb(16, 72, 156);
+    color: #c6c6c6;
+}

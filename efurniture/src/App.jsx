@@ -13,8 +13,12 @@ import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 import PaymentForm from "./vn-pay-payment/PaymentForm";
 import PaymentTransform from "./vn-pay-payment/PaymentTransform";
+import Profile from "./pages/Profile/Profile";
 import Cart from "./pages/Cart/Cart";
-import Checkout from "./pages/Purchase/Checkout";
+import OrderList from "./pages/Order/OrderList";
+import AboutPage from "./pages/About/AboutPage";
+import ContactPage from "./pages/Contact/ContactPage";
+import BookingPage from "./pages/Booking/BookingPage";
 
 function App() {
   return (
@@ -25,14 +29,17 @@ function App() {
       <Route path="/signup/email" element={<EmailSignup />} />
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/reset/:id" element={<Reset />} />
+      <Route path="/profile/:id" element={<Profile />} />
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/:id" element={<Product />} />
       <Route path="/category/:name" element={<CategorizedProductList />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/order" element={<OrderList />} />
       <Route path="/paymentForm" element={<PaymentForm />} />
       <Route path="/admin" element={<AdminPage />} />
-
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/bookings/:id" element={<BookingPage />} />
     </Routes>
   );
 }

@@ -2,6 +2,10 @@ export const getProduct = () => {
   return fetch("http://localhost:3344/products").then((res) => res.json());
 };
 
+export const getProductById = (id) => {
+  return fetch(`http://localhost:3344/products/${id}`).then((res) => res.json());
+}
+
 export const addProduct = (data) => {
   return fetch(`http://localhost:3344/products`, {
     method: 'POST',

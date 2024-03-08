@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import styles from './Product.module.css'
 import Navbar from '../../components/Navbar/Navbar'
-import { Divider, Typography, List, Card, Spin, Flex, Tooltip } from 'antd'
+import { Divider, Typography, List, Card, Spin, Flex, Tooltip, Image } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import RelatedProducts from '../../components/Related Products/RelatedProducts'
 import Footer from '../../components/Home/Footer'
+import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 
 export default function CategorizedProductList() {
     const { Text, Title } = Typography
@@ -97,7 +98,10 @@ export default function CategorizedProductList() {
                                             <Text strong className={styles.productName}>{item.name}</Text>
                                         </Tooltip>
                                         <Text type='secondary' italic style={{ fontWeight: "400" }}>
-                                            <Text delete={item.status === 0}>{item.price} $</Text>&ensp;
+                                            <Text delete={item.status === 0}>
+                                                {item.price}&ensp;
+                                                <Image src={efPointLogo} alt='' width={20} preview={false} style={{ marginBottom: '18%' }} />
+                                            </Text>&ensp;
                                             {item.status === 0 ? 'SOLD OUT' : ''}
                                         </Text>
                                     </div>

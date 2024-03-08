@@ -122,16 +122,15 @@ const Navbar = () => {
           </button>
           {currentUser ? (
             <>
-              <a href="/cart">
-                <Badge count={userCart.length} showZero={true} title="">
-                  <button className={styles.iconButton}>
-                    <ShoppingCartOutlined
-                      style={{ color: "#FFF", fontSize: "180%" }}
-                    />
-                  </button>
-                </Badge>
-              </a>
-              <button className={styles.iconButton}>
+              <Badge count={userCart.length} showZero={true} title="">
+                <button className={styles.iconButton} onClick={() => navigate('/cart')}>
+                  <ShoppingCartOutlined
+                    style={{ color: "#FFF", fontSize: "180%" }}
+                  />
+                </button>
+              </Badge>
+              <button className={styles.iconButton}
+                onClick={() => navigate(`/profile/${currentUserId}`)}>
                 <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
               </button>
               <Tooltip title="Log out">
@@ -153,42 +152,6 @@ const Navbar = () => {
             </Tooltip>
           )}
         </span>
-
-        <div
-          onClick={() => setToggleNavbar(!toggleNavbar)}
-          className={styles.hamburger}
-        >
-          {toggleNavbar ? `X` : "||||"}
-        </div>
-      </div>
-      <div
-        className={
-          toggleNavbar
-            ? `${styles.collapsedDisplay} ${styles.open}`
-            : `${styles.collapsedDisplay} ${styles.close}`
-        }
-      >
-        <Link to="/" className={styles.button}>
-          HOME
-        </Link>
-        <Dropdown menu={menuProps} className={styles.button}>
-          <a onClick={() => navigate("/products")} className={styles.button}>
-            <Space>
-              PRODUCTS
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
-        <Link to="/about" className={styles.button}>
-          ABOUT US
-        </Link>
-        <Link to="/contact" className={styles.button}>
-          CONTACT
-        </Link>
-        <Link to="/signin" className={styles.button}>
-          SIGN IN
-        </Link>
-        <input placeholder="Search..." type="text" className={styles.search} />
       </div>
     </div>
   );

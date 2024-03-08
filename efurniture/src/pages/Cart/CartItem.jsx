@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Typography, Flex, Image, Button, InputNumber } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import styles from './Cart.module.css'
+import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 import axios from 'axios'
 
-export default function CartItem({ cartItemId, productId, quantity }) {
+export default function CartItem({ cartItemId, productId, quantity, totalPrice }) {
     const { Text, Title } = Typography
     const navigate = useNavigate()
     const [cartProduct, setCartProduct] = useState({})
+    const [quantityValue, setQuantityValue] = useState(quantity)
 
     const fetchProduct = async () => {
         await axios.get(`http://localhost:3344/products/${productId}`)
             .then((res) => {
+                totalPrice(res.data.price * quantity)
                 setCartProduct(res.data)
             })
             .catch((err) => console.log(err))
@@ -20,8 +24,6 @@ export default function CartItem({ cartItemId, productId, quantity }) {
     useEffect(() => {
         fetchProduct()
     }, [])
-
-    const [quantityValue, setQuantityValue] = useState(quantity)
 
     const onQuantityChange = (value) => {
         if (value) {
@@ -44,6 +46,7 @@ export default function CartItem({ cartItemId, productId, quantity }) {
             })
                 .then((res) => {
                     console.log(res)
+                    navigate(0)
                 })
                 .catch((err) => console.log(err.message))
         }
@@ -57,9 +60,19 @@ export default function CartItem({ cartItemId, productId, quantity }) {
             })
                 .then((res) => {
                     console.log(res)
+                    navigate(0)
                 })
                 .catch((err) => console.log(err.message))
         }
+    }
+
+    const handleDelete = () => {
+        axios.delete(`http://localhost:3344/cartItems/${cartItemId}`)
+            .then((res) => {
+                console.log(res)
+                navigate(0)
+            })
+            .catch((err) => console.log(err.message))
     }
 
     return (
@@ -75,20 +88,29 @@ export default function CartItem({ cartItemId, productId, quantity }) {
                     </Text>
                     <Flex justify='center' align='center' className={styles.quantitySection}>
                         <Button onClick={decreaseQuantity} style={{ marginRight: "2%" }}>-</Button>
-                        <InputNumber min={1} max={20} onChange={onQuantityChange} controls={false} value={quantityValue} size='medium' style={{ width: '15%' }} />
+                        <InputNumber min={1} max={20} onChange={onQuantityChange} onBlur={() => navigate(0)} onPressEnter={() => navigate(0)}
+                            controls={false} value={quantityValue} size='medium' style={{ width: '15%' }} />
                         <Button onClick={increaseQuantity} style={{ marginLeft: "2%" }}>+</Button>
+                        <Button onClick={handleDelete} style={{ marginLeft: "2%", display: 'flex', alignItems: 'center', fontSize: '120%' }} danger>
+                            <DeleteOutlined />
+                        </Button>
                     </Flex>
                 </Flex>
                 <div className={styles.priceSection}>
                     <Text type='secondary' italic className={styles.productInfo}>
                         <Text style={{ fontSize: '80%', opacity: '0.5' }} className={styles.price}>
-                            {cartProduct.price} $ / each
+                            {cartProduct.price}
+                            <Image src={efPointLogo} alt='' width={15} preview={false} style={{ marginBottom: '18%' }} />
+                            / each
                         </Text>
                     </Text>
                     <Text>
-                        <Title style={{ fontSize: '180%', color: '#8A2013' }} className={styles.price}>
-                            {Math.round(cartProduct.price * quantityValue * 100) / 100} $
-                        </Title>
+                        <Flex gap={10}>
+                            <Title style={{ fontSize: '180%' }} className={styles.price}>
+                                {Math.round(cartProduct.price * quantityValue * 100) / 100}
+                            </Title>
+                            <Image src={efPointLogo} alt='' width={30} preview={false} style={{ marginBottom: '18%' }} />
+                        </Flex>
                     </Text>
                 </div>
             </Flex>
