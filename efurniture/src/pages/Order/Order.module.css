@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cutive&display=swap');
+
 .orderListContainer {
     display: flex;
     flex-direction: column;
@@ -9,6 +11,7 @@
     justify-content: center;
     align-items: center;
     box-shadow: 1px 1px 1px 1px;
+    padding-right: 1%;
 }
 
 .dateTimeSection {
@@ -24,14 +27,21 @@
 
 .orderInfo {
     max-width: fit-content;
+    white-space: nowrap;
 }
 
-#name {
-    border: solid 1px blue;
+#name,
+#total {
+    font-family: "Cutive", serif;
+    font-weight: 400;
+    font-style: normal;
+    max-width: fit-content;
 }
 
 #quantity {
-    border: solid 1px green;
+    font-family: "Cutive", serif;
+    font-weight: 400;
+    font-style: normal;
     opacity: 0.6;
     align-self: flex-start;
 }

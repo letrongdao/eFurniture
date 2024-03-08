@@ -25,14 +25,14 @@ export default function OrderItem({ productId, quantity }) {
 
     return (
         <>
-            <Flex align='center' justify='center' gap={20} className={styles.orderItemSection}>
+            <Flex align='center' justify='center' gap={30} className={styles.orderItemSection}>
                 <Image src={product.image_url} alt='' preview={false} width={200} />
                 <Flex vertical justify='center' align='center' gap={10} className={styles.orderInfo}>
                     <Title id={styles.name}>{product.name}</Title>
                     <Text id={styles.quantity}>Quantity: {quantity}</Text>
                 </Flex>
                 <Flex gap={10} className={styles.orderInfo}>
-                    <Title>{product.price * quantity}</Title>
+                    <Title id={styles.total}>Total: {product.price * quantity}</Title>
                     <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
                 </Flex>
             </Flex>
