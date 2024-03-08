@@ -36,6 +36,7 @@ function App() {
       <Route path="/cart" element={<Cart />} />
       <Route path="/order" element={<OrderList />} />
       <Route path="/paymentForm" element={<PaymentForm />} />
+      <Route path="/paymentTransform" element={<PaymentTransform />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />

@@ -28,7 +28,7 @@ export default function OrderList() {
     useEffect(() => {
         if (location.state) {
             if (location.state.noti === 'cart') {
-                message.success("Thank you for supporting EFurni. Check your order status to get the process.")
+                message.success("Thank you for supporting EFurniture. Check your order status to get the process.")
             }
         }
         fetchOrderList()

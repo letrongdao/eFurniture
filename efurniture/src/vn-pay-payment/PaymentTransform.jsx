@@ -1,49 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const PaymentTransform = () => {
-  useEffect(() => {
-    // Function to submit payment form
-    const submitPaymentForm = () => {
-      // Create a form element
-      const form = document.createElement('form');
-      form.setAttribute('method', 'post');
-      form.setAttribute('action', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html');
-      form.setAttribute('target', '_blank'); // Open in a new tab
+const VnPayResult = () => {
+    const [paymentResult, setPaymentResult] = useState(null);
 
-      // Add input fields for payment data
-      const fields = {
-        vnp_Version: '2.1.0',
-        vnp_Command: 'pay',
-        // Add other payment data here
-      };
+    useEffect(() => {
+        // Đây là nơi bạn sẽ lấy dữ liệu về kết quả thanh toán từ backend của bạn, có thể thông qua API hoặc webhook.
+        // Trong ví dụ này, tôi sẽ giả định dữ liệu được trả về từ backend là một object chứa thông tin kết quả thanh toán.
+        // Bạn cần thay đổi phần này để phù hợp với cách bạn tích hợp với backend của mình.
+        const mockPaymentResult = {
+            orderId: '123456',
+            amount: 100000, // Số tiền thanh toán
+            status: 'success', // Trạng thái thanh toán
+            message: 'Payment successful', // Thông điệp
+            // Thêm các thông tin khác nếu cần
+        };
 
-      // Append input fields to the form
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', key);
-        input.setAttribute('value', value);
-        form.appendChild(input);
-      });
+        // Cập nhật kết quả thanh toán vào state
+        setPaymentResult(mockPaymentResult);
+    }, []);
 
-      // Append the form to the body and submit
-      document.body.appendChild(form);
-      form.submit();
-
-      // Clean up: remove the form from the DOM
-      document.body.removeChild(form);
-    };
-
-    // Call the function to submit payment form
-    submitPaymentForm();
-  }, []);
-
-  return (
-    <div>
-      <h2>Redirecting to Payment...</h2>
-      {/* Add loading indicator or message here */}
-    </div>
-  );
+    return (
+        <div>
+            {paymentResult ? (
+                <div>
+                    <h2>Payment Result</h2>
+                    <p><strong>Order ID:</strong> {paymentResult.orderId}</p>
+                    <p><strong>Amount:</strong> {paymentResult.amount}</p>
+                    <p><strong>Status:</strong> {paymentResult.status}</p>
+                    <p><strong>Message:</strong> {paymentResult.message}</p>
+                    {/* Hiển thị các thông tin khác nếu cần */}
+                </div>
+            ) : (
+                <p>Loading...</p>
+            )}
+        </div>
+    );
 };
 
-export default PaymentTransform;
+export default VnPayResult;
