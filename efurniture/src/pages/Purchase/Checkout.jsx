@@ -70,14 +70,7 @@ export default function Checkout() {
                 <Flex vertical justify='center' align='center' className={styles.billingSection}>
                     <Title>BILLING</Title>
                     <span className={styles.productListSection}>
-                        {/* <List
-                            size="small"
-                            bordered
-                            dataSource={checkoutList}
-                            renderItem={(item) =>
-                                <List.Item>{item}</List.Item>
-                            }
-                        /> */}
+
                     </span>
                 </Flex>
             </Flex>

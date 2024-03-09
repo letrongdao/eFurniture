@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
-import { generateId } from "../../assistants/Generators";
+import { generateCode } from "../../assistants/Generators";
 import Reset from "./Reset";
 import eFurniLogo from '../../assets/logos/eFurniLogo_transparent.png'
 
@@ -43,7 +43,7 @@ export default function Forgot() {
     const emailForm = useFormik({
         initialValues: {
             email: '',
-            code: generateId(6, "")
+            code: generateCode(6, "")
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email").required("")

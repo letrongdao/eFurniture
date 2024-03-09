@@ -7,6 +7,7 @@ import {
   SolutionOutlined,
   HomeOutlined,
   InboxOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme, Breadcrumb, Image } from "antd";
 import eFurniLogo from "../../assets/logos/eFurniLogo_transparent.png";
@@ -15,6 +16,7 @@ import Dashboard from "../../components/Admin/Dashboard/Dashboard";
 import Products from "../../components/Admin/Product/Products";
 import Orders from "../../components/Admin/Orders/Orders";
 import Inventory from "../../components/Admin/Inventory/Inventory";
+import Booking from "../../components/Admin/Booking/Booking";
 import { Link } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
@@ -56,6 +58,12 @@ const Admin = () => {
       icon: <InboxOutlined />,
       label: "Inventory",
       onClick: () => setActiveComponent("Inventory"),
+    },
+    {
+      key: "6",
+      icon: <BookOutlined />,
+      label: "Booking",
+      onClick: () => setActiveComponent("Booking"),
     },
   ];
 
@@ -130,6 +138,7 @@ const Admin = () => {
           {activeComponent === "Orders" && <Orders />}
           {activeComponent === "Products" && <Products />}
           {activeComponent === "Inventory" && <Inventory />}
+          {activeComponent === "Booking" && <Booking />}
         </Content>
       </Layout>
     </Layout>

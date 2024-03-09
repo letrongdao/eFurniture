@@ -35,22 +35,36 @@
 }
 
 .productImagesDesc {
+  display: inline-block;
   text-align: center;
-  margin: 0rem 0 1rem 0;
+  margin: auto;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
 .productContainer {
   margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 20rem;
+  height: 30rem;
+  box-shadow: 2px 2px 2px 2px;
 }
 
 .productContainer:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 
-.productImagesDesc > h2 {
+.productImagesDesc>h2 {
   margin: 0px;
 }
 
-.productImagesDesc > p {
+.productImagesDesc>p {
   margin: 5px 0 0 0;
 }

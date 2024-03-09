@@ -1,137 +1,170 @@
-import React, { useState, useEffect } from "react";
-import { List, InputNumber, Button, message, Row, Col } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
-import "./Cart.css";
-import Footer from "../../components/home/Footer.jsx";
-import Navbar from "../../components/Navbar/Navbar.jsx"; // Import the CSS file for custom styling
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { Flex, Typography, Divider, Button, Image } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './Cart.module.css'
+import Footer from "../../components/Home/Footer.jsx";
+import Navbar from "../../components/Navbar/Navbar.jsx";
+import axios from 'axios';
+import CartItem from './CartItem.jsx';
+import CartDetailList from './CartDetailList.jsx'
+import efPointLogo from '../../assets/icons/efpoint_transparent.png'
+import { generateId } from '../../assistants/Generators.js'
+import dateFormat from '../../assistants/date.format.js';
 
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [cartItemData, setCartItemData] = useState([]);
-  const userId = sessionStorage.getItem("loginUserId");
+export default function Cart() {
+  const { Text, Title } = Typography
+  const navigate = useNavigate()
+  const currentUserId = sessionStorage.getItem("loginUserId")
+  const [cartItems, setCartItems] = useState([])
+  const [user, setUser] = useState({})
+  const [totalAmount, setTotalAmount] = useState(0)
+
+  const fetchUserData = async () => {
+    await axios.get(`http://localhost:3344/users/${currentUserId}`)
+      .then((res) => {
+        setUser(res.data[0])
+      })
+      .catch((err) => console.log(err))
+  }
 
   const fetchCartItems = async () => {
-    var cartId = "";
-    await axios
-      .get(`http://localhost:3344/carts/${userId}`)
+    await axios.get(`http://localhost:3344/cartItems/${currentUserId}`)
       .then((res) => {
-        cartId = res.data[0].cart_id;
+        setCartItems(res.data)
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(err))
+  }
 
-    axios
-      .get(`http://localhost:3344/cartItems/${cartId}`)
-      .then((res) => {
-        console.log("Cart item fetched: ", res.data);
-        setCartItemData(res.data);
-      })
-      .catch((err) => console.log(err.message));
+  const getTotalPrice = (price) => {
+    setTotalAmount(c => c + (price / 2))
+  }
 
-    cartItemData.map((item) => {
-      axios
-        .get(`http://localhost:3344/products/${item.product_id}`)
-        .then((res) => {
-          setCartItems(res.data);
-        })
-        .catch((err) => console.log(err));
-      console.log("ProductID: ", item.product_id);
-    });
+  const handleCheckout = async () => {
+    try {
+      // await axios.post('http://localhost:3344/create_payment_url', {
+      //   amount: totalAmount * 100,
+      //   bankCode: 'VNBANK',
+      //   language: 'vn',
+      //   orderDescription: 'Mô tả đơn hàng',
+      //   orderType: 'billpayment',
+      // }).then(res => {
+      //   const responseData = res.data.vnpUrl;
+      //   window.location.href = responseData;
+      // }).catch(error => console.log(error))
+      if (user.efpoint < totalAmount) {
+        console.log("Not enough EF Point")
+      } else {
+        try {
+          console.log("ENOUGH EFPOINT. Congrats.")
+          const newOrderId = generateId(30, '')
+          const orderCreateDate = dateFormat(new Date, 'yyyy/mm/dd HH:MM:ss')
+          await axios.post(`http://localhost:3344/orders`, {
+            order_id: newOrderId,
+            date: orderCreateDate,
+            total: totalAmount,
+            status: 1,
+            user_id: currentUserId
+          })
+            .then((res) => {
+              console.log("Post order: ", res.data)
+            })
+            .catch((err) => console.log(err))
+
+          cartItems.map(async (item) => {
+            const newOrderItemId = generateId(30, '')
+            console.log("cartItems list: ", item)
+            await axios.get(`http://localhost:3344/products/${item.product_id}`)
+              .then((res) => {
+                axios.post(`http://localhost:3344/orderItems`, {
+                  orderItem_id: newOrderItemId,
+                  price: res.data.price,
+                  quantity: item.quantity,
+                  order_id: newOrderId,
+                  product_id: item.product_id
+                })
+                  .then((res) => {
+                    console.log("Order items post process: ", res.data)
+                  })
+                  .catch((err) => console.log(err))
+              })
+              .catch((err) => console.log(err))
+            await axios.delete(`http://localhost:3344/cartItems/${item.cartItem_id}`)
+              .then((res) => {
+                console.log(res.data)
+              })
+              .catch((err) => console.log(err))
+          })
+          await axios.patch(`http://localhost:3344/users/efpoint/${currentUserId}`, {
+            efpoint: user.efpoint - totalAmount
+          })
+            .then(() => {
+
+            })
+            .catch((err) => console.log(err))
+        } catch (err) {
+          console.log('Error: ', err)
+        } finally {
+          navigate('order', { state: { noti: 'cart' } })
+        }
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   useEffect(() => {
-    fetchCartItems();
-  }, []);
-
-  const handleQuantityChange = async (productId, newQuantity) => {
-    try {
-      const response = await fetch(`http://localhost:3344/cart`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          product_id: productId,
-          quantity: newQuantity,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update quantity");
-      }
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.product_id === productId
-            ? { ...item, quantity: newQuantity }
-            : item
-        )
-      );
-      message.success("Quantity updated successfully.");
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
-  };
-
-  const handleDeleteItem = async (productId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3344/cart?user_id=${userId}&product_id=${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete item");
-      }
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => item.product_id !== productId)
-      );
-      message.success("Item deleted from cart.");
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
+    fetchCartItems()
+    fetchUserData()
+  }, [])
 
   return (
     <>
       <Navbar />
-      {cartItems ? <h1>{cartItems.length}</h1> : null}
-      {/* <Row justify="center" className="main">
-        <Col span={14}>
-          <div className="cart-list">
-            <List
-              dataSource={cartItems}
-              renderItem={item => (
-                <List.Item className="cart-item" style={{ display: "block" }}>
-                  <Row align="middle">
-                    <Col span={4}>
-                      <img src={item.image_url} alt={item.name} className="cart-item-image" />
-                    </Col>
-                    <Col span={7} style={{ fontWeight: "bold", fontSize: "1.2rem" }}>{item.name}</Col>
-                    <Col span={3}>Price: {item.price}</Col>
-                    <Col span={4}>
-                      <InputNumber
-                        min={1}
-                        defaultValue={item.quantity}
-                        onChange={newQuantity => handleQuantityChange(item.product_id, newQuantity)}
-                      />
-                    </Col>
-                    <Col span={3}>Total: {item.price * item.quantity}</Col>
-                    <Col span={2} className="last-col">
-                      <Button type="primary" danger icon={<DeleteOutlined />} onClick={() => handleDeleteItem(item.product_id)}>
-                        Delete
-                      </Button>
-                    </Col>
-                  </Row>
-                </List.Item>
-              )}
-            />
+      {cartItems.length === 0
+        ?
+        <div>
+          <Flex justify='space-around' align='center' gap={1} className={styles.cartContainer} id={styles.emptyCart}>
+            <img src='https://www.iconpacks.net/icons/2/free-shopping-cart-icon-1985-thumb.png' alt='' />
+            <Text italic style={{ fontFamily: 'monospace', opacity: '0.6' }}>There is nothing here yet</Text>
+            <Title style={{ fontSize: '150%' }}>
+              <Link to='/products' className={styles.shopNow}>SHOP NOW&ensp;<ArrowRightOutlined /></Link>
+            </Title>
+          </Flex>
+        </div>
+        :
+        <Flex justify='space-evenly' align='center' className={styles.cartContainer}>
+          <div className={styles.orderItemSection}>
+            {cartItems.map((item) => (
+              <CartItem cartItemId={item.cartItem_id} productId={item.product_id} quantity={item.quantity} totalPrice={getTotalPrice} />
+            ))}
           </div>
-        </Col>
-      </Row> */}
+          <Flex vertical justify='space-between' align='center' className={styles.billingSection}>
+            <Title className={styles.summary}>SUMMARY</Title>
+            <div className={styles.productListSection}>
+              {cartItems.map((item) => (
+                <CartDetailList productId={item.product_id} quantity={item.quantity} />
+              ))}
+            </div>
+            <Divider orientation='center'></Divider>
+            <Flex gap={10}>
+              <Title className={styles.totalAmount}>Total: {Math.round((totalAmount * 100)) / 100}</Title>
+              <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
+            </Flex>
+            <Flex vertical justify='space-evenly' align='center' gap={2} className={styles.buttonSection}>
+              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); navigate('/order') }}>
+                BUY
+                <Image src='https://static.vecteezy.com/system/resources/previews/017/350/123/original/green-check-mark-icon-in-round-shape-design-png.png' width={30} alt='' preview={false} />
+              </Button>
+              <Button block className={styles.button} onClick={() => navigate('/products')}>
+                Back to shop <ArrowRightOutlined />
+              </Button>
+            </Flex>
+          </Flex>
+        </Flex>
+      }
       <Footer />
     </>
-  );
+  )
 };
-
-export default Cart;

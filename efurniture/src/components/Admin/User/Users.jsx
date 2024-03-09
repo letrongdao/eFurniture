@@ -1,24 +1,15 @@
-import {
-  Avatar,
-  Space,
-  Table,
-  Typography,
-  Input,
-  Modal,
-  Select,
-  Switch,
-} from "antd";
+import { Avatar, Space, Table, Input, Modal, Select, Switch } from "antd";
 import {
   EditOutlined,
   InfoCircleOutlined,
   WarningFilled,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { getUser, getUserById } from "../../../dataControllers/userController";
+import { getUser, getUserById, updateUser, banUser } from "../../../dataControllers/userController";
 
 const options = [
   {
-    value: "user",
+    value: "US",
     label: "User",
   },
   {
@@ -40,22 +31,26 @@ function Users() {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchInput, setSearchInput] = useState();
   const [banData, setBanData] = useState({
-    status: false,
+    status: 0,
   });
 
   const [editFormData, setEditFormData] = useState({
     fullName: "",
     email: "",
-    role: "",
-    status: false,
+    role_id: "",
+    status: 0,
   });
 
   useEffect(() => {
-    setLoading(true);
-    getUser().then((res) => {
-      setDataSource(res);
+    const fetchData = async () => {
+      setLoading(true);
+      const newData = await getUser();
+      setDataSource(newData);
       setLoading(false);
-    });
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   }, []);
 
   // const onDeleteUser = (record) => {
@@ -71,23 +66,22 @@ function Users() {
   //   });
   // };
 
-  const banUser = (record) => {
-    let ban = { ...banData, id: record };
+  const onBanUser = (record) => {
     setTestRecord(record);
     Modal.confirm({
       title: "BAN THIS ACCOUNT?",
       okText: "Ban",
       okType: "danger",
       onOk: () => {
-        updateUser(record, ban);
+        banUser(record, banData);
       },
     });
   };
 
   const onEditUser = (record) => {
     setIsEditing(true);
-    let data = { ...editFormData, id: record };
-    setEditFormData(data);
+    // let data = { ...editFormData };
+    // setEditFormData(data);
     setTestRecord(record);
   };
 
@@ -125,7 +119,7 @@ function Users() {
   };
 
   const handleSwitchChange = (checked) => {
-    setEditFormData({ ...editFormData, status: checked ? true : false });
+    setEditFormData({ ...editFormData, status: checked ? 1 : 0 });
   };
 
   return (
@@ -164,7 +158,18 @@ function Users() {
           {
             title: "Status",
             dataIndex: "status",
-            render: (status) => (status ? "Online" : "Banned"),
+            render: (status) => (
+              <span
+                style={{
+                  backgroundColor: status ? "green" : "red",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  color: "white",
+                }}
+              >
+                {status ? "Online" : "Banned"}
+              </span>
+            ),
           },
           {
             title: "Action",
@@ -192,7 +197,7 @@ function Users() {
                   <WarningFilled
                     onClick={() => {
                       // onDeleteUser(record);
-                      banUser(record);
+                      onBanUser(record);
                     }}
                     style={{ color: "red" }}
                   />
@@ -240,12 +245,12 @@ function Users() {
           />
           Role:{" "}
           <Select
-            value={editFormData?.role}
+            value={editFormData?.role_id}
             options={options}
             style={{ width: 100, margin: "20px 20px 0px 0px" }}
             onChange={(value) => {
               setEditFormData((pre) => {
-                return { ...pre, role: value };
+                return { ...pre, role_id: value };
               });
             }}
           />
@@ -279,7 +284,7 @@ function Users() {
               {
                 title: "Role",
                 dataIndex: "role_id",
-                key: "role",
+                key: "role_id",
               },
               {
                 title: "Phone",
@@ -294,7 +299,7 @@ function Users() {
               {
                 title: "Status",
                 dataIndex: "status",
-                render: (status) => status ? "Online" : "Banned"
+                render: (status) => (status ? "Online" : "Banned"),
               },
             ]}
             pagination={false}
