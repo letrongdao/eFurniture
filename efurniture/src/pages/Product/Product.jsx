@@ -10,7 +10,6 @@ import {
   Modal,
 } from "antd";
 import {
-  HeartOutlined,
   ShoppingCartOutlined,
   ShoppingOutlined,
   CheckCircleOutlined,
