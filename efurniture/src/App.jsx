@@ -20,7 +20,7 @@ import ContactPage from "./pages/Contact/ContactPage";
 import BookingPage from "./pages/Booking/BookingPage";
 import AddAddressModal from './components/AddAddressModal/AddAddressModal';
 import Checkout from './pages/Checkout/Checkout';
-
+import SearchResult from './pages/Search/SearchResult';
 function App() {
   return (
     <Routes>
@@ -43,6 +43,8 @@ function App() {
       <Route path="/bookings/:id" element={<BookingPage />} />
       <Route path='/test-modal' element={<AddAddressModal/>} />
       <Route path='test-checkout' element={<Checkout/>} />
+      <Route path='/search' element={<SearchResult/>} />
+
     </Routes>
   );
 }

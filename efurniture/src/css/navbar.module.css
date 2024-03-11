@@ -188,6 +188,7 @@
   transition: ease-in-out 300ms;
 }
 
+
 @media only screen and (max-width: 900px) {
   .button {
     display: none;

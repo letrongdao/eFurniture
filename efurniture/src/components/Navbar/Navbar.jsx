@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
 import {
   DownOutlined,
   UserOutlined,
@@ -16,6 +16,7 @@ import {
   Button,
   Badge,
   Tooltip,
+  Flex,
 } from "antd";
 import axios from "axios";
 import styles from "../../css/navbar.module.css";
@@ -31,6 +32,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [userCart, setUserCart] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleMenuClick = (i) => {
     categories.map((item) => {
@@ -87,6 +89,7 @@ const Navbar = () => {
     location.reload();
   };
 
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -117,8 +120,8 @@ const Navbar = () => {
       </div>
       <div className={styles.right}>
         <span className={styles.userSection}>
-          <button className={styles.iconButton}>
-            <SearchOutlined style={{ color: "#FFF", fontSize: "150%" }} />
+          <button className={styles.iconButton} onClick={() => navigate(`/search`)}>
+            <SearchOutlined style={{ color: "#FFF", fontSize: "150%" }}/>
           </button>
           {currentUser ? (
             <>

@@ -204,6 +204,19 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
+app.get('/search', (req, res) => {
+  const searchTerm = req.query.q;
+  const sqlQuery = `SELECT * FROM products WHERE description LIKE '%${searchTerm}%' OR name LIKE '%${searchTerm}%'`;
+  db.query(sqlQuery, (error, results) => {
+    if (error) {
+      console.error('Error searching:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 //POST create a new booking with user_id, product_id, date, time, content, status, booking_id
 app.post('/bookings', (req, res) => {
   const sql = "INSERT INTO bookings SET ?";
