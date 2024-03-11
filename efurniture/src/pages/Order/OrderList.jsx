@@ -18,66 +18,60 @@ export default function OrderList() {
   const currentUserId = sessionStorage.getItem("loginUserId");
   const [orderList, setOrderList] = useState([]);
 
-  const fetchOrderList = async () => {
-    await axios
-      .get(`http://localhost:3344/orders/${currentUserId}`)
-      .then((res) => {
-        setOrderList(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    if (location.state) {
-      if (location.state.noti === "cart") {
-        message.success(
-          "Thank you for supporting EFurniture. Check your order status to get the process."
-        );
-      }
+    const fetchOrderList = async () => {
+        await axios.get(`http://localhost:3344/orders/user/${currentUserId}`)
+            .then((res) => {
+                setOrderList(res.data)
+            })
+            .catch((err) => console.log(err))
     }
-    fetchOrderList();
-  }, []);
 
-  return (
-    <>
-      {contextHolder}
-      <Navbar />
-      {orderList.length === 0 ? (
-        <Flex
-          justify="space-around"
-          align="center"
-          gap={1}
-          className={styles.orderListContainer}
-          id={styles.emptyList}
-        >
-          <Text italic style={{ fontFamily: "monospace", opacity: "0.6" }}>
-            There is nothing here yet
-          </Text>
-          <Title style={{ fontSize: "150%" }}>
-            <Link to="/products" className={styles.shopNow}>
-              SHOP NOW&ensp;
-              <ArrowRightOutlined />
-            </Link>
-          </Title>
-        </Flex>
-      ) : (
+    useEffect(() => {
+        if (location.state) {
+            if (location.state.noti === 'cart') {
+                message.success("Thank you for supporting EFurniture. Check your order status to get the process.")
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchOrderList()
+    }, [])
+
+    return (
         <>
-          {orderList.map((order) => (
-            <Flex
-              align="center"
-              justify="start"
-              gap={10}
-              style={{ marginLeft: "5%" }}
-            >
-              <OrderItemList orderId={order.order_id} />
-              <span className={styles.dateTimeSection}>
-                <Text>{moment(order.date).fromNow()}</Text>
-              </span>
-            </Flex>
-          ))}
+            {contextHolder}
+            <Navbar />
+            {orderList.length === 0
+                ?
+                <Flex justify='space-around' align='center' gap={1} className={styles.orderListContainer} id={styles.emptyList}>
+                    <Text italic style={{ fontFamily: 'monospace', opacity: '0.6' }}>There is nothing here yet</Text>
+                    <Title style={{ fontSize: '150%' }}>
+                        <Link to='/products' className={styles.shopNow}>SHOP NOW&ensp;<ArrowRightOutlined /></Link>
+                    </Title>
+                </Flex>
+                :
+                <>
+                    <table class="table table-striped table-light table-sm table-bordered table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Product</th>
+                                <th></th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {orderList.map((order) => (
+                                <OrderItemList orderId={order.order_id} date={order.date} isDelivered={order.isDelivered} />
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            }
+            <Footer />
         </>
-      )}
-      <Footer />
-    </>
-  );
+    )
 }
