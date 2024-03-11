@@ -75,7 +75,9 @@ const FeedbackList = (record) => {
           </div>
         ) : (
           <div style={{ margin: "10px auto" }}>
-            <Text italic>There is no feedback on this yet.</Text>
+            <Text style={{ marginLeft: "70px" }} italic>
+              There is no feedback on this yet.
+            </Text>
           </div>
         )}
       </div>
