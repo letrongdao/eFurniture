@@ -11,8 +11,10 @@ import CartDetailList from './CartDetailList.jsx'
 import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 import { generateId } from '../../assistants/Generators.js'
 import dateFormat from '../../assistants/date.format.js';
+import AddAddressModal from '../../components/AddAddressModal/AddAddressModal.jsx';
 
 export default function Cart() {
+  const [open, setOpen] = useState(false)
   const { Text, Title } = Typography
   const navigate = useNavigate()
   const currentUserId = sessionStorage.getItem("loginUserId")
@@ -153,10 +155,12 @@ export default function Cart() {
               <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
             </Flex>
             <Flex vertical justify='space-evenly' align='center' gap={2} className={styles.buttonSection}>
-              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); navigate('/order') }}>
+              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); setOpen(true) }}>
                 BUY
                 <Image src='https://static.vecteezy.com/system/resources/previews/017/350/123/original/green-check-mark-icon-in-round-shape-design-png.png' width={30} alt='' preview={false} />
               </Button>
+              <AddAddressModal open={ open} setOpen={setOpen} />
+              
               <Button block className={styles.button} onClick={() => navigate('/products')}>
                 Back to shop <ArrowRightOutlined />
               </Button>

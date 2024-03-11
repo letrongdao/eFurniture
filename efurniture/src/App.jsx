@@ -19,6 +19,8 @@ import OrderList from "./pages/Order/OrderList";
 import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 import BookingPage from "./pages/Booking/BookingPage";
+import AddAddressModal from './components/AddAddressModal/AddAddressModal';
+import Checkout from './pages/Checkout/Checkout';
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/bookings/:id" element={<BookingPage />} />
+      <Route path='/test-modal' element={<AddAddressModal/>} />
+      <Route path='test-checkout' element={<Checkout/>} />
     </Routes>
   );
 }
