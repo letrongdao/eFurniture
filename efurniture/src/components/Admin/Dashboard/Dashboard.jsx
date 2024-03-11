@@ -31,6 +31,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 function Dashboard() {
   const [orders, setOrders] = useState(0);
   const [products, setProducts] = useState(0);
@@ -53,68 +54,42 @@ function Dashboard() {
     });
   }, []);
   return (
-    <Space size={20} direction="vertical">
+    <Space size={20} direction="vertical" style={{ padding: 20 }}>
       <Typography.Title level={4}>Dashboard</Typography.Title>
       <Space direction="horizontal">
         <DashboardCard
-          icon={
-            <ShoppingCartOutlined
-              style={{
-                color: "green",
-                backgroundColor: "rgba(0,255,0,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
-              }}
-            />
-          }
+          icon={<ShoppingCartOutlined style={{ fontSize: "20px" }} />}
           title={"Orders"}
           value={orders}
+          gradientColors={["#FF512F", "#F09819"]}
         />
         <DashboardCard
           icon={
             <ShoppingOutlined
               style={{
-                color: "blue",
-                backgroundColor: "rgba(0,0,255,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
+                // color: "green",
+                // backgroundColor: "rgba(0,255,0,0.25)",
+                // borderRadius: 20,
+                // padding: 8,
+                fontSize: "20px",
               }}
             />
           }
           title={"Products"}
           value={products}
+          gradientColors={["#00CDAC", "#8DD5E9"]}
         />
         <DashboardCard
-          icon={
-            <UserOutlined
-              style={{
-                color: "purple",
-                backgroundColor: "rgba(0,255,255,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
-              }}
-            />
-          }
+          icon={<UserOutlined style={{ fontSize: "20px" }} />}
           title={"Customer"}
           value={users}
+          gradientColors={["#F857A6", "#FF5858"]}
         />
         <DashboardCard
-          icon={
-            <BookOutlined
-              style={{
-                color: "red",
-                backgroundColor: "rgba(255,0,0,0.25)",
-                borderRadius: 20,
-                fontSize: 24,
-                padding: 8,
-              }}
-            />
-          }
+          icon={<BookOutlined style={{ fontSize: "20px" }} />}
           title={"Booking"}
           value={bookings}
+          gradientColors={["#2196F3", "#00C9FF"]}
         />
       </Space>
       <Space>
@@ -124,16 +99,29 @@ function Dashboard() {
     </Space>
   );
 }
-function DashboardCard({ title, value, icon }) {
+
+function DashboardCard({ title, value, icon, gradientColors }) {
+  const gradientBackground = {
+    background: `linear-gradient(to bottom right, ${gradientColors[0]}, ${gradientColors[1]})`,
+  };
+  const titleStyle = {
+    color: "white", // Change the color to your desired color
+    marginBottom: 0, // Adjust spacing if necessary
+    fontWeight: "bold",
+  };
   return (
-    <Card style={{ width: "310px" }}>
+    <Card style={{ width: "300px", ...gradientBackground }}>
       <Space direction="horizontal">
         {icon}
-        <Statistic title={title} value={value} />
+        <Statistic
+          title={<Typography.Text style={titleStyle}>{title}</Typography.Text>}
+          value={value}
+        />
       </Space>
     </Card>
   );
 }
+
 function RecentOrders() {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -170,6 +158,7 @@ function RecentOrders() {
     </>
   );
 }
+
 function DashboardChart() {
   const [reveneuData, setReveneuData] = useState({
     labels: [],
@@ -196,6 +185,7 @@ function DashboardChart() {
       setReveneuData(dataSource);
     });
   }, []);
+
   const options = {
     responsive: true,
     plugins: {
@@ -214,4 +204,5 @@ function DashboardChart() {
     </Card>
   );
 }
+
 export default Dashboard;

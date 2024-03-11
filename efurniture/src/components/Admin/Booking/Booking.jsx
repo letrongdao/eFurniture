@@ -21,8 +21,8 @@ function Bookings() {
       setLoading(false);
     };
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(fetchData, 1000);
+    // return () => clearInterval(intervalId);
   }, []);
 
   const onApproveBooking = (record) => {
@@ -34,6 +34,8 @@ function Bookings() {
       },
     });
   };
+
+  console.log("DATEA: ", dataSource);
 
   const onDeleteBooking = (record) => {
     console.log(record);

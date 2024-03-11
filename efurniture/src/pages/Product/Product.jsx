@@ -25,6 +25,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import RelatedProducts from "../../components/Related Products/RelatedProducts";
 import Footer from "../../components/Home/Footer";
 import dateFormat from "../../assistants/date.format";
+import FeedbackList from "../../components/FeedbackList/FeedbackList";
 
 export default function Product() {
   const userId = sessionStorage.getItem("loginUserId");
@@ -399,6 +400,7 @@ export default function Product() {
               </Flex>
             </form>
           </Modal>
+          <FeedbackList product={currentProduct.product_id} />
           <RelatedProducts />
           <Footer />
         </>

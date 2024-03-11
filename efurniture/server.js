@@ -236,14 +236,18 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
-app.delete('/cartItems/:cartItemId', (req, res) => {
-  const cartItemId = req.params.cartItemId
-  const sql = "DELETE FROM cartItems WHERE cartItem_id = ?";
-  db.query(sql, [cartItemId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
+app.get('/search', (req, res) => {
+  const searchTerm = req.query.q;
+  const sqlQuery = `SELECT * FROM products WHERE description LIKE '%${searchTerm}%' OR name LIKE '%${searchTerm}%'`;
+  db.query(sqlQuery, (error, results) => {
+    if (error) {
+      console.error('Error searching:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 //POST create a new booking with user_id, product_id, date, time, content, status, booking_id
 app.post('/bookings', (req, res) => {
@@ -266,11 +270,10 @@ app.post('/bookings', (req, res) => {
   });
 });
 
-
 //PATCH update a booking with booking_id
 app.patch('/bookings/:id', (req, res) => {
   const id = req.params.id;
-  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
+  const sql = "UPDATE bookings SET status = 1 WHERE booking_id = ?";
   const data = [req.body, id];
   console.log(data);
   db.query(sql, data, (err, result) => {
@@ -293,19 +296,6 @@ app.delete('/bookings/:id', (req, res) => {
       return;
     } else {
       res.json({ message: 'Cart deleted!' });
-    }
-  });
-});
-
-//GET get all bookings
-app.get('/bookings', (req, res) => {
-  const sql = "SELECT * FROM bookings";
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.json(result);
     }
   });
 });
@@ -374,6 +364,70 @@ app.post('/orderItems', (req, res) => {
   db.query(sql, values, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
+  })
+})
+
+app.get('/feedbacks', (req, res) => {
+  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName, p.product_id AS productId, p.name AS productName, p.image_url AS productImage FROM feedbacks f JOIN users u ON f.user_id = u.user_id JOIN products p ON f.product_id = p.product_id";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.get('/feedbacks/:id', (req, res) => {
+  const feedbackId = req.params.id;
+  const sql = "SELECT * from feedbacks WHERE feedback_id = ?"
+  db.query(sql, [feedbackId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.get('/feedbacks/product/:id', (req, res) => {
+  const productId = req.params.id;
+  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName FROM feedbacks f JOIN users u ON f.user_id = u.user_id WHERE f.product_id = ?";
+  db.query(sql, [productId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.post('/feedbacks', (req, res) => {
+  const newFeedback = req.body;
+  const sql = "INSERT INTO feedbacks SET ?"
+  db.query(sql, newFeedback, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.delete('/feedbacks/:id', (req, res) => {
+  const feedbackId = req.params.id;
+  const sql = "DELETE FROM feedbacks WHERE feedback_id = ?"
+  db.query(sql, [feedbackId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
   })
 })
 

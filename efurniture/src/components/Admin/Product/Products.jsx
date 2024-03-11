@@ -68,8 +68,8 @@ function Products() {
       setLoading(false);
     };
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(fetchData, 1000);
+    // return () => clearInterval(intervalId);
   }, []);
 
   const onUpdateProduct = (record) => {
