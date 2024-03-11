@@ -5,7 +5,12 @@ import {
   WarningFilled,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { getUser, getUserById, updateUser, banUser } from "../../../dataControllers/userController";
+import {
+  getUser,
+  getUserById,
+  updateUser,
+  banUser,
+} from "../../../dataControllers/userController";
 
 const options = [
   {
@@ -49,8 +54,8 @@ function Users() {
       setLoading(false);
     };
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(fetchData, 1000);
+    // return () => clearInterval(intervalId);
   }, []);
 
   // const onDeleteUser = (record) => {

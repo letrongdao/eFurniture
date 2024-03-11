@@ -12,7 +12,6 @@ export default function OrderItem({ productId, quantity }) {
     const fetchProductData = async () => {
         await axios.get(`http://localhost:3344/products/${productId}`)
             .then((res) => {
-                console.log("Product: ", res.data)
                 setProduct(res.data)
             })
             .catch((err) => console.log(err))
@@ -24,16 +23,14 @@ export default function OrderItem({ productId, quantity }) {
 
     return (
         <>
-            <Flex align='center' justify='center' gap={30} className={styles.orderItemSection}>
-                <Image src={product.image_url} alt='' preview={false} width={200} />
-                <Flex vertical justify='center' align='center' gap={10} className={styles.orderInfo}>
-                    <Title id={styles.name}>{product.name}</Title>
-                    <Text id={styles.quantity}>Quantity: {quantity}</Text>
-                </Flex>
-                <Flex gap={10} className={styles.orderInfo}>
-                    <Title id={styles.total}>Total: {product.price * quantity}$</Title>
-                </Flex>
-            </Flex>
+            <td>
+                <Image src={product.image_url} alt='' width={200} style={{ borderRadius: '20px' }} />
+            </td>
+            <td>
+                <p style={{ fontSize: '180%' }}><strong>{product.name}</strong></p>
+            </td>
+            <td>{quantity}</td>
+            <td style={{ fontSize: '150%' }}><strong>{quantity * product.price} $</strong></td>
         </>
     )
 }

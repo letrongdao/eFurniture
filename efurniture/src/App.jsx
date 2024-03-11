@@ -15,6 +15,7 @@ import PaymentForm from "./vn-pay-payment/PaymentForm";
 import Profile from "./pages/Profile/Profile";
 import Cart from "./pages/Cart/Cart";
 import OrderList from "./pages/Order/OrderList";
+import OrderStatus from "./pages/Order/OrderStatus";
 import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -36,15 +37,21 @@ function App() {
       <Route path="/category/:name" element={<CategorizedProductList />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/order" element={<OrderList />} />
+      <Route path="/orderStatus" element={<OrderStatus />} />
       <Route path="/paymentForm" element={<PaymentForm />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/bookings/:id" element={<BookingPage />} />
+<<<<<<< HEAD
       <Route path='/test-modal' element={<AddAddressModal/>} />
       <Route path='test-checkout' element={<Checkout/>} />
       <Route path='/search' element={<SearchResult/>} />
 
+=======
+      <Route path='/test-modal' element={<AddAddressModal />} />
+      <Route path='test-checkout' element={<Checkout />} />
+>>>>>>> eb1ae3eb7ca89466ed647b4f78b431b25e01682c
     </Routes>
   );
 }

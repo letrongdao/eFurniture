@@ -46,10 +46,8 @@ function Inventory() {
   const [testRecord, setTestRecord] = useState();
   const [searchInput, setSearchInput] = useState();
   const [editFormData, setEditFormData] = useState({
-    name: "",
-    price: "",
+    quantity: 0,
     status: 1,
-    category_name: "",
   });
 
   useEffect(() => {
@@ -107,7 +105,7 @@ function Inventory() {
 
   return (
     <Space size={20} direction="vertical">
-      {/* <Typography.Title level={4}>Product</Typography.Title> */}
+      {/* <Typography.Title level={4}>Inventory</Typography.Title> */}
       <div>
         <Input.Search
           placeholder="Search by name, category..."
@@ -116,7 +114,6 @@ function Inventory() {
           enterButton
           style={{ width: "500px" }}
         />
-        {/* <AddModal>Add Product</AddModal> */}
       </div>
       <Table
         style={{ width: "1250px" }}
@@ -155,7 +152,18 @@ function Inventory() {
             title: "Status",
             key: "status",
             dataIndex: "status",
-            render: (status) => (status ? "Available" : "Unavailable"),
+            render: (status) => (
+              <span
+                style={{
+                  backgroundColor: status ? "green" : "red",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  color: "white",
+                }}
+              >
+                {status ? "Available" : "Unavailable"}
+              </span>
+            ),
           },
           {
             title: "Action",
@@ -175,13 +183,14 @@ function Inventory() {
                     onClick={() => {
                       onUpdateProduct(record);
                     }}
+                    style={{ color: "blue" }}
                   />
-                  <DeleteOutlined
+                  {/* <DeleteOutlined
                     onClick={() => {
                       onDeleteProduct(record);
                     }}
                     style={{ color: "red" }}
-                  />
+                  /> */}
                 </div>
               );
             },
@@ -204,38 +213,22 @@ function Inventory() {
           resetEditing();
         }}
       >
-        <div style={{ lineHeight: "2.5" }}>
-          Name:{" "}
-          <Input
-            value={editFormData?.name}
-            onChange={(e) => {
-              setEditFormData((pre) => {
-                return { ...pre, name: e.target.value };
-              });
-            }}
-          />
-          Price:{" "}
-          <Input
-            value={editFormData?.price}
-            onChange={(e) => {
-              setEditFormData((pre) => {
-                return { ...pre, price: e.target.value };
-              });
-            }}
-          />
-          Category:{" "}
-          <Select
-            value={editFormData?.category_name}
-            options={options}
-            style={{ width: 200, margin: "20px 20px 0px 0px" }}
-            onChange={(e) => {
-              setEditFormData((pre) => {
-                return { ...pre, category_name: e };
-              });
-            }}
-          />
+        <div style={{ lineHeight: "3" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            Quantity:{"   "}
+            <Input
+              style={{ marginLeft: "10px", width: "300px" }}
+              value={editFormData?.quantity}
+              onChange={(e) => {
+                setEditFormData((pre) => {
+                  return { ...pre, quantity: e.target.value };
+                });
+              }}
+            />
+          </div>
           Status:{" "}
           <Switch
+            style={{ marginLeft: "20px" }}
             value={editFormData?.status}
             onChange={(e) => {
               setEditFormData((pre) => {

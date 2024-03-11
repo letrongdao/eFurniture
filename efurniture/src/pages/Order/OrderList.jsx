@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Flex, Typography, message } from 'antd'
-import { ArrowRightOutlined } from '@ant-design/icons'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
-import styles from './Order.module.css'
-import Navbar from '../../components/Navbar/Navbar'
-import Footer from '../../components/Home/Footer'
-import OrderItemList from './OrderItemList'
-import dateFormat from '../../assistants/date.format'
-import moment from 'moment'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Flex, Typography, message } from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import styles from "./Order.module.css";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Home/Footer";
+import OrderItemList from "./OrderItemList";
+import dateFormat from "../../assistants/date.format";
+import moment from "moment";
 
 export default function OrderList() {
-    const { Text, Title } = Typography
-    const { messageApi, contextHolder } = message.useMessage()
-    const navigate = useNavigate()
-    const location = useLocation()
-    const currentUserId = sessionStorage.getItem("loginUserId")
-    const [orderList, setOrderList] = useState([])
+  const { Text, Title } = Typography;
+  const { messageApi, contextHolder } = message.useMessage();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentUserId = sessionStorage.getItem("loginUserId");
+  const [orderList, setOrderList] = useState([]);
 
     const fetchOrderList = async () => {
-        await axios.get(`http://localhost:3344/orders/${currentUserId}`)
+        await axios.get(`http://localhost:3344/orders/user/${currentUserId}`)
             .then((res) => {
                 setOrderList(res.data)
             })
@@ -32,6 +32,9 @@ export default function OrderList() {
                 message.success("Thank you for supporting EFurniture. Check your order status to get the process.")
             }
         }
+    }, [])
+
+    useEffect(() => {
         fetchOrderList()
     }, [])
 
@@ -49,14 +52,23 @@ export default function OrderList() {
                 </Flex>
                 :
                 <>
-                    {orderList.map((order) => (
-                        <Flex align='center' justify='start' gap={10} style={{ marginLeft: '5%' }}>
-                            <OrderItemList orderId={order.order_id} />
-                            <span className={styles.dateTimeSection}>
-                                <Text>{moment(order.date).fromNow()}</Text>
-                            </span>
-                        </Flex>
-                    ))}
+                    <table class="table table-striped table-light table-sm table-bordered table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Product</th>
+                                <th></th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {orderList.map((order) => (
+                                <OrderItemList orderId={order.order_id} date={order.date} isDelivered={order.isDelivered} />
+                            ))}
+                        </tbody>
+                    </table>
                 </>
             }
             <Footer />
