@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import OrderItem from './OrderItem'
-import { Flex } from 'antd'
+import { Flex, Button, Typography } from 'antd'
 import dateFormat from '../../assistants/date.format'
 import moment from 'moment'
 
 export default function OrderItemList({ orderId, date, isDelivered }) {
     const currentUserId = sessionStorage.getItem("loginUserId")
+    const { Text, Title } = Typography
     const [orderItemList, setOrderItemList] = useState([])
 
     const fetchOrderItemList = async () => {
@@ -20,6 +21,10 @@ export default function OrderItemList({ orderId, date, isDelivered }) {
     useEffect(() => {
         fetchOrderItemList()
     }, [])
+
+    const handleFeedback = () => {
+        // FEEDBACK
+    }
 
     return (
         <>
@@ -36,6 +41,11 @@ export default function OrderItemList({ orderId, date, isDelivered }) {
                     </td>
                     <td>
                         {isDelivered === 1 ? 'Delivered' : 'On delivery'}
+                    </td>
+                    <td>
+                        <Button type='primary' style={{ backgroundColor: isDelivered ? '#126788' : 'grey' }} disabled={!isDelivered} onClick={handleFeedback}>
+                            <Text strong style={{ color: '#FFF' }}>Send feedback</Text>
+                        </Button>
                     </td>
                 </tr>
             ))}

@@ -43,15 +43,9 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/bookings/:id" element={<BookingPage />} />
-<<<<<<< HEAD
-      <Route path='/test-modal' element={<AddAddressModal/>} />
-      <Route path='test-checkout' element={<Checkout/>} />
-      <Route path='/search' element={<SearchResult/>} />
-
-=======
       <Route path='/test-modal' element={<AddAddressModal />} />
       <Route path='test-checkout' element={<Checkout />} />
->>>>>>> eb1ae3eb7ca89466ed647b4f78b431b25e01682c
+      <Route path='/search' element={<SearchResult />} />
     </Routes>
   );
 }

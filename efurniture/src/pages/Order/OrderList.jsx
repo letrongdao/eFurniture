@@ -60,7 +60,8 @@ export default function OrderList() {
                                 <th>Quantity</th>
                                 <th>Total</th>
                                 <th>Date</th>
-                                <th>Status</th>
+                                <th>Delivery status</th>
+                                <th>Feedback</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
