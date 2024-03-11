@@ -3,7 +3,6 @@ import styles from '../../css/related.module.css'
 import { useState, useEffect } from 'react'
 import { Typography, Card, Divider, Flex, Image } from 'antd'
 import axios from 'axios'
-import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 
 
 export default function RelatedProducts() {
@@ -50,7 +49,7 @@ export default function RelatedProducts() {
                 <Text type='secondary' italic style={{ fontWeight: "400" }}>
                   <Text delete={item.status === 0}>
                     {item.price}&ensp;
-                    <Image src={efPointLogo} alt='' width={20} preview={false} style={{ marginBottom: '18%' }} />
+                    $
                   </Text>&ensp;
                   {item.status === 0 ? 'SOLD OUT' : ''}
                 </Text>

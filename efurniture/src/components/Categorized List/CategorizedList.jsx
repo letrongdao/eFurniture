@@ -3,7 +3,6 @@ import styles from './Product.module.css'
 import { Divider, Typography, List, Card, Tooltip, Image } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 
 export default function CategorizedList({ name }) {
     const currentUserId = sessionStorage.getItem("loginUserId")
@@ -78,9 +77,8 @@ export default function CategorizedList({ name }) {
                                 </Tooltip>
                                 <Text type='secondary' italic style={{ fontWeight: "400" }}>
                                     <Text delete={item.status === 0}>
-                                        {item.price} &ensp;
-                                        <Image src={efPointLogo} alt='' width={20} preview={false} style={{ marginBottom: '18%' }} />
-                                    </Text>&ensp;
+                                        {item.price} &ensp;$
+                                        </Text>&ensp;
                                     {item.status === 0 ? 'SOLD OUT' : ''}
                                 </Text>
                             </div>

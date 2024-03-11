@@ -477,30 +477,30 @@ app.get('/vnpay_ipn', function (req, res, next) {
 
   if (secureHash === signed) {
     if (checkOrderId) {
-      if (checkAmount) {
-        if (paymentStatus === "0") {
-          if (rspCode === "00") {
-            // Success
-            // Update the transaction status to success in your database
-            var sqlUpdateOrder = 'UPDATE orders SET status = ? WHERE order_id = ?';
-            db.query(sqlUpdateOrder, [1, orderId], (error) => {
-              if (error) {
-                console.error('Error:', error);
-                return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
-              }
-              return res.status(200).json({ RspCode: '00', Message: 'Success' });
-            });
-          } else {
-            // Failure
-            // Update the transaction status to failure in your database
-            res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
-          }
+        if (checkAmount) {
+            if (paymentStatus === "0") {
+                if (rspCode === "00") {
+                    // Success
+                    // Update the transaction status to success in your database
+                    var sqlUpdateOrder = 'INSERT INTO orders VALUES (?,?,?,?,?)';
+                    db.query(sqlUpdateOrder, [1, orderId], (error) => {
+                      if (error) {
+                      console.error('Error:', error);
+                      return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
+                         }
+                      return res.status(200).json({ RspCode: '00', Message: 'Success' });
+                        });
+                } else {
+                    // Failure
+                    // Update the transaction status to failure in your database
+                    res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
+                }
+            } else {
+                res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
+            }
         } else {
-          res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
+            res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
         }
-      } else {
-        res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
-      }
     } else {
       res.status(200).json({ RspCode: '01', Message: 'Order not found' });
     }

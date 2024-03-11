@@ -12,13 +12,14 @@ import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 import PaymentForm from "./vn-pay-payment/PaymentForm";
-// import PaymentTransform from "./vn-pay-payment/PaymentTransform";
 import Profile from "./pages/Profile/Profile";
 import Cart from "./pages/Cart/Cart";
 import OrderList from "./pages/Order/OrderList";
 import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 import BookingPage from "./pages/Booking/BookingPage";
+import AddAddressModal from './components/AddAddressModal/AddAddressModal';
+import Checkout from './pages/Checkout/Checkout';
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/bookings/:id" element={<BookingPage />} />
+      <Route path='/test-modal' element={<AddAddressModal/>} />
+      <Route path='test-checkout' element={<Checkout/>} />
     </Routes>
   );
 }
