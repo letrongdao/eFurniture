@@ -236,7 +236,6 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
-<<<<<<< HEAD
 app.get('/search', (req, res) => {
   const searchTerm = req.query.q;
   const sqlQuery = `SELECT * FROM products WHERE description LIKE '%${searchTerm}%' OR name LIKE '%${searchTerm}%'`;
@@ -249,29 +248,6 @@ app.get('/search', (req, res) => {
     }
   });
 });
-=======
-app.delete('/cartItems/:cartItemId', (req, res) => {
-  const cartItemId = req.params.cartItemId
-  const sql = "DELETE FROM cartItems WHERE cartItem_id = ?";
-  db.query(sql, [cartItemId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-//GET NAME AND PRODUCT NAME FROM BOOKINGS
-app.get('/bookings', (req, res) => {
-  const sql = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      res.json(result);
-    }
-  })
-})
->>>>>>> eb1ae3eb7ca89466ed647b4f78b431b25e01682c
 
 //POST create a new booking with user_id, product_id, date, time, content, status, booking_id
 app.post('/bookings', (req, res) => {
