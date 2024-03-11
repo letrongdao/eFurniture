@@ -85,7 +85,9 @@ const Navbar = () => {
 
   const logout = () => {
     sessionStorage.removeItem("loginUserId");
-    location.reload();
+    setTimeout(() => {
+      navigate('/');
+    }, 1000)
   };
 
   return (

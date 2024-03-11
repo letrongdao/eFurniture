@@ -89,7 +89,7 @@ export default function Cart() {
     }
 
     await axios.post('http://localhost:3344/create_payment_url', {
-      amount: totalAmount * 24850,
+      amount: totalAmount * 24650,
       bankCode: 'VNBANK',
       language: 'vn',
       orderDescription: `Purchase eFurniture order ${newOrderId}`,

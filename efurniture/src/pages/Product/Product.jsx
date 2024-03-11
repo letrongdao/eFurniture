@@ -120,21 +120,56 @@ export default function Product() {
       quantity: quantity,
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("Buy now form values: ", values);
-      const orderId = generateId(30, "");
-      const orderItemId = generateId(30, "");
-      const createDate = dateFormat(new Date(), "yyyy/mm/dd HH:MM:ss");
-      axios
-        .post(`http://localhost:3344/orders`, {
-          order_id: orderId,
-          date: createDate,
+      const newOrderId = generateId(30, '')
+
+      try {
+        const orderCreateDate = dateFormat(new Date, 'yyyy/mm/dd HH:MM:ss')
+        await axios.post(`http://localhost:3344/orders`, {
+          order_id: newOrderId,
+          date: orderCreateDate,
           total: currentProduct.price * values.quantity,
-          status: 1,
-          user_id: userId,
+          isDelivered: 0,
+          status: 0,
+          user_id: userId
         })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.message));
+          .then((res) => {
+            console.log("Post order: ", res.data)
+          })
+          .catch((err) => console.log(err))
+
+
+        const newOrderItemId = generateId(30, '')
+
+        axios.post(`http://localhost:3344/orderItems`, {
+          orderItem_id: newOrderItemId,
+          price: currentProduct.price,
+          quantity: values.quantity,
+          order_id: newOrderId,
+          product_id: currentProduct.product_id
+        })
+          .then((res) => {
+            console.log("Order items post: ", res.data)
+          })
+          .catch((err) => console.log(err))
+      } catch (err) {
+        console.log('Error: ', err)
+      }
+
+      await axios.post('http://localhost:3344/create_payment_url', {
+        amount: currentProduct.price * values.quantity * 24650,
+        bankCode: 'VNBANK',
+        language: 'vn',
+        orderDescription: `Purchase eFurniture order ${newOrderId}`,
+        orderType: 'billpayment',
+        orderId: newOrderId,
+      })
+        .then((res) => {
+          const responseData = res.data.vnpUrl;
+          window.location.href = responseData;
+        })
+        .catch(error => console.log(error))
     },
   });
 
@@ -200,8 +235,7 @@ export default function Product() {
                       }}
                       delete={currentProduct.status === 0}
                     >
-                      {currentProduct.price}
-                      $
+                      {currentProduct.price} $
                     </Text>
                     &ensp;{currentProduct.status === 0 ? "SOLD OUT" : ""}
                   </Text>
@@ -359,7 +393,7 @@ export default function Product() {
                   </Flex>
                   <Flex style={{ marginTop: "10%" }} gap={10}>
                     <Text style={{ fontSize: "180%" }}>
-                      {Math.round(currentProduct.price * quantity * 100) / 100}
+                      {Math.round(currentProduct.price * quantity * 100) / 100} $
                     </Text>
                   </Flex>
                 </Flex>

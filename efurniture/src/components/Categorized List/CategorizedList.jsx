@@ -77,7 +77,7 @@ export default function CategorizedList({ name }) {
                                 </Tooltip>
                                 <Text type='secondary' italic style={{ fontWeight: "400" }}>
                                     <Text delete={item.status === 0}>
-                                        {item.price} &ensp;$
+                                        {item.price} $
                                         </Text>&ensp;
                                     {item.status === 0 ? 'SOLD OUT' : ''}
                                 </Text>
