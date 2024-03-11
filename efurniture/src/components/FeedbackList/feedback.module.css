@@ -1,0 +1,217 @@
+.artworkContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 5%;
+  width: 95%;
+  max-width: fit-content;
+  margin: 7% auto 3% auto;
+  min-height: 70vh;
+  box-shadow: 5px 7px 8px 10px #d3d3d3;
+  border-radius: 25px;
+  padding: 1% 0;
+}
+
+.leftSection {
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  margin-left: 1%;
+}
+
+.rightSection {
+  max-height: 100%;
+  height: 90%;
+  width: 100%;
+  min-width: 600px;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 8%;
+  min-width: fit-content;
+}
+
+.image {
+  min-height: 400px;
+  max-height: 600px;
+  max-width: 100%;
+  border-radius: 25px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-overflow: ellipsis;
+  gap: 3%;
+}
+
+.info span {
+  display: flex;
+  flex-direction: column;
+}
+
+.artistSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10%;
+}
+
+.commentSection {
+  background-color: #ffffff;
+  min-height: 300px;
+  max-height: 300px;
+  width: 90%;
+  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  margin-top: 4%;
+}
+
+#followButton {
+  font-size: 120%;
+  display: flex;
+  align-items: center;
+  padding: 4% 3%;
+  background-color: #1b80c3;
+}
+
+#followButton:hover {
+  background-color: #145c8c;
+}
+
+#userName {
+  font-size: 120%;
+  color: #201c1c;
+  min-width: max-content;
+}
+
+#userName:hover {
+  cursor: pointer;
+  color: #000000;
+  text-decoration: underline;
+}
+
+.singleComment {
+  min-height: 80px;
+  box-shadow: 2px 2px 2px 2px #d3d3d3;
+  margin: 2% 1%;
+  max-width: 90%;
+  min-width: fit-content;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.singleCommentSection {
+  max-width: 100%;
+  display: flex;
+  gap: 2%;
+}
+
+.commentTypeSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1%;
+  max-width: fit-content;
+  align-self: center;
+  margin-top: 2%;
+  font-size: 90%;
+}
+
+.commentTypeSection form {
+  display: flex;
+  flex-direction: row;
+  gap: 1%;
+  width: 100%;
+}
+
+.commentTypeSection #input {
+  min-width: 300px;
+  display: inline-block;
+  height: 40px;
+}
+
+#submitButton {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background-color: #145c8c;
+}
+
+#submitButton:hover {
+  background-color: #1b78b6;
+}
+
+.commentInfo {
+  max-width: 100%;
+  min-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+}
+
+.commentInfo .commentText {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 420px;
+}
+
+.commentAction {
+  font-size: 80%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 5%;
+}
+
+.commentAction:hover {
+  cursor: pointer;
+}
+
+.commentLikeButton {
+  font-size: 110%;
+  border-radius: 5px;
+  min-width: 25px;
+  min-height: 20px;
+  padding: 2px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #000;
+}
+
+.commentLikeButton:hover {
+  text-decoration: underline;
+}

@@ -6,11 +6,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { generateId } from "../../assistants/Generators";
 import { getProductById } from "../../dataControllers/productController";
 import { createBooking } from "../../dataControllers/bookingController";
+import axios from "axios";
 // import Footer from "../../components/Home/Footer";
 
 export default function BookingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const currentUserId = sessionStorage.getItem("loginUserId");
+  const [user, setUser] = useState({});
   const [information, setInformation] = useState({
     image_url: "",
     description: "",
@@ -21,18 +24,32 @@ export default function BookingPage() {
     time: "",
     status: 0,
     contents: "",
-    user_id: "us5833430108618",
+    // user_id: "us5833430108618",
+    user_id: currentUserId,
     product_id: id,
   });
 
+  const fetchUserData = async () => {
+    await axios
+      .get(`http://localhost:3344/users/${currentUserId}`)
+      .then((res) => {
+        setUser(res.data[0]);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
-    getProductById(id).then((res) => {
-      setInformation({
-        ...information,
-        image_url: res.image_url,
-        description: res.description,
+    const fetchData = async () => {
+      await getProductById(id).then((res) => {
+        setInformation({
+          ...information,
+          image_url: res.image_url,
+          description: res.description,
+        });
       });
-    });
+      await fetchUserData();
+    };
+    fetchData();
   }, []);
 
   const handleSubmit = (event) => {
@@ -44,7 +61,7 @@ export default function BookingPage() {
       time: "",
       status: 0,
       contents: "",
-      user: "us5833430108618",
+      user: "",
     });
     navigate(`/products/${id}`).then(message.success("Booking Successful!!!"));
   };
@@ -57,7 +74,7 @@ export default function BookingPage() {
       time: "",
       status: 0,
       contents: "",
-      user_id: "us5833430108618",
+      user_id: "",
       product_id: "",
     });
     navigate(`/products/${id}`);

@@ -170,13 +170,22 @@ app.get('/productsOfTheWeek', (req, res) => {
 })
 
 app.get('/inventoryItems', (req, res) => {
-  const sql = "SELECT * FROM inventoryitems";
+  // const sql = "SELECT * FROM inventoryitems";
+  const sql = "SELECT i.inventoryItem_id, i.status, i.quantity, i.product_id, p.name AS productName, p.image_url AS productImage FROM inventoryitems i JOIN products p ON i.product_id = p.product_id";
   db.query(sql, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
   })
 })
 
+app.patch('/inventoryItems/:id', (req, res) => {
+  const productId = req.params.id
+  const sql = "UPDATE inventoryitems SET ? WHERE product_id = ?";
+  db.query(sql, [productId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
 
 app.get('/categories', (req, res) => {
   const sql = "SELECT * FROM categories";
@@ -225,19 +234,18 @@ app.post('/bookings', (req, res) => {
   });
 });
 
-
-//PATCH update a booking with booking_id
+//PATCH approve a booking with booking_id
 app.patch('/bookings/:id', (req, res) => {
   const id = req.params.id;
-  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
-  const data = [req.body, id];
+  const sql = "UPDATE bookings SET status = 1 WHERE booking_id = ?";
+  const data = [id];
   console.log(data);
   db.query(sql, data, (err, result) => {
     if (err) {
       console.log(err);
-      return;
+      return res.status(500).json({ message: 'Error updating booking status' });
     } else {
-      res.json({ message: 'Cart updated successfully' });
+      res.json({ message: 'Booking status updated to true successfully' });
     }
   });
 });
@@ -257,8 +265,21 @@ app.delete('/bookings/:id', (req, res) => {
 });
 
 //GET get all bookings
+// app.get('/bookings', (req, res) => {
+//   const sql = "SELECT * FROM bookings";
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     } else {
+//       res.json(result);
+//     }
+//   });
+// });
+
+//GET NAME AND PRODUCT NAME FROM BOOKINGS
 app.get('/bookings', (req, res) => {
-  const sql = "SELECT * FROM bookings";
+  const sql = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -266,22 +287,86 @@ app.get('/bookings', (req, res) => {
     } else {
       res.json(result);
     }
-  });
-});
+  })
+})
+
+app.get('/feedbacks', (req, res) => {
+  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName, p.product_id AS productId, p.name AS productName, p.image_url AS productImage FROM feedbacks f JOIN users u ON f.user_id = u.user_id JOIN products p ON f.product_id = p.product_id";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.get('/feedbacks/:id', (req, res) => {
+  const feedbackId = req.params.id;
+  const sql = "SELECT * from feedbacks WHERE feedback_id = ?"
+  db.query(sql, [feedbackId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.get('/feedbacks/product/:id', (req, res) => {
+  const productId = req.params.id;
+  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName FROM feedbacks f JOIN users u ON f.user_id = u.user_id WHERE f.product_id = ?";
+  db.query(sql, [productId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.post('/feedbacks', (req, res) => {
+  const newFeedback = req.body;
+  const sql = "INSERT INTO feedbacks SET ?"
+  db.query(sql, newFeedback, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
+
+app.delete('/feedbacks/:id', (req, res) => {
+  const feedbackId = req.params.id;
+  const sql = "DELETE FROM feedbacks WHERE feedback_id = ?"
+  db.query(sql, [feedbackId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    } else {
+      res.json(result);
+    }
+  })
+})
 
 app.get('/orders/:orderId', (req, res) => {
-    const orderId = req.params.orderId;
-    const sql =  "SELECT * FROM orders WHERE order_id = ?";
-    db.query(sql, (err, result) => {
-      if (err) {
-        console.error('Error:', err);
-        return res.status(500).json({ message: 'Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu' });
-      }
-      if (result.length === 0) {
-        return res.status(404).json({ message: 'Đơn hàng không tồn tại' });
-      }
-      return res.status(200).json(result[0]);
-    });
+  const orderId = req.params.orderId;
+  const sql = "SELECT * FROM orders WHERE order_id = ?";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error:', err);
+      return res.status(500).json({ message: 'Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu' });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'Đơn hàng không tồn tại' });
+    }
+    return res.status(200).json(result[0]);
+  });
 });
 
 function sortObject(obj) {
@@ -384,37 +469,37 @@ app.get('/vnpay_ipn', function (req, res, next) {
 
   if (secureHash === signed) {
     if (checkOrderId) {
-        if (checkAmount) {
-            if (paymentStatus === "0") {
-                if (rspCode === "00") {
-                    // Success
-                    // Update the transaction status to success in your database
-                    var sqlUpdateOrder = 'UPDATE orders SET status = ? WHERE order_id = ?';
-                    db.query(sqlUpdateOrder, [1, orderId], (error) => {
-                      if (error) {
-                      console.error('Error:', error);
-                      return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
-                         }
-                      return res.status(200).json({ RspCode: '00', Message: 'Success' });
-                        });
-                } else {
-                    // Failure
-                    // Update the transaction status to failure in your database
-                    res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
-                }
-            } else {
-                res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
-            }
+      if (checkAmount) {
+        if (paymentStatus === "0") {
+          if (rspCode === "00") {
+            // Success
+            // Update the transaction status to success in your database
+            var sqlUpdateOrder = 'UPDATE orders SET status = ? WHERE order_id = ?';
+            db.query(sqlUpdateOrder, [1, orderId], (error) => {
+              if (error) {
+                console.error('Error:', error);
+                return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
+              }
+              return res.status(200).json({ RspCode: '00', Message: 'Success' });
+            });
+          } else {
+            // Failure
+            // Update the transaction status to failure in your database
+            res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
+          }
         } else {
-            res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
+          res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
         }
+      } else {
+        res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
+      }
     } else {
-        res.status(200).json({ RspCode: '01', Message: 'Order not found' });
+      res.status(200).json({ RspCode: '01', Message: 'Order not found' });
     }
-      } 
+  }
   else {
     res.status(200).json({ RspCode: '97', Message: 'Checksum failed' });
-}
+  }
 });
 
 

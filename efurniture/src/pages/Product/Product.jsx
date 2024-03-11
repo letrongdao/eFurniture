@@ -27,6 +27,7 @@ import RelatedProducts from "../../components/Related Products/RelatedProducts";
 import Footer from "../../components/Home/Footer";
 import dateFormat from "../../assistants/date.format";
 import efPointLogo from "../../assets/icons/efpoint_transparent.png";
+import FeedbackList from "../../components/FeedbackList/FeedbackList";
 
 export default function Product() {
   const userId = sessionStorage.getItem("loginUserId");
@@ -274,7 +275,10 @@ export default function Product() {
                   <Link className={styles.favoriteSection}>
                     <HeartOutlined /> Add to wishlist
                   </Link>
-                  <Link href={`/bookings/${currentProduct.product_id}`} className={styles.favoriteSection}>
+                  <Link
+                    href={`/bookings/${currentProduct.product_id}`}
+                    className={styles.favoriteSection}
+                  >
                     <CheckCircleOutlined /> Set an appointment for this
                   </Link>
                 </Flex>
@@ -383,6 +387,7 @@ export default function Product() {
               </Flex>
             </form>
           </Modal>
+          <FeedbackList product={currentProduct.product_id} />
           <RelatedProducts />
           <Footer />
         </>
