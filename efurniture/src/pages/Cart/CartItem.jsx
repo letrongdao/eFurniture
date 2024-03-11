@@ -3,7 +3,6 @@ import { Card, Typography, Flex, Image, Button, InputNumber } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import styles from './Cart.module.css'
-import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 import axios from 'axios'
 
 export default function CartItem({ cartItemId, productId, quantity, totalPrice }) {
@@ -100,7 +99,7 @@ export default function CartItem({ cartItemId, productId, quantity, totalPrice }
                     <Text type='secondary' italic className={styles.productInfo}>
                         <Text style={{ fontSize: '80%', opacity: '0.5' }} className={styles.price}>
                             {cartProduct.price}
-                            <Image src={efPointLogo} alt='' width={15} preview={false} style={{ marginBottom: '18%' }} />
+                            $
                             / each
                         </Text>
                     </Text>
@@ -109,7 +108,7 @@ export default function CartItem({ cartItemId, productId, quantity, totalPrice }
                             <Title style={{ fontSize: '180%' }} className={styles.price}>
                                 {Math.round(cartProduct.price * quantityValue * 100) / 100}
                             </Title>
-                            <Image src={efPointLogo} alt='' width={30} preview={false} style={{ marginBottom: '18%' }} />
+                            $
                         </Flex>
                     </Text>
                 </div>

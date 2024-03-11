@@ -3,7 +3,6 @@ import axios from 'axios'
 import { Flex, Image, Typography } from 'antd'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './Order.module.css'
-import efPointLogo from '../../assets/icons/efpoint_transparent.png'
 
 export default function OrderItem({ productId, quantity }) {
     const navigate = useNavigate()
@@ -32,8 +31,7 @@ export default function OrderItem({ productId, quantity }) {
                     <Text id={styles.quantity}>Quantity: {quantity}</Text>
                 </Flex>
                 <Flex gap={10} className={styles.orderInfo}>
-                    <Title id={styles.total}>Total: {product.price * quantity}</Title>
-                    <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
+                    <Title id={styles.total}>Total: {product.price * quantity}$</Title>
                 </Flex>
             </Flex>
         </>

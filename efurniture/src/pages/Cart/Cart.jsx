@@ -151,8 +151,7 @@ export default function Cart() {
             </div>
             <Divider orientation='center'></Divider>
             <Flex gap={10}>
-              <Title className={styles.totalAmount}>Total: {Math.round((totalAmount * 100)) / 100}</Title>
-              <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
+              <Title className={styles.totalAmount}>Total: {Math.round((totalAmount * 100)) / 100} $</Title>             
             </Flex>
             <Flex vertical justify='space-evenly' align='center' gap={2} className={styles.buttonSection}>
               <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); setOpen(true) }}>

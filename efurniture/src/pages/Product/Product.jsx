@@ -26,7 +26,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import RelatedProducts from "../../components/Related Products/RelatedProducts";
 import Footer from "../../components/Home/Footer";
 import dateFormat from "../../assistants/date.format";
-import efPointLogo from "../../assets/icons/efpoint_transparent.png";
 
 export default function Product() {
   const userId = sessionStorage.getItem("loginUserId");
@@ -202,13 +201,7 @@ export default function Product() {
                       delete={currentProduct.status === 0}
                     >
                       {currentProduct.price}
-                      <Image
-                        src={efPointLogo}
-                        alt=""
-                        width={50}
-                        preview={false}
-                        style={{ marginBottom: "18%" }}
-                      />
+                      $
                     </Text>
                     &ensp;{currentProduct.status === 0 ? "SOLD OUT" : ""}
                   </Text>
@@ -371,13 +364,6 @@ export default function Product() {
                     <Text style={{ fontSize: "180%" }}>
                       {Math.round(currentProduct.price * quantity * 100) / 100}
                     </Text>
-                    <Image
-                      src={efPointLogo}
-                      alt=""
-                      width={40}
-                      preview={false}
-                      style={{ marginBottom: "18%", marginRight: "3%" }}
-                    />
                   </Flex>
                 </Flex>
               </Flex>
