@@ -19,7 +19,7 @@ export default function OrderList() {
     const [orderList, setOrderList] = useState([])
 
     const fetchOrderList = async () => {
-        await axios.get(`http://localhost:3344/orders/${currentUserId}`)
+        await axios.get(`http://localhost:3344/orders/user/${currentUserId}`)
             .then((res) => {
                 setOrderList(res.data)
             })
@@ -49,14 +49,23 @@ export default function OrderList() {
                 </Flex>
                 :
                 <>
-                    {orderList.map((order) => (
-                        <Flex align='center' justify='start' gap={10} style={{ marginLeft: '5%' }}>
-                            <OrderItemList orderId={order.order_id} />
-                            <span className={styles.dateTimeSection}>
-                                <Text>{moment(order.date).fromNow()}</Text>
-                            </span>
-                        </Flex>
-                    ))}
+                    <table class="table table-striped table-light table-sm table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orderList.map((order) => (
+                                <OrderItemList orderId={order.order_id} date={order.date} status={order.status} />
+                            ))}
+                        </tbody>
+                    </table>
                 </>
             }
             <Footer />

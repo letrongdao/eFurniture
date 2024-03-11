@@ -63,7 +63,7 @@ export default function Cart() {
             order_id: newOrderId,
             date: orderCreateDate,
             total: totalAmount,
-            status: 1,
+            status: 0,
             user_id: currentUserId
           })
             .then((res) => {
@@ -99,13 +99,11 @@ export default function Cart() {
             efpoint: user.efpoint - totalAmount
           })
             .then(() => {
-
+              navigate('/order', { state: { noti: 'cart' } })
             })
             .catch((err) => console.log(err))
         } catch (err) {
           console.log('Error: ', err)
-        } finally {
-          navigate('order', { state: { noti: 'cart' } })
         }
       }
 
@@ -153,7 +151,7 @@ export default function Cart() {
               <Image src={efPointLogo} alt='' width={50} preview={false} style={{ marginBottom: '18%' }} />
             </Flex>
             <Flex vertical justify='space-evenly' align='center' gap={2} className={styles.buttonSection}>
-              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout(); navigate('/order') }}>
+              <Button block className={styles.button} id={styles.buyButton} onClick={() => { handleCheckout() }}>
                 BUY
                 <Image src='https://static.vecteezy.com/system/resources/previews/017/350/123/original/green-check-mark-icon-in-round-shape-design-png.png' width={30} alt='' preview={false} />
               </Button>

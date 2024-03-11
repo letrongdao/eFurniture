@@ -270,10 +270,7 @@ export default function Product() {
                     <PlusOutlined />
                   </Button>
                 </Flex>
-                <Flex gap={30} style={{ margin: "2% 0" }}>
-                  <Link className={styles.favoriteSection}>
-                    <HeartOutlined /> Add to wishlist
-                  </Link>
+                <Flex justify="center" align="center" style={{ margin: "2% 0" }}>
                   <Link href={`/bookings/${currentProduct.product_id}`} className={styles.favoriteSection}>
                     <CheckCircleOutlined /> Set an appointment for this
                   </Link>

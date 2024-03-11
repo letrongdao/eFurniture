@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Flex } from 'antd'
-import { useNavigate, useLocation } from 'react-router-dom'
-import styles from './Order.module.css'
 import OrderItem from './OrderItem'
+import { Flex } from 'antd'
+import dateFormat from '../../assistants/date.format'
+import moment from 'moment'
 
-export default function OrderItemList({ orderId }) {
-    const navigate = useNavigate()
+export default function OrderItemList({ orderId, date, status }) {
     const currentUserId = sessionStorage.getItem("loginUserId")
     const [orderItemList, setOrderItemList] = useState([])
 
@@ -24,11 +23,22 @@ export default function OrderItemList({ orderId }) {
 
     return (
         <>
-            <Flex vertical style={{ marginTop: '2%' }}>
-                {orderItemList.map((orderItem) => (
-                    <OrderItem productId={orderItem.product_id} quantity={orderItem.quantity} />
-                ))}
-            </Flex>
+            {orderItemList.map((item, i) => (
+                <tr className={status === 1 ? "table-success" : ""} style={{ marginBottom: "10px"}}>
+                    <OrderItem productId={item.product_id} quantity={item.quantity} />
+                    <td>
+                        <Flex vertical justify='center' align='center'>
+                            <p>
+                                <strong style={{ fontSize: '120%' }}>{moment(date).fromNow()}</strong><br />
+                                {dateFormat(date, 'HH:MM dd/mm/yyyy')}
+                            </p>
+                        </Flex>
+                    </td>
+                    <td>
+                        {status === 1 ? 'Delivered' : 'On delivery'}
+                    </td>
+                </tr>
+            ))}
         </>
     )
 }
