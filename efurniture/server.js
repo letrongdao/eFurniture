@@ -17,8 +17,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Allow GET, POST, PATCH, DELETE methods
   credentials: true // Allow sending cookies with the request
 }));
-// app.use('/create_payment_url', createProxyMiddleware({ target: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', changeOrigin: true }));
-
 
 const db = mysql2.createConnection({
   host: process.env.HOST,
@@ -49,12 +47,12 @@ app.get('/users/:id', (req, res) => {
 })
 
 app.post('/users', async (req, res) => {
-  const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status, efpoint) VALUES (?,?,?,?,?,?,?,?,?)"
-  const values = [req.body.user_id, req.body.email, req.body.password, req.body.fullName, req.body.role_id, req.body.phone, req.body.create_at, req.body.status, req.body.efpoint]
+  const sql = "INSERT INTO users (user_id, email, password, fullName, role_id, phone, create_at, status) VALUES (?,?,?,?,?,?,?,?)"
+  const values = [req.body.user_id, req.body.email, req.body.password, req.body.fullName, req.body.role_id, req.body.phone, req.body.create_at, req.body.status]
   db.query(sql, values, (err, result) => {
     if (err) {
       console.log(err)
-      return res.json(result);
+      return;
     } else {
       console.log("Successfully registered")
     }
@@ -71,36 +69,6 @@ app.patch('/users/:id', async (req, res) => {
       return;
     } else {
       console.log("Password has been successfully reset.")
-    }
-  })
-})
-
-app.patch('/users/status/:id', async (req, res) => {
-  const id = req.params.id;
-  const updatedUser = req.body;
-  const sql = "UPDATE users SET ? WHERE user_id = ?";
-  db.query(sql, [updatedUser, id], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else if (result.affectedRows === 0) {
-      res.status(404).json({ error: 'Product not found' });
-    } else {
-      res.json({ message: 'Product updated successfully' });
-    }
-  });
-})
-
-app.patch('/users/efpoint/:id', async (req, res) => {
-  const id = req.params.id
-  const sql = "UPDATE users SET efpoint = ? WHERE user_id = ?"
-  const data = [req.body.efpoint, id]
-  db.query(sql, data, (err, result) => {
-    if (err) {
-      console.log(err.message)
-      return;
-    } else {
-      console.log("EF Point balance has been updated.")
     }
   })
 })
@@ -227,25 +195,6 @@ app.get('/cartItems/:userId', (req, res) => {
   })
 })
 
-app.get('/cartItems/:userId/:productId', (req, res) => {
-  const userId = req.params.userId
-  const productId = req.params.productId
-  const sql = "SELECT * FROM cartItems WHERE user_id = ? and product_id = ?";
-  db.query(sql, [userId, productId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-app.post('/cartItems', (req, res) => {
-  const values = [req.body.cartItem_id, req.body.quantity, req.body.product_id, req.body.user_id]
-  const sql = "INSERT INTO cartItems VALUES (?,?,?,?)";
-  db.query(sql, values, (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
 app.patch('/cartItems/:cartItemId', (req, res) => {
   const cartItemId = req.params.cartItemId
   const sql = "UPDATE cartitems SET quantity = ? WHERE cartItem_id = ?";
@@ -255,58 +204,13 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
-app.delete('/cartItems/:cartItemId', (req, res) => {
-  const cartItemId = req.params.cartItemId
-  const sql = "DELETE FROM cartitems WHERE cartItem_id = ?";
-  db.query(sql, [cartItemId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-app.get('/orderItems/:orderId', (req, res) => {
-  const orderId = req.params.orderId
-  const sql = "SELECT * FROM orderitems WHERE order_id = ?";
-  db.query(sql, [orderId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-app.post('/orderItems', (req, res) => {
-  const values = [req.body.orderItem_id, req.body.price, req.body.quantity, req.body.order_id, req.body.product_id]
-  const sql = "INSERT INTO orderitems VALUES (?,?,?,?,?)";
-  db.query(sql, values, (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-app.get('/orders/:userId', (req, res) => {
-  const userId = req.params.userId
-  const sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY date DESC";
-  db.query(sql, [userId], (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
-app.post('/orders', (req, res) => {
-  const values = [req.body.order_id, req.body.date, req.body.total, req.body.status, req.body.user_id]
-  const sql = "INSERT INTO orders VALUES (?,?,?,?,?)";
-  db.query(sql, values, (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
-
 //POST create a new booking with user_id, product_id, date, time, content, status, booking_id
 app.post('/bookings', (req, res) => {
   const sql = "INSERT INTO bookings SET ?";
   const newBooking = req.body;
-  // if (newBooking.status === undefined) {
-  //   newBooking.status = 0;
-  // }
+  if (newBooking.status === undefined) {
+    newBooking.status = 0;
+  }
   // if (newBooking.user_id === undefined) {
   //   newBooking.user_id = 'us1231123129131';
   // }
@@ -321,18 +225,19 @@ app.post('/bookings', (req, res) => {
   });
 });
 
-//PATCH approve a booking with booking_id
+
+//PATCH update a booking with booking_id
 app.patch('/bookings/:id', (req, res) => {
   const id = req.params.id;
-  const sql = "UPDATE bookings SET status = 1 WHERE booking_id = ?";
-  const data = [id];
+  const sql = "UPDATE bookings SET ? WHERE booking_id = ?";
+  const data = [req.body, id];
   console.log(data);
   db.query(sql, data, (err, result) => {
     if (err) {
       console.log(err);
-      return res.status(500).json({ message: 'Error updating booking status' });
+      return;
     } else {
-      res.json({ message: 'Booking status updated to true successfully' });
+      res.json({ message: 'Cart updated successfully' });
     }
   });
 });
@@ -352,21 +257,8 @@ app.delete('/bookings/:id', (req, res) => {
 });
 
 //GET get all bookings
-// app.get('/bookings', (req, res) => {
-//   const sql = "SELECT * FROM bookings";
-//   db.query(sql, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     } else {
-//       res.json(result);
-//     }
-//   });
-// });
-
-//GET NAME AND PRODUCT NAME FROM BOOKINGS
 app.get('/bookings', (req, res) => {
-  const sql = "SELECT b.booking_id, b.date, b.time, b.status, b.contents, u.fullName AS fullName, p.name AS productName FROM bookings b JOIN users u ON b.user_id = u.user_id JOIN products p ON b.product_id = p.product_id";
+  const sql = "SELECT * FROM bookings";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -374,17 +266,23 @@ app.get('/bookings', (req, res) => {
     } else {
       res.json(result);
     }
-  })
-})
+  });
+});
 
-app.get('/bookings/:id', (req, res) => {
-  const id = req.params.id
-  const sql = "SELECT * FROM bookings WHERE booking_id = ?";
-  db.query(sql, id, (err, result) => {
-    if (err) console.log(err.message)
-    return res.json(result)
-  })
-})
+app.get('/orders/:orderId', (req, res) => {
+    const orderId = req.params.orderId;
+    const sql =  "SELECT * FROM orders WHERE order_id = ?";
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ message: 'Đã xảy ra lỗi khi truy vấn cơ sở dữ liệu' });
+      }
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'Đơn hàng không tồn tại' });
+      }
+      return res.status(200).json(result[0]);
+    });
+});
 
 function sortObject(obj) {
   let sorted = {};
@@ -409,7 +307,7 @@ app.post('/create_payment_url', function (req, res, next) {
   var tmnCode = 'P10RAQ3B';
   var secretKey = 'PBRPLJFXKZPGWWBCRSYJFQLDQHOQNUQI';
   var vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-  var returnUrl = 'http://localhost:5173/';
+  var returnUrl = 'http://localhost:3344/vnpay_ipn';
 
   var date = new Date();
 
@@ -462,7 +360,6 @@ app.post('/create_payment_url', function (req, res, next) {
 // Vui lòng tham khảo thêm tại code demo
 
 
-
 app.get('/vnpay_ipn', function (req, res, next) {
   var vnp_Params = req.query;
   var secureHash = vnp_Params['vnp_SecureHash'];
@@ -475,17 +372,49 @@ app.get('/vnpay_ipn', function (req, res, next) {
   var signData = querystring.stringify(vnp_Params, { encode: false });
   var hmac = crypto.createHmac("sha512", secretKey);
   var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+  var rspCode = vnp_Params["vnp_ResponseCode"];
+  var orderId = vnp_Params["vnp_TxnRef"];
 
+  var paymentStatus = "0"; // Giả sử '0' là trạng thái khởi tạo giao dịch, chưa có IPN. Trạng thái này được lưu khi yêu cầu thanh toán chuyển hướng sang Cổng thanh toán VNPAY tại đầu khởi tạo đơn hàng.
+  //let paymentStatus = '1'; // Giả sử '1' là trạng thái thành công bạn cập nhật sau IPN được gọi và trả kết quả về nó
+  //let paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
+
+  var checkOrderId = true; // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
+  var checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
 
   if (secureHash === signed) {
-    var orderId = vnp_Params['vnp_TxnRef'];
-    var rspCode = vnp_Params['vnp_ResponseCode'];
-    //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
-    res.status(200).json({ RspCode: '00', Message: 'success' })
-  }
+    if (checkOrderId) {
+        if (checkAmount) {
+            if (paymentStatus === "0") {
+                if (rspCode === "00") {
+                    // Success
+                    // Update the transaction status to success in your database
+                    var sqlUpdateOrder = 'UPDATE orders SET status = ? WHERE order_id = ?';
+                    db.query(sqlUpdateOrder, [1, orderId], (error) => {
+                      if (error) {
+                      console.error('Error:', error);
+                      return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
+                         }
+                      return res.status(200).json({ RspCode: '00', Message: 'Success' });
+                        });
+                } else {
+                    // Failure
+                    // Update the transaction status to failure in your database
+                    res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
+                }
+            } else {
+                res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
+            }
+        } else {
+            res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
+        }
+    } else {
+        res.status(200).json({ RspCode: '01', Message: 'Order not found' });
+    }
+      } 
   else {
-    res.status(200).json({ RspCode: '97', Message: 'Fail checksum' })
-  }
+    res.status(200).json({ RspCode: '97', Message: 'Checksum failed' });
+}
 });
 
 
@@ -507,12 +436,12 @@ app.get('/vnpay_return', function (req, res, next) {
   var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
 
   if (secureHash === signed) {
-    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua   
 
     res.render('success', { code: vnp_Params['vnp_ResponseCode'] })
   } else {
     res.render('success', { code: '97' })
-  } s
+  }
 });
 
 

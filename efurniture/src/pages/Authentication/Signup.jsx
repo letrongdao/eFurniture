@@ -137,7 +137,7 @@ export default function Signup() {
                 status: true,
                 efpoint: 0,
             })
-            // sendEmail()
+            sendEmail()
             showModal()
         }
     })
@@ -293,7 +293,7 @@ export default function Signup() {
                             <span className={styles.modalButtonGroup}>
                                 <Button type="default" shape="round" onClick={handleCancel}>Cancel</Button>
                                 <Button type="primary" htmlType="submit" shape="round" disabled={isLoading ? true : false}>
-                                    {isLoading ? <LoadingOutlined /> : <p>Verify {verifyCode}</p>}
+                                    {isLoading ? <LoadingOutlined /> : <p>Verify</p>}
                                 </Button>
                             </span>
                         </form>

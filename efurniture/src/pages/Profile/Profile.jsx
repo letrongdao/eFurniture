@@ -51,7 +51,7 @@ export default function Profile() {
                         <Text style={{ fontSize: '70%', opacity: '0.5' }}>1 EF Point &#8771; 1 US Dollar &#8771; 24.690,00 VND </Text>
                     </Flex>
                     <Flex vertical align='center' justify='center' gap={10}>
-                        <button className={styles.button} id={styles.buyPointButton}>BUY EF POINTS</button>
+                        <button className={styles.button} id={styles.buyPointButton} onClick={() => navigate('/paymentForm')}>BUY EF POINTS</button>
                         <button className={styles.button} onClick={() => navigate('/order')}>VIEW ORDER HISTORY</button>
                     </Flex>
                 </Flex>

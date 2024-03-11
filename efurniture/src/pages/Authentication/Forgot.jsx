@@ -55,7 +55,7 @@ export default function Forgot() {
                 .then(data => {
                     const foundAccountByEmail = data.find((account) => (account.email === values.email))
                     if (foundAccountByEmail) {
-                        // sendEmail()
+                        sendEmail()
                         setUserId(foundAccountByEmail.user_id)
                         setVerifyCode(emailForm.initialValues.code)
                         setIsLoading(false)
@@ -161,7 +161,7 @@ export default function Forgot() {
                         <span className={styles.modalButtonGroup}>
                             <Button type="default" shape="round" onClick={handleCancel}>Cancel</Button>
                             <Button type="primary" htmlType="submit" shape="round" disabled={isLoading ? true : false}>
-                                {isLoading ? <LoadingOutlined /> : <p>Verify {verifyCode}</p>}
+                                {isLoading ? <LoadingOutlined /> : <p>Verify</p>}
                             </Button>
                         </span>
                     </form>
