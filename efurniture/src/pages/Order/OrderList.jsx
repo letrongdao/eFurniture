@@ -32,6 +32,9 @@ export default function OrderList() {
                 message.success("Thank you for supporting EFurniture. Check your order status to get the process.")
             }
         }
+    }, [])
+
+    useEffect(() => {
         fetchOrderList()
     }, [])
 
@@ -49,20 +52,20 @@ export default function OrderList() {
                 </Flex>
                 :
                 <>
-                    <table class="table table-striped table-light table-sm table-hover">
+                    <table class="table table-striped table-light table-sm table-bordered table-hover align-middle">
                         <thead class="table-dark">
                             <tr>
-                                <th>Image</th>
                                 <th>Product</th>
+                                <th></th>
                                 <th>Quantity</th>
                                 <th>Total</th>
                                 <th>Date</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="table-group-divider">
                             {orderList.map((order) => (
-                                <OrderItemList orderId={order.order_id} date={order.date} status={order.status} />
+                                <OrderItemList orderId={order.order_id} date={order.date} isDelivered={order.isDelivered} />
                             ))}
                         </tbody>
                     </table>

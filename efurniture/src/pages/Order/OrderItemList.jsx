@@ -5,7 +5,7 @@ import { Flex } from 'antd'
 import dateFormat from '../../assistants/date.format'
 import moment from 'moment'
 
-export default function OrderItemList({ orderId, date, status }) {
+export default function OrderItemList({ orderId, date, isDelivered }) {
     const currentUserId = sessionStorage.getItem("loginUserId")
     const [orderItemList, setOrderItemList] = useState([])
 
@@ -24,7 +24,7 @@ export default function OrderItemList({ orderId, date, status }) {
     return (
         <>
             {orderItemList.map((item, i) => (
-                <tr className={status === 1 ? "table-success" : ""} style={{ marginBottom: "10px"}}>
+                <tr className={isDelivered === 1 ? "table-success" : ""} style={{ marginBottom: "10px" }}>
                     <OrderItem productId={item.product_id} quantity={item.quantity} />
                     <td>
                         <Flex vertical justify='center' align='center'>
@@ -35,7 +35,7 @@ export default function OrderItemList({ orderId, date, status }) {
                         </Flex>
                     </td>
                     <td>
-                        {status === 1 ? 'Delivered' : 'On delivery'}
+                        {isDelivered === 1 ? 'Delivered' : 'On delivery'}
                     </td>
                 </tr>
             ))}

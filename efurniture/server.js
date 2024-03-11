@@ -339,7 +339,7 @@ app.get('/orders/:orderId', (req, res) => {
 
 app.get('/orders/user/:userId', (req, res) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY status ASC, date DESC";
+  const sql = "SELECT * FROM orders WHERE user_id = ? AND status = 1 ORDER BY status ASC, date DESC";
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error(err);
@@ -349,8 +349,8 @@ app.get('/orders/user/:userId', (req, res) => {
 });
 
 app.post('/orders', (req, res) => {
-  const values = [req.body.order_id, req.body.date, req.body.total, req.body.status, req.body.user_id]
-  const sql = "INSERT INTO orders VALUES (?,?,?,?,?)";
+  const values = [req.body.order_id, req.body.date, req.body.total, req.body.isDelivered, req.body.status, req.body.user_id]
+  const sql = "INSERT INTO orders VALUES (?,?,?,?,?,?)";
   db.query(sql, values, (err, result) => {
     if (err) console.log(err.message)
     return res.json(result)
@@ -405,7 +405,7 @@ app.post('/create_payment_url', function (req, res, next) {
   var date = new Date();
 
   var createDate = dateFormat(date, 'yyyymmddHHmmss');
-  var orderId = dateFormat(date, 'HHmmss');
+  var orderId = req.body.orderId
   var amount = req.body.amount;
   var bankCode = req.body.bankCode;
 
@@ -477,30 +477,39 @@ app.get('/vnpay_ipn', function (req, res, next) {
 
   if (secureHash === signed) {
     if (checkOrderId) {
-        if (checkAmount) {
-            if (paymentStatus === "0") {
-                if (rspCode === "00") {
-                    // Success
-                    // Update the transaction status to success in your database
-                    var sqlUpdateOrder = 'INSERT INTO orders VALUES (?,?,?,?,?)';
-                    db.query(sqlUpdateOrder, [1, orderId], (error) => {
-                      if (error) {
-                      console.error('Error:', error);
-                      return res.status(500).json({ RspCode: '97', Message: 'Fail updating order status' });
-                         }
-                      return res.status(200).json({ RspCode: '00', Message: 'Success' });
-                        });
-                } else {
-                    // Failure
-                    // Update the transaction status to failure in your database
-                    res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
-                }
-            } else {
-                res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
-            }
+      if (checkAmount) {
+        if (paymentStatus === "0") {
+          if (rspCode === "00") {
+            // Success
+            // Update the transaction status to success in your database
+            console.log("OrderId: ", orderId)
+            const sql = "UPDATE orders SET status = 1 WHERE order_id = ?"
+            db.query(sql, [orderId], (result, err) => {
+              if (err) console.log(err)
+              else res.json(result)
+            })
+            res.redirect('http://localhost:5173/order')
+          } else {
+            const orderSql = "DELETE FROM orders WHERE order_id = ?"
+            db.query(orderSql, [orderId], (result, err) => {
+              if (err) console.log(err)
+              else res.json(result)
+            })
+
+            const orderItemSql = "DELETE FROM orderItems WHERE order_id = ?"
+            db.query(orderItemSql, [orderId], (result, err) => {
+              if (err) console.log(err)
+              else res.json(result)
+            })
+
+            res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
+          }
         } else {
-            res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
+          res.status(200).json({ RspCode: '02', Message: 'This order has been updated to the payment status' });
         }
+      } else {
+        res.status(200).json({ RspCode: '04', Message: 'Amount invalid' });
+      }
     } else {
       res.status(200).json({ RspCode: '01', Message: 'Order not found' });
     }

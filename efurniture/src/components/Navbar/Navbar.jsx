@@ -7,6 +7,7 @@ import {
   ShoppingCartOutlined,
   SearchOutlined,
   LoginOutlined,
+  FileDoneOutlined,
 } from "@ant-design/icons";
 import {
   Dropdown,
@@ -122,17 +123,27 @@ const Navbar = () => {
           </button>
           {currentUser ? (
             <>
-              <Badge count={userCart.length} showZero={true} title="">
-                <button className={styles.iconButton} onClick={() => navigate('/cart')}>
-                  <ShoppingCartOutlined
-                    style={{ color: "#FFF", fontSize: "180%" }}
-                  />
+              <Tooltip title="Orders">
+                <button className={styles.iconButton}
+                  onClick={() => navigate(`/order`)}>
+                  <FileDoneOutlined style={{ color: "#FFF", fontSize: "150%" }} />
                 </button>
-              </Badge>
-              <button className={styles.iconButton}
-                onClick={() => navigate(`/profile/${currentUserId}`)}>
-                <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
-              </button>
+              </Tooltip>
+              <Tooltip title="Cart">
+                <Badge count={userCart.length} showZero={true} title="">
+                  <button className={styles.iconButton} onClick={() => navigate('/cart')}>
+                    <ShoppingCartOutlined
+                      style={{ color: "#FFF", fontSize: "180%" }}
+                    />
+                  </button>
+                </Badge>
+              </Tooltip>
+              <Tooltip title="Profile">
+                <button className={styles.iconButton}
+                  onClick={() => navigate(`/profile/${currentUserId}`)}>
+                  <UserOutlined style={{ color: "#FFF", fontSize: "150%" }} />
+                </button>
+              </Tooltip>
               <Tooltip title="Log out">
                 <button className={styles.logButton} onClick={logout}>
                   <LogoutOutlined style={{ fontSize: "150%" }} />
