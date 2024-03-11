@@ -12,7 +12,6 @@ import ProductList from "./pages/Product/ProductList";
 import Product from "./pages/Product/Product";
 import CategorizedProductList from "./pages/Product/CategorizedProductList";
 import PaymentForm from "./vn-pay-payment/PaymentForm";
-import PaymentTransform from "./vn-pay-payment/PaymentTransform";
 import Profile from "./pages/Profile/Profile";
 import Cart from "./pages/Cart/Cart";
 import OrderList from "./pages/Order/OrderList";

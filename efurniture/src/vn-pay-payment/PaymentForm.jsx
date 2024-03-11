@@ -15,11 +15,10 @@ function PaymentForm() {
         orderDescription: 'Mô tả đơn hàng',
         orderType: 'billpayment', // Loại đơn hàng (nếu có)
       }).then(res => {
-        console.log(res)
         const responseData = res.data.vnpUrl;
         // Redirect đến URL tạo được
         window.location.href = responseData;
-      }).catch(error => console.log(error))              
+      }).catch(error => console.log(error))       
     } catch (error) {
       console.error('Error:', error);
     }

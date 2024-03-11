@@ -389,7 +389,7 @@ app.get('/vnpay_ipn', function (req, res, next) {
                 if (rspCode === "00") {
                     // Success
                     // Update the transaction status to success in your database
-                    var sqlUpdateOrder = 'UPDATE orders SET status = ? WHERE order_id = ?';
+                    var sqlUpdateOrder = 'INSERT INTO orders VALUES (?,?,?,?,?)';
                     db.query(sqlUpdateOrder, [1, orderId], (error) => {
                       if (error) {
                       console.error('Error:', error);
