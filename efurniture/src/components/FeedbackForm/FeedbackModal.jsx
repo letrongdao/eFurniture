@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Modal, Input, Space, message } from "antd";
+import { Button, Form, Modal, Input, Space, Rate, message } from "antd";
 import { WarningOutlined } from "@ant-design/icons";
 import { createFeedback } from "../../dataControllers/feedbackController";
 import dateFormat from "../../assistants/date.format";
@@ -16,6 +16,7 @@ const FeedbackForm = (record) => {
     user_id: "",
     product_id: "",
     description: "",
+    rating: 0,
     createdAt: "",
   });
 
@@ -53,6 +54,7 @@ const FeedbackForm = (record) => {
       user_id: "",
       product_id: "",
       description: "",
+      rating: 0,
       createdAt: "",
     });
   };
@@ -67,6 +69,7 @@ const FeedbackForm = (record) => {
       user_id: "",
       product_id: "",
       description: "",
+      rating: 0,
       createdAt: "",
     });
     message.success("Feedback Successful!!!");
@@ -96,6 +99,16 @@ const FeedbackForm = (record) => {
       >
         <Form layout="vertical">
           <Space direction="vertical">
+            <Form.Item name="rating" style={{ float: "left" }}>
+              <span style={{ marginRight: "10px" }}>Rating: </span>
+              <Rate
+                value={formData?.rating}
+                allowClear={true}
+                onChange={(e) => {
+                  setFormData({ ...formData, rating: e });
+                }}
+              />
+            </Form.Item>
             <Form.Item name="description" label="Description of the feedback:">
               <Input.TextArea
                 rows={5}

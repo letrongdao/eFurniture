@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getFeedbackByProductId } from "../../dataControllers/feedbackController";
-import { Divider, Typography, List, Avatar } from "antd";
+import { Divider, Typography, List, Avatar, Rate } from "antd";
 import FeedbackForm from "../FeedbackForm/FeedbackModal";
 import moment from "moment";
 import styles from "../../css/related.module.css";
@@ -11,6 +11,7 @@ const FeedbackList = (record) => {
     feedback_id: "",
     fullName: "",
     description: "",
+    rating: 0,
     createdAt: "",
   });
 
@@ -20,6 +21,7 @@ const FeedbackList = (record) => {
         feedback_id: item.feedback_id,
         fullName: item.fullName,
         description: item.description,
+        rating: item.rating,
         createdAt: item.createdAt,
       }));
       setFeedbackList(getFeedbackList);
@@ -58,10 +60,17 @@ const FeedbackList = (record) => {
                       <Avatar src={feedback.user?.avatar} alt="" size={45} />
                     </span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ marginBottom: "4px" }}>
+                      <div style={{ marginBottom: "1px" }}>
                         <strong>{feedback.fullName}</strong>
                       </div>
-                      <div style={{ fontSize: "70%", marginBottom: "4px" }}>
+                      <div>
+                        <Rate
+                          style={{ fontSize: "15px", color: "red" }}
+                          disabled
+                          defaultValue={feedback.rating}
+                        />
+                      </div>
+                      <div style={{ fontSize: "70%", marginBottom: "10px" }}>
                         {moment(feedback.createdAt).fromNow()}
                       </div>
                       <div style={{ lineHeight: "1.5" }}>
