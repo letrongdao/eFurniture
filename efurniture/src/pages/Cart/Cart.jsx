@@ -82,7 +82,6 @@ export default function Cart() {
         await axios.delete(`http://localhost:3344/cartItems/${item.cartItem_id}`)
           .then((res) => {
             console.log(res.data)
-            // navigate('/order', { state: { noti: 'cart' } })
           })
           .catch((err) => console.log(err))
       })

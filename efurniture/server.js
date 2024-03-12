@@ -555,7 +555,7 @@ app.get('/vnpay_ipn', function (req, res, next) {
               if (err) console.log(err)
               else res.json(result)
             })
-
+            res.redirect('http://localhost:5173/cart')
             res.status(200).json({ RspCode: '02', Message: 'Transaction failed' });
           }
         } else {
