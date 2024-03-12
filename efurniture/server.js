@@ -368,7 +368,7 @@ app.post('/orderItems', (req, res) => {
 })
 
 app.get('/feedbacks', (req, res) => {
-  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName, p.product_id AS productId, p.name AS productName, p.image_url AS productImage FROM feedbacks f JOIN users u ON f.user_id = u.user_id JOIN products p ON f.product_id = p.product_id";
+  const sql = "SELECT f.feedback_id, f.rating, f.createdAt, f.description, u.fullName AS fullName, p.product_id AS productId, p.name AS productName, p.image_url AS productImage FROM feedbacks f JOIN users u ON f.user_id = u.user_id JOIN products p ON f.product_id = p.product_id";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -394,7 +394,7 @@ app.get('/feedbacks/:id', (req, res) => {
 
 app.get('/feedbacks/product/:id', (req, res) => {
   const productId = req.params.id;
-  const sql = "SELECT f.feedback_id, f.createdAt, f.description, u.fullName AS fullName FROM feedbacks f JOIN users u ON f.user_id = u.user_id WHERE f.product_id = ?";
+  const sql = "SELECT f.feedback_id, f.rating, f.createdAt, f.description, u.fullName AS fullName FROM feedbacks f JOIN users u ON f.user_id = u.user_id WHERE f.product_id = ?";
   db.query(sql, [productId], (err, result) => {
     if (err) {
       console.log(err);
