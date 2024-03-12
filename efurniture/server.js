@@ -236,6 +236,15 @@ app.patch('/cartItems/:cartItemId', (req, res) => {
   })
 })
 
+app.delete('/cartItems/:cartItemId', (req, res) => {
+  const cartItemId = req.params.cartItemId
+  const sql = "DELETE FROM cartitems WHERE cartItem_id = ?";
+  db.query(sql, [cartItemId], (err, result) => {
+    if (err) console.log(err.message)
+    return res.json(result)
+  })
+})
+
 app.get('/search', (req, res) => {
   const searchTerm = req.query.q;
   const sqlQuery = `SELECT * FROM products WHERE description LIKE '%${searchTerm}%' OR name LIKE '%${searchTerm}%'`;
@@ -329,7 +338,7 @@ app.get('/orders/:orderId', (req, res) => {
 
 app.get('/orders/user/:userId', (req, res) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM orders WHERE user_id = ? AND status = 1 ORDER BY status ASC, date DESC";
+  const sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY status ASC, date DESC";
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error(err);

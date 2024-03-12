@@ -89,19 +89,19 @@ export default function Cart() {
       console.log('Error: ', err)
     }
 
-    await axios.post('http://localhost:3344/create_payment_url', {
-      amount: totalAmount * 24650,
-      bankCode: 'VNBANK',
-      language: 'vn',
-      orderDescription: `Purchase eFurniture order ${newOrderId}`,
-      orderType: 'billpayment',
-      orderId: newOrderId,
-    })
-      .then((res) => {
-        const responseData = res.data.vnpUrl;
-        window.location.href = responseData;
-      })
-      .catch(error => console.log(error))
+  //   await axios.post('http://localhost:3344/create_payment_url', {
+  //     amount: totalAmount * 24650,
+  //     bankCode: 'VNBANK',
+  //     language: 'vn',
+  //     orderDescription: `Purchase eFurniture order ${newOrderId}`,
+  //     orderType: 'billpayment',
+  //     orderId: newOrderId,
+  //   })
+  //     .then((res) => {
+  //       const responseData = res.data.vnpUrl;
+  //       window.location.href = responseData;
+  //     })
+  //     .catch(error => console.log(error))
   }
 
   useEffect(() => {
